@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -117,7 +118,7 @@ def CompactArrayIndices(tree):
   """
   new_tree = {}
   index = 0
-  for key, rest in sorted(tree.iteritems()):
+  for key, rest in sorted(tree.items()):
     if key.isdigit():
       key = "%06d" % index
       index += 1
@@ -204,7 +205,7 @@ def _GeneralRemoveAbstractPath(parts, store):
     if not isinstance(substore, dict):
       # Path wasn't in the sparse tree; don't delete anything further up.
       key_should_live = True
-    elif substore.keys()[0].isdigit():
+    elif list(substore.keys())[0].isdigit():
       key_should_live = _RemoveAbstractPathFromRepeatedPartOfSparse(
           rest, substore)
     else:
@@ -353,7 +354,7 @@ def _GeneralSetAbstract(parts, value, store, log):
       store[key] = substore
 
     if isinstance(substore, dict):
-      if substore and substore.keys()[0].isdigit():
+      if substore and list(substore.keys())[0].isdigit():
         # Handle repeated elements.
         _SetAbstractThroughRepeated(rest, value, substore, log)
       else:

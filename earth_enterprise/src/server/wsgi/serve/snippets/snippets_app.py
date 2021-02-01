@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,7 +24,7 @@ import cgi
 import logging
 import logging.config
 import sys
-import urlparse
+import urllib.parse
 
 from common import exceptions
 from serve import constants
@@ -73,7 +74,7 @@ class SnippetsApp(object):
       form = cgi.FieldStorage(fp=environ["wsgi.input"],
                               environ=environ)
 
-      for key in form.keys():
+      for key in list(form.keys()):
         request.SetParameter(key, form.getvalue(key, ""))
     else:
       try:
@@ -111,7 +112,7 @@ class SnippetsApp(object):
     Raises:
       SnippetsServeException.
     """
-    post_dct = urlparse.parse_qs(post_input)
+    post_dct = urllib.parse.parse_qs(post_input)
     cmd = post_dct.get(constants.CMD, [""])[0]
     if not cmd:
       return

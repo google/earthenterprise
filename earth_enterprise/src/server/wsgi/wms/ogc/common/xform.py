@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,8 +20,8 @@
 
 import logging
 
-import geom
-import utils
+from . import geom
+from . import utils
 
 # Get logger
 logger = logging.getLogger("wms_maps")
@@ -117,7 +118,7 @@ class WindowViewportMapping(object):
 
 def main():
   phy = WindowViewportMapping((-3, 3), (-10, 10))
-  print phy.PhysPtToLog((-5, 5))
+  print(phy.PhysPtToLog((-5, 5)))
 
 if __name__ == "__main__":
   main()

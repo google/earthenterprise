@@ -73,7 +73,6 @@ ValidOptions = set(
      'release',
      'optimize',
      'crosstool',
-     'python_version',
       # Use to build GEE Fusion w/ max number of concurrent jobs equal
       # to max_num_jobs_coeff * 8.
      'max_num_jobs_coeff',
@@ -109,11 +108,6 @@ optimize = int(ARGUMENTS.get('optimize', 0))
 crosstool_version = ARGUMENTS.get('crosstool', 'v14')
 max_num_jobs_coeff = ARGUMENTS.get('max_num_jobs_coeff', 16)
 gprof = ARGUMENTS.get('profile', 0) or ARGUMENTS.get('gprof', 0)
-python_version = int(ARGUMENTS.get('python_version',2))
-
-if python_version not in [2, 3]:
-    print("Invalid python version! Valid options are 2 and 3.")
-    Exit()
 
 
 # A sandbox build has no built-in library rpath info, so that the
@@ -214,6 +208,12 @@ else:
   python_bin = '/usr/bin/python'
   python_include = '/usr/include/python%s' % python_major_version
   python_home = '/usr'
+
+python_3_version = '3.8.6'
+python_3_major_version = '3.8'
+python_3_bin = '/usr/bin/python3.8'
+python_3_include = '/usr/include/python%s' % python_3_major_version
+python_3_home = '/usr'
 
 # setup platform specific operations
 is_os_ubuntu = False
@@ -563,11 +563,11 @@ env = khEnvironment(
     cross_cc_dir=cross_cc_dir,
     cross_cc_target=cross_cc_target,
     cross_cc_base=cross_cc_base,
-    python_bin=python_bin,
-    python_include=python_include,
-    python_version=python_version,
-    python_major_version=python_major_version,
-    python_home=python_home,
+    python_bin=python_3_bin,
+    python_include=python_3_include,
+    python_version=python_3_version,
+    python_major_version=python_3_major_version,
+    python_home=python_3_home,
     el_ver=el_ver,
     png_ver=png_ver,
     freetype_ver="freetype-2.10.0"
