@@ -41,14 +41,9 @@ QueryRules::QueryRules(QWidget* parent, const char* name, Qt::WFlags f)
 void QueryRules::init(const FilterConfig& config) {
   // clear out any previous children
   const QObjectList c = viewport()->children();
-  if (c.size()) {
-    auto it = c.begin();
-    QObject* obj;
-    while ((obj = *it) != 0) {
-      ++it;
-      Q3GroupBox* box = reinterpret_cast<Q3GroupBox*>(obj);
-      delete box;
-    }
+  for (int i = 0; i < c.size(); i++) {
+    Q3GroupBox* box = reinterpret_cast<Q3GroupBox*>(c.at(i));
+    delete box;
   }
 
   rule_count_ = 0;
@@ -190,15 +185,10 @@ void QueryRules::viewportResizeEvent(QResizeEvent* event) {
   QSize sz = event->size();
 
   const QObjectList c = viewport()->children();
-  if (c.size()) {
-    auto it = c.begin();
-    QObject* obj;
-    while ((obj = *it) != 0) {
-      ++it;
-      QSize wsz = reinterpret_cast<QWidget*>(obj)->size();
-      wsz.setWidth(sz.width());
-      reinterpret_cast<QWidget*>(obj)->resize(wsz);
-    }
+  for (int i = 0; i < c.size(); i++) {
+    QSize wsz = reinterpret_cast<QWidget*>(c.at(i))->size();
+    wsz.setWidth(sz.width());    
+    reinterpret_cast<QWidget*>(c.at(i))->resize(wsz);
   }
 
   Q3ScrollView::viewportResizeEvent(event);
