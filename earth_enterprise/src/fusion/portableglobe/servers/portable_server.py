@@ -287,7 +287,7 @@ class CompositeQueryHandler(portable_server_base.BaseHandler):
 
     else:
       self.set_header("Content-Type", "text/plain")
-      print("Unknown query request: {0}".format(self.request.uri)
+      print("Unknown query request: {0}".format(self.request.uri))
 
     self.finish()
 
