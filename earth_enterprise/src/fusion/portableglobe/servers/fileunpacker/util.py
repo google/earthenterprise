@@ -37,7 +37,7 @@ class OsCommandError(Exception):
 def PipePexpectStreamNonBlocking(source_stream, destination_stream):
   while source_stream.isalive():
     try:
-      chunk = source_stream.read_nonblocking(timeout=0)
+      chunk = source_stream.read_nonblocking(timeout=0).decode('utf-8', 'ignore')
       destination_stream.write(chunk)
     except (pexpect.TIMEOUT, pexpect.EOF):
       return

@@ -63,6 +63,10 @@ class BaseHandler(tornado.web.RequestHandler):
       print(e.message)
       return False
 
+    except FileNotFoundError:
+      print('BaseHandler.WriteLocalFile file not found %s' % path)
+      return False
+
   def ShowUri(self, host):
     """Show the uri that was requested."""
     # Comment out next line to increase performance.

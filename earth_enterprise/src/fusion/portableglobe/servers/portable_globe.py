@@ -310,10 +310,13 @@ class Globe(object):
     Returns:
       The map packet itself.
     """
+    msg = "ReadMapDataPacket: qtpath {0} packet_type {1} channel {2} layer_id {3} file_loc_ {4}".format(type(qtpath), packet_type, channel, layer_id, self.file_loc_)
     if self.unpacker_.FindMapDataPacket(
         qtpath, packet_type, channel, layer_id, self.file_loc_):
       return self.GetData()
     else:
+      print(msg)
+
       raise UnableToFindException("Unable to find packet.")
 
   def ReadMapImageryPacket(self, qtpath, channel, layer_id):

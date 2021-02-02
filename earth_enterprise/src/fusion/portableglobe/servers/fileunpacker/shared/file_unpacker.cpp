@@ -136,7 +136,7 @@ FileUnpacker::FileUnpacker(
     if (it != index_.end()) {
       data_packet_index_loc_ = it->second;
     } else {
-      std::cerr << "Unable to find: " << packet_index << std::endl;
+      std::cerr << "FileUnpacker::FileUnpacker, 3d_data. Unable to find: " << packet_index << std::endl;
       return;
     }
 
@@ -191,7 +191,7 @@ FileUnpacker::FileUnpacker(
       mapdata_packet_index_loc_ = it->second;
     } else {
       has_2d_data_ = false;
-      std::cerr << "Unable to find: " << packet_index << std::endl;
+      std::cerr << "FileUnpacker::FileUnpacker, 2d_data. Unable to find: " << packet_index << std::endl;
       return;
     }
 
@@ -382,7 +382,7 @@ bool FileUnpacker::FindFile(const char* file_name,
     file_loc->Set(it->second.Offset(), it->second.Size());
     return true;
   } else {
-    std::cout << "Unable to find: " << file_name << std::endl;
+    std::cout << "FileUnpacker::FindFile, Unable to find: " << file_name << std::endl;
     file_loc->Set(0, 0);
     return false;
   }
