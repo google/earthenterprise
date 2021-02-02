@@ -397,11 +397,11 @@ now serving</div>
         self.set_header("Content-Type", "application/json")
         self.WriteGlobesInfoJson()
       elif cmd == "show_info":
-        globe = self.request.arguments["globe"][0]
-        self.WriteForm(globe_info=globe)
+        globe_file = self.decode_argument(self.request.arguments["globe"][0])
+        self.WriteForm(globe_info=globe_file)
       elif cmd == "serve_globe":
         self.set_header("Content-Type", "text/html")
-        globe_file = self.request.arguments["globe"][0]
+        globe_file = self.decode_argument(self.request.arguments["globe"][0])
         tornado.web.globe_.ServeGlobe(globe_file)
         self.servePortablePage(path)
       elif cmd == "confirmation_id":

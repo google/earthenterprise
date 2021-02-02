@@ -39,7 +39,6 @@ FileUnpacker::FileUnpacker(const char* package_file) {
   // Get length of file.
   length_ = Package::FileSize(package_file);
   if (!length_) {
-    std::cerr << "FileUnpacker::FileUnpacker, Unable to find: " << package_file << std::endl;
     return;
   }
 

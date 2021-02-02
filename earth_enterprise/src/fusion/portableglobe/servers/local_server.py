@@ -232,7 +232,7 @@ class LocalServer(object):
     if path == "root.kml":
       path = "skel.kml"
     elif path == "eb_balloon":
-      ftid = handler.request.arguments["ftid"][0].replace(":", "-")
+      ftid = handler.decode_argument(handler.request.arguments["ftid"][0]).replace(":", "-")
       path = "balloon_%s.html" % ftid
 
     try:
@@ -266,10 +266,11 @@ class LocalServer(object):
 
     # See if the request includes changing the globe.
     try:
-      if handler.request.arguments["globe"][0]:
+      globe = handler.decode_argument(handler.request.arguments["globe"][0])
+      if globe:
         globe_path = "%s%s%s" % (
             tornado.web.globe_.GlobeBaseDirectory(),
-            os.sep, handler.request.arguments["globe"][0])
+            os.sep, globe)
         tornado.web.globe_.ServeGlobe(globe_path)
     except:
       pass
@@ -326,7 +327,7 @@ class LocalServer(object):
       raise tornado.web.HTTPError(404)
 
     try:
-      version = handler.request.arguments["cv"][0]
+      version = handler.decode_argument(handler.request.arguments["cv"][0])
       if float(version[:3]) >= 7.1:
         self.LocalOneBoxKmlSearchHandler(handler)
         return
@@ -334,25 +335,25 @@ class LocalServer(object):
       pass  # Unknown version.
 
     try:
-      service = handler.request.arguments["service"][0]
+      service = handler.decode_argument(handler.request.arguments["service"][0])
       self.search_services_[service].KmlSearch(handler)
       return
     except KeyError:
       pass  # Search service has not been defined; use default.
 
     if "displayKeys" in handler.request.arguments.keys():
-      key = handler.request.arguments["displayKeys"][0]
+      key = handler.decode_argument(handler.request.arguments["displayKeys"][0])
       if key in handler.request.arguments.keys():
         try:
-          search_term = handler.request.arguments[key][0].lower()
+          search_term = handler.decode_argument(handler.request.arguments[key][0].lower())
         except KeyError:
           # Earth 6.2.2+ will use "q" instead.
-          search_term = handler.request.arguments[ALT_SEARCH_SERVICE_KEY][0]
+          search_term = handler.decode_argument(handler.request.arguments[ALT_SEARCH_SERVICE_KEY][0])
         handler.write(tornado.web.globe_.search_db_.KmlSearch(search_term))
 
   def LocalOneBoxKmlSearchHandler(self, handler):
     """Handle GET request for kml search results from search box."""
-    search_term = handler.request.arguments[ALT_SEARCH_SERVICE_KEY][0]
+    search_term = handler.decode_argument(handler.request.arguments[ALT_SEARCH_SERVICE_KEY][0])
     # Look for POI prefix match.
     results = tornado.web.globe_.search_db_.KmlSearch(search_term).strip()
     if results:
@@ -375,8 +376,8 @@ class LocalServer(object):
     if not handler.IsValidRequest():
       raise tornado.web.HTTPError(404)
 
-    cb = handler.request.arguments["cb"][0]
-    service = handler.request.arguments["service"][0]
+    cb = handler.decode_argument(handler.request.arguments["cb"][0])
+    service = handler.decode_argument(handler.request.arguments["service"][0])
     try:
       self.search_services_[service].JsonSearch(handler, cb)
       return
@@ -384,9 +385,9 @@ class LocalServer(object):
       pass  # Search service has not been defined; use default.
 
     if "displayKeys" in handler.request.arguments.keys():
-      key = handler.request.arguments["displayKeys"][0]
+      key = handler.decode_argument(handler.request.arguments["displayKeys"][0])
       if key in handler.request.arguments.keys():
-        search_term = handler.request.arguments[key][0].lower()
+        search_term = handler.decode_argument(handler.request.arguments[key][0]).lower()
         handler.write(tornado.web.globe_.search_db_.JsonSearch(search_term, cb))
 
   def ParseGlobeReqName(self, req):
@@ -559,16 +560,16 @@ class LocalServer(object):
     if not handler.IsValidRequest():
       raise tornado.web.HTTPError(404)
 
-    x = int(handler.request.arguments["x"][0])
-    y = int(handler.request.arguments["y"][0])
-    z = int(handler.request.arguments["z"][0])
+    x = int(handler.decode_argument(handler.request.arguments["x"][0]))
+    y = int(handler.decode_argument(handler.request.arguments["y"][0]))
+    z = int(handler.decode_argument(handler.request.arguments["z"][0]))
     if tornado.web.globe_.IsMbtiles() and is_imagery:
       handler.write(
           tornado.web.globe_.ReadMapImageryTile(x, y, z))
       return
 
     qtnode = self.ConvertToQtNode(x, y, z)
-    channel = int(handler.request.arguments["channel"][0])
+    channel = int(handler.decode_argument(handler.request.arguments["channel"][0]))
     try:
       if is_imagery:
         handler.write(

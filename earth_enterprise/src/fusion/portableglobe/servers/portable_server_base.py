@@ -36,7 +36,7 @@ class BaseHandler(tornado.web.RequestHandler):
     """Return a simple file as content."""
     # If local override is on, return the local file if it exists.
     if (tornado.web.globe_.config_.LocalOverride() and
-        os.path.isfile("./local/%s" % path)):
+        os.path.isfile("./local/{0}".format(path))):
       print("Using local file:{0}".format(path))
       return self.WriteLocalFile(path)
 
@@ -64,8 +64,8 @@ class BaseHandler(tornado.web.RequestHandler):
       return False
 
     except FileNotFoundError:
-      print('BaseHandler.WriteLocalFile file not found %s' % path)
-      return False
+      print('BaseHandler.WriteLocalFile file not found: %s' % path)
+      return False 
 
   def ShowUri(self, host):
     """Show the uri that was requested."""

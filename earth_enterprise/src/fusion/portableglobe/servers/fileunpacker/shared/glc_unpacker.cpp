@@ -284,7 +284,6 @@ bool GlcUnpacker::FindMapDataPacket(const char* qtpath,
                                     int channel,
                                     int layer,
                                     PackageFileLoc* data_loc) {
-  static std::ofstream outfile ("/home/centos/outfile", std::ofstream::out);
   if (!is_gee_) {
     std::cerr << "Not a GEE file." << std::endl;
     return false;
@@ -299,7 +298,6 @@ bool GlcUnpacker::FindMapDataPacket(const char* qtpath,
       } else {
         layer = parent_layer_[layer];
         if (layer == 0) {
-          outfile << "----------------" << std::endl << "GlcUnpacker::FindMapDataPacket layer = 0 failure!" << std::endl << "qtpath: " << std::string(qtpath) << " packet_type: " << packet_type << " channel: " << channel << " layer: " << layer << std::endl << "data_loc, " << data_loc->output() << std::endl << "----------------" << std::endl;
           return false;
         }
       }
@@ -474,7 +472,6 @@ bool GlcUnpacker::FindFile(const char* file_name,
     file_loc->Set(it->second.Offset(), it->second.Size());
     return true;
   } else {
-    std::cerr << "GlcUnpacker::FindFile, Unable to find: " << file_name << std::endl;
     file_loc->Set(0, 0);
     return false;
   }

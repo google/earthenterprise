@@ -53,7 +53,8 @@ class ExtService(object):
     handler.set_header("Content-Type", "text/html")
     handler.write("<p>Process GET request...")
     try:
-      handler.write("<p>Hello %s!" % handler.request.arguments["name"][0])
+      name = handler.decode_argument(handler.request.arguments["name"][0])
+      handler.write("<p>Hello %s!" % name)
     except KeyError:
       handler.write("<p>Hello unknown!")
     handler.write("<p>Path: %s" % path)
@@ -65,7 +66,8 @@ class ExtService(object):
     handler.set_header("Content-Type", "text/html")
     handler.write("<p>Process POST request...")
     try:
-      handler.write("<p>Hello %s!" % handler.request.arguments["name"][0])
+      name = handler.decode_argument(handler.request.arguments["name"][0])
+      handler.write("<p>Hello %s!" % name)
     except KeyError:
       handler.write("<p>Hello unknown!")
     handler.write("<p>Path: %s" % path)

@@ -119,11 +119,12 @@ class Globe(object):
     """Returns package or file content currently pointed to by unpacker."""
     offset = 0 + (self.file_loc_.HighOffset() & 0xffffffff) << 32
     offset += (self.file_loc_.LowOffset() & 0xffffffff)
+    
     fp = open(self.GlobePath(), "rb")
     fp.seek(offset)
     # We should never be requesting files whose size doesn't fit in the
     # lower 32 bits.
-    content = fp.read(self.file_loc_.LowSize()).decode()
+    content = fp.read(self.file_loc_.LowSize())
     fp.close()
     return content
 
@@ -166,20 +167,19 @@ class Globe(object):
 
   def FileExists(self, relative_file_path):
     """Returns whether file exists in current glx."""
-    #relative_file_path = relative_file_path.encode("ascii", "ignore")
+
     return self.unpacker_.FindFile(relative_file_path, self.file_loc_)
 
   def ReadFile(self, relative_file_path):
     """Returns content of file stored in globe package file.
-
     If file is not found, returns an empty string.
     """
-    #relative_file_path = relative_file_path.encode("ascii", "ignore")
+    
     if self.unpacker_.FindFile(relative_file_path, self.file_loc_):
-      return self.GetData()
+      return self.GetData().decode()
     else:
-      raise UnableToFindException("Unable to find file %s." %
-                                  relative_file_path)
+
+      raise UnableToFindException("Unable to find file %s." % relative_file_path)
 
   def ReadLayerFile(self, relative_file_path, layer_id):
     """Returns content of file stored in layer package file.
@@ -197,6 +197,7 @@ class Globe(object):
         relative_file_path, layer_id, self.file_loc_):
       return self.GetData()
     else:
+
       raise UnableToFindException("Unable to find file.")
 
   def ReadMetaDbRoot(self):
@@ -213,14 +214,12 @@ class Globe(object):
     """
     if self.unpacker_.FindLayerFile(path, layer_id, self.file_loc_):
       data = self.GetData()
-      print("path dbroot: {0} {1}".format(path, len(data)))
       return data
     elif self.unpacker_.FindQtpPacket(
         "0", glc_unpacker.kDbRootPacket, 0, layer_id, self.file_loc_):
       data = self.GetData()
       return data
     else:
-      print("Did not find: {0} {1}".format(path, layer_id))
       raise UnableToFindException("Unable to find dbroot.")
 
   def ReadDataPacket(self, qtpath, packet_type, channel, layer_id):
@@ -310,13 +309,10 @@ class Globe(object):
     Returns:
       The map packet itself.
     """
-    msg = "ReadMapDataPacket: qtpath {0} packet_type {1} channel {2} layer_id {3} file_loc_ {4}".format(type(qtpath), packet_type, channel, layer_id, self.file_loc_)
     if self.unpacker_.FindMapDataPacket(
         qtpath, packet_type, channel, layer_id, self.file_loc_):
       return self.GetData()
     else:
-      print(msg)
-
       raise UnableToFindException("Unable to find packet.")
 
   def ReadMapImageryPacket(self, qtpath, channel, layer_id):
