@@ -1,7 +1,8 @@
-#! /usr/bin/python
+#!/usr/bin/env python3.8
 #
 # Protocol Buffers - Google's data interchange format
 # Copyright 2008 Google Inc.  All rights reserved.
+# Copyright 2021 the Open GEE Contributors
 # http://code.google.com/p/protobuf/
 #
 # Redistribution and use in source and binary forms, with or without
@@ -79,7 +80,7 @@ class MessageTest(unittest.TestCase):
     golden_message.ParseFromString(golden_data)
     all_set = unittest_pb2.TestAllExtensions()
     test_util.SetAllExtensions(all_set)
-    self.assertEquals(all_set, golden_message)
+    self.assertEqual(all_set, golden_message)
     self.assertTrue(golden_message.SerializeToString() == golden_data)
     golden_copy = copy.deepcopy(golden_message)
     self.assertTrue(golden_copy.SerializeToString() == golden_data)
@@ -90,7 +91,7 @@ class MessageTest(unittest.TestCase):
     golden_message.ParseFromString(golden_data)
     all_set = unittest_pb2.TestPackedTypes()
     test_util.SetAllPackedFields(all_set)
-    self.assertEquals(all_set, golden_message)
+    self.assertEqual(all_set, golden_message)
     self.assertTrue(all_set.SerializeToString() == golden_data)
     golden_copy = copy.deepcopy(golden_message)
     self.assertTrue(golden_copy.SerializeToString() == golden_data)
@@ -101,7 +102,7 @@ class MessageTest(unittest.TestCase):
     golden_message.ParseFromString(golden_data)
     all_set = unittest_pb2.TestPackedExtensions()
     test_util.SetAllPackedExtensions(all_set)
-    self.assertEquals(all_set, golden_message)
+    self.assertEqual(all_set, golden_message)
     self.assertTrue(all_set.SerializeToString() == golden_data)
     golden_copy = copy.deepcopy(golden_message)
     self.assertTrue(golden_copy.SerializeToString() == golden_data)

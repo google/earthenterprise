@@ -1,5 +1,6 @@
 # Protocol Buffers - Google's data interchange format
 # Copyright 2008 Google Inc.  All rights reserved.
+# Copyright 2021 the Open GEE Contributors
 # http://code.google.com/p/protobuf/
 #
 # Redistribution and use in source and binary forms, with or without
@@ -377,7 +378,7 @@ def StringDecoder(field_number, is_repeated, is_packed, key, new_default):
   """Returns a decoder for a string field."""
 
   local_DecodeVarint = _DecodeVarint
-  local_unicode = unicode
+  local_unicode = str
 
   assert not is_packed
   if is_repeated:

@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2008 Google Inc.
+# Copyright 2021 the OpenGEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -152,8 +153,8 @@ class Mox(object):
 
   # A list of types that should be stubbed out with MockObjects (as
   # opposed to MockAnythings).
-  _USE_MOCK_OBJECT = [types.ClassType, types.InstanceType, types.ModuleType,
-                      types.ObjectType, types.TypeType]
+  _USE_MOCK_OBJECT = [type, types.InstanceType, types.ModuleType,
+                      object, type]
 
   def __init__(self):
     """Initialize a new Mox."""
@@ -306,7 +307,7 @@ class MockAnything:
     return MockMethod(method_name, self._expected_calls_queue,
                       self._replay_mode)
 
-  def __nonzero__(self):
+  def __bool__(self):
     """Return 1 for nonzero so the mock can be used as a conditional."""
 
     return 1
@@ -778,7 +779,7 @@ class Comparator:
       rhs: any python object
     """
 
-    raise NotImplementedError, 'method must be implemented by a subclass.'
+    raise NotImplementedError('method must be implemented by a subclass.')
 
   def __eq__(self, rhs):
     return self.equals(rhs)
@@ -1350,7 +1351,7 @@ class MoxMetaTestBase(type):
       for attr_name in dir(base):
         d[attr_name] = getattr(base, attr_name)
 
-    for func_name, func in d.items():
+    for func_name, func in list(d.items()):
       if func_name.startswith('test') and callable(func):
         setattr(cls, func_name, MoxMetaTestBase.CleanUpTest(cls, func))
 
@@ -1386,7 +1387,7 @@ class MoxMetaTestBase(type):
     return new_method
 
 
-class MoxTestBase(unittest.TestCase):
+class MoxTestBase(unittest.TestCase, metaclass=MoxMetaTestBase):
   """Convenience test class to make stubbing easier.
 
   Sets up a "mox" attribute which is an instance of Mox - any mox tests will
@@ -1394,8 +1395,6 @@ class MoxTestBase(unittest.TestCase):
   methods have been called at the end of each test, eliminating boilerplate
   code.
   """
-
-  __metaclass__ = MoxMetaTestBase
 
   def setUp(self):
     self.mox = Mox()

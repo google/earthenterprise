@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2008 Google Inc.
+# Copyright 2021 the OpenGEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -60,7 +61,7 @@ class StubOutForTesting:
        Raises AttributeError if the attribute cannot be found.
     """
     if (inspect.ismodule(obj) or
-        (not inspect.isclass(obj) and obj.__dict__.has_key(attr_name))):
+        (not inspect.isclass(obj) and attr_name in obj.__dict__)):
       orig_obj = obj
       orig_attr = getattr(obj, attr_name)
 

@@ -1,7 +1,8 @@
-#! /usr/bin/python
+#!/usr/bin/env python3.8
 #
 # Protocol Buffers - Google's data interchange format
 # Copyright 2008 Google Inc.  All rights reserved.
+# Copyright 2021 the Open GEE Contributors
 # http://code.google.com/p/protobuf/
 #
 # Redistribution and use in source and binary forms, with or without
@@ -149,7 +150,7 @@ class GeneratorTest(unittest.TestCase):
     # extension and for its value to be set to -789.
 
   def testNestedTypes(self):
-    self.assertEquals(
+    self.assertEqual(
         set(unittest_pb2.TestAllTypes.DESCRIPTOR.nested_types),
         set([
             unittest_pb2.TestAllTypes.NestedMessage.DESCRIPTOR,

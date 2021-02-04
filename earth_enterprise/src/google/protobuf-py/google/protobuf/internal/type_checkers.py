@@ -1,5 +1,6 @@
 # Protocol Buffers - Google's data interchange format
 # Copyright 2008 Google Inc.  All rights reserved.
+# Copyright 2021 the Open GEE Contributors
 # http://code.google.com/p/protobuf/
 #
 # Redistribution and use in source and binary forms, with or without
@@ -97,9 +98,9 @@ class IntValueChecker(object):
   """Checker used for integer fields.  Performs type-check and range check."""
 
   def CheckValue(self, proposed_value):
-    if not isinstance(proposed_value, (int, long)):
+    if not isinstance(proposed_value, int):
       message = ('%.1024r has type %s, but expected one of: %s' %
-                 (proposed_value, type(proposed_value), (int, long)))
+                 (proposed_value, type(proposed_value), (int, int)))
       raise TypeError(message)
     if not self._MIN <= proposed_value <= self._MAX:
       raise ValueError('Value out of range: %d' % proposed_value)
@@ -110,16 +111,16 @@ class UnicodeValueChecker(object):
   """Checker used for string fields."""
 
   def CheckValue(self, proposed_value):
-    if not isinstance(proposed_value, (str, unicode)):
+    if not isinstance(proposed_value, str):
       message = ('%.1024r has type %s, but expected one of: %s' %
-                 (proposed_value, type(proposed_value), (str, unicode)))
+                 (proposed_value, type(proposed_value), (str, str)))
       raise TypeError(message)
 
     # If the value is of type 'str' make sure that it is in 7-bit ASCII
     # encoding.
     if isinstance(proposed_value, str):
       try:
-        unicode(proposed_value, 'ascii')
+        str(proposed_value, 'ascii')
       except UnicodeDecodeError:
         raise ValueError('%.1024r has type str, but isn\'t in 7-bit ASCII '
                          'encoding. Non-ASCII strings must be converted to '
@@ -156,9 +157,9 @@ _VALUE_CHECKERS = {
     _FieldDescriptor.CPPTYPE_UINT32: Uint32ValueChecker(),
     _FieldDescriptor.CPPTYPE_UINT64: Uint64ValueChecker(),
     _FieldDescriptor.CPPTYPE_DOUBLE: TypeChecker(
-        float, int, long),
+        float, int, int),
     _FieldDescriptor.CPPTYPE_FLOAT: TypeChecker(
-        float, int, long),
+        float, int, int),
     _FieldDescriptor.CPPTYPE_BOOL: TypeChecker(bool, int),
     _FieldDescriptor.CPPTYPE_ENUM: Int32ValueChecker(),
     _FieldDescriptor.CPPTYPE_STRING: TypeChecker(str),
