@@ -1,7 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
-# Copyright 2019, Open GEE Contributors
+# Copyright 2021, Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -130,7 +130,7 @@ class GlcAssembler(object):
   @staticmethod
   def Status(message):
     """Outputs a status message."""
-    print "\n%s" % message
+    print("\n%s" % message)
 
   @staticmethod
   def GetUniqueName(file_template, glc_name, allow_overwrite):
@@ -342,7 +342,7 @@ class GlcAssembler(object):
             output_file = "%s/%s" % (self.base_path, relative_address)
             self.ExtractFileFromGlx(
                 layer_info["path"], search_file, output_file)
-            print "Writing %s to %s ..." % (search_file, output_file)
+            print("Writing {0} to {1} ...".format(search_file, output_file))
       except KeyError:
         if layer_info["grab_kml"]:
           try:
@@ -364,14 +364,14 @@ class GlcAssembler(object):
 
             # Modify url to point at local copy in glc.
             layer_info["url"] = "/kml/%s" % kml_file
-            print "Downloaded to %s and made it available at %s." % (
-                kml_path, layer_info["url"])
+            print("Downloaded to {0} and made it available at {1}.". 
+                  format(kml_path, layer_info["url"]))
           except IOError:
-            print "Unable to write kml."
+            print("Unable to write kml.")
 
         else:
           # Ok, skip kml entries.
-          print "Skipping kml: %s" % layer_info["url"]
+          print("Skipping kml: %s" % layer_info["url"])
 
       index += 1
 
@@ -443,7 +443,7 @@ class GlcAssembler(object):
 
     # Verify all GLMs have the same projection:
     warned_about_projections = False
-    for i in xrange(1, len(glms)):
+    for i in range(1, len(glms)):
       glm_json = self.GetJson(glms[i]['path'])
       if glm_json['projection'] != first_glm_json['projection']:
         if not warned_about_projections:
@@ -467,7 +467,7 @@ class GlcAssembler(object):
 
   def DeleteGlc(self, path):
     if os.path.exists(path):
-      print "\nDeleting %s ..." % path
+      print("\nDeleting %s ..." % path)
       os.remove(path)
 
   # Example 3d json request:
@@ -777,7 +777,7 @@ class GlcAssembler(object):
         if os.path.isfile(extracted_glx):
           return msg + "FAILED: %s already exists." % extracted_glx
 
-        print "Extracting %s to %s ..." % (glx_entry, extracted_glx)
+        print("Extracting {0} to {1} ...".format(glx_entry, extracted_glx))
         msg += self.ExtractFileFromGlx(self.glc_path, glx_entry, extracted_glx)
       return "SUCCESS"
     except Exception as e:
@@ -787,7 +787,7 @@ class GlcAssembler(object):
       if logger is not None:
         logger.Log("ERROR: %s\n%s\n" % (err_msg, stack_trace))
       else:
-        print "ERROR: %s\n%s\n" % (err_msg, stack_trace)
+        print("ERROR: {0}\n{1}\n".format(err_msg, stack_trace))
       return "FAILED %s" % err_msg
 
 

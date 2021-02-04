@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
 # Copyright 2020 Open GEE Contributors
@@ -49,7 +49,7 @@ class GlobeCutter(object):
           search_tabs = fp.read()
       fp.close()
     except:
-      print ("No search tabs found.")
+      print("No search tabs found.")
 
     return search_tabs
 

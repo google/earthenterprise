@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
 #
@@ -110,7 +110,7 @@ class Globe(object):
     if glm_layer_id in self.is_base_layer_:
       return self.is_base_layer_[glm_layer_id]
 
-    print "Unknown layer (IsBaseLayer)."
+    print("Unknown layer (IsBaseLayer).")
     return False
 
   def _GetData(self):
@@ -149,14 +149,14 @@ class Globe(object):
 
   def CalculateCrc(self):
     """Returns calculated crc for the globe."""
-    size = ((os.path.getsize(self.GlobePath())
+    size = int((os.path.getsize(self.GlobePath())
              - glc_unpacker.Package.kCrcOffset)
             / glc_unpacker.Package.kCrcSize)
     fp = open(self.GlobePath(), "rb")
 
     crc = [0, 0, 0, 0]
-    for unused_i in xrange(size):
-      for j in xrange(glc_unpacker.Package.kCrcSize):
+    for unused_i in range(size):
+      for j in range(glc_unpacker.Package.kCrcSize):
         ch = fp.read(1)
         crc[j] ^= ord(ch)
 
@@ -260,13 +260,13 @@ class Globe(object):
 
     if self.unpacker_.FindLayerFile(path, layer_id, self.file_loc_):
       data = self._GetData()
-      print "path dbroot: ", path, len(data)
+      print("path dbroot: {0} {1}".format(path, len(data))
       return data
     elif self.unpacker_.FindQtpPacket(
         "0", glc_unpacker.kDbRootPacket, 0, layer_id, self.file_loc_):
       return self._GetData()
     else:
-      print "Did not find dbRoot for: ", layer_id
+      print("Did not find dbRoot for: ", layer_id)
       raise portable_exceptions.UnableToFindException("Unable to find dbroot.")
 
   def ReadDataPacket(self, qtpath, packet_type, channel, layer_id):

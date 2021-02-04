@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
 #
@@ -102,7 +102,7 @@ class GeeTestResult(unittest.TestResult):
 
 def PrintJsonResults(results):
   """Print results in json format."""
-  print json.dumps(results)
+  print(json.dumps(results))
 
 
 def PrintTextSuiteResults(results,
@@ -115,44 +115,44 @@ def PrintTextSuiteResults(results,
   num_errors = 0
   num_skipped = 0
   for result in results["test_results"]:
-    print "-- (%s) %s %s" % (result["module"], result["test"], result["status"])
+    print("-- (%s) %s %s" % (result["module"], result["test"], result["status"]))
     if result["status"] == "SUCCESS":
       num_successes += 1
     else:
       if result["status"] == "FAILURE":
         num_failures += 1
-        print "  %s: %s" % (result["error_type"], result["error_msg"])
-        print "Traceback\n%s" % result["error_traceback"]
+        print("  %s: %s" % (result["error_type"], result["error_msg"]))
+        print("Traceback\n%s" % result["error_traceback"])
       elif result["status"] == "ERROR":
         num_errors += 1
-        print "  %s: %s" % (result["error_type"], result["error_msg"])
-        print "Traceback\n%s" % result["error_traceback"]
+        print("  %s: %s" % (result["error_type"], result["error_msg"]))
+        print("Traceback\n%s" % result["error_traceback"])
       elif result["status"] == "SKIPPED":
         num_skipped += 1
-        print "  %s" % (result["skip_reason"])
+        print("  %s" % (result["skip_reason"]))
       else:
-        print "Unknown status:", result["status"]
+        print("Unknown status:", result["status"])
         break
     num_tests += 1
 
   if show_stdout:
-    print "Test messages:"
+    print("Test messages:")
     for line in results["stdout"]:
-      print line.strip()
-  print "Summary: %d tests  %d successes  %d errors  %d failures %d skipped" % (
-      num_tests, num_successes, num_errors, num_failures, num_skipped)
+      print(line.strip())
+  print("Summary: {0} tests {1} successes {2} errors {3} failures {4} skipped".
+      format(num_tests, num_successes, num_errors, num_failures, num_skipped))
 
 
 def PrintTextResults(results):
   """Print results for a test suite."""
   if results["user_tests"]:
-    print "\n** User Tests **"
+    print("\n** User Tests **")
     PrintTextSuiteResults(results["user_tests"])
   if results["fusion_tests"]:
-    print "\n** Fusion Tests **"
+    print("\n** Fusion Tests **")
     PrintTextSuiteResults(results["fusion_tests"])
   if results["server_tests"]:
-    print "\n** Server Tests **"
+    print("\n** Server Tests **")
     PrintTextSuiteResults(results["server_tests"])
 
 
@@ -184,22 +184,22 @@ def RunTests(test_runner, test_dir):
 
 
 def Usage(app):
-  print "Usage:"
-  print ("  %s [--no_user_tests] [--no_fusion_tests] [--no_server_tests]"
-         " [format]") % app
-  print "     format - Output format ('json' or 'text'). Default: 'json'"
+  print("Usage:")
+  print("  %s [--no_user_tests] [--no_fusion_tests] [--no_server_tests]"
+        " [format]") % app)
+  print("     format - Output format ('json' or 'text'). Default: 'json'")
   exit(0)
 
 
 def main(argv):
   """ Main function to run tests and render results. """
-  for i in xrange(1, len(argv)):
+  for i in range(1, len(argv)):
     if argv[i] not in ["--no_user_tests",
                        "--no_fusion_tests",
                        "--no_server_tests",
                        "json",
                        "text"]:
-      print "Unknown parameter:", argv[i]
+      print("Unknown parameter:", argv[i])
       Usage(argv[0])
 
   test_runner = GeeTestRunner()

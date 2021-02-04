@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
 #
@@ -167,7 +167,7 @@ def BoundsToRawJson(lat, lng, lod, bounds):
     raw json containing point and tile bounds.
   """
   utils = search_utils.SearchUtils()
-  print "%s\n" % utils.GetContentType("json")
+  print("%s\n" % utils.GetContentType("json"))
 
   coordinates = "[%f,%f,0]" % (bounds["west"], bounds["south"])
   coordinates += ",[%f,%f,0]" % (bounds["west"], bounds["north"])
@@ -207,7 +207,7 @@ def BoundsToJson(lat, lng, lod, bounds):
     lod: (integer) Level of detail (zoom).
     bounds: (dictonary)  North, west, south, east bounds.
   """
-  print BoundsToRawJson(lat, lng, lod, bounds)
+  print(BoundsToRawJson(lat, lng, lod, bounds))
 
 
 def BoundsToJsonp(lat, lng, lod, bounds, function_name):
@@ -220,7 +220,7 @@ def BoundsToJsonp(lat, lng, lod, bounds, function_name):
     bounds: (dictonary)  North, west, south, east bounds.
     function_name: (string) Name of function to call on json argument.
   """
-  print "%s('%s');" % (function_name, BoundsToRawJson(lat, lng, lod, bounds))
+  print("%s('%s');" % (function_name, BoundsToRawJson(lat, lng, lod, bounds)))
 
 
 def BoundsToKml(lat, lng, lod, bounds):
@@ -233,7 +233,7 @@ def BoundsToKml(lat, lng, lod, bounds):
     bounds: (dictonary)  North, west, south, east bounds.
   """
   utils = search_utils.SearchUtils()
-  print "%s\n" % utils.GetContentType("kml")
+  print("%s\n" % utils.GetContentType("kml"))
 
   coordinates = "%f,%f,0" % (bounds["west"], bounds["south"])
   coordinates += " %f,%f,0" % (bounds["west"], bounds["north"])
@@ -261,7 +261,7 @@ def BoundsToKml(lat, lng, lod, bounds):
       foldername="Results",
       style=utils.style,
       placemark=search_placemarks)
-  print kml_response
+  print(kml_response)
 
 
 def DoBoundsSearch(lat, lng, lod, output, function_name=""):
@@ -292,8 +292,8 @@ def DoBoundsSearch(lat, lng, lod, output, function_name=""):
 
 def Fail(message):
   """Fail with the given message."""
-  print "Content-type: text/plain\n"
-  print message
+  print("Content-type: text/plain\n")
+  print(message)
   raise Exception(message)
 
 
