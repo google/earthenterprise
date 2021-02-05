@@ -258,7 +258,16 @@ task openGeePostGisRpm(type: GeeRpm) {
     autoFindProvides = true
     autoFindRequires = true
 
+    // "requires" is for runtime dependencies. "requiresPre" is for pre-install
+    // script dependencies. We need both because pre- and post-install scripts
+    // call Open GEE binaries, and they may fail if a different version of
+    // common libraries is installed.
+    // In this case, opengee-postgis doesn't have a pre- or post-install script
+    // to worry about, but we do need to make sure that opengee-common's
+    // pre-install script runs first.
     requires('opengee-common', ospackage.version, GREATER | EQUAL)
+    requiresPre('opengee-common', ospackage.version, GREATER | EQUAL)
+
     // The code in GeeRpm decides that this RPM should depend on proj, but
     // it actually depends on proj-devel.
     requires('proj-devel')
@@ -535,9 +544,14 @@ task openGeeServerRpm(type: GeeRpm, dependsOn: openGeeServerInitScripts) {
     autoFindProvides = true
     autoFindRequires = true
 
+    // "requires" is for runtime dependencies. "requiresPre" is for pre-install
+    // script dependencies. We need both because pre- and post-install scripts
+    // call Open GEE binaries, and they may fail if a different version of
+    // common libraries is installed.
     requires('opengee-common', ospackage.version, GREATER | EQUAL)
     requiresPre('opengee-common', ospackage.version, GREATER | EQUAL)
     requires('opengee-postgis', '2.3.9', GREATER | EQUAL)
+    requiresPre('opengee-postgis', '2.3.9', GREATER | EQUAL)
     conflicts('opengee-postgis', '2.0', LESS )
     conflicts('opengee-postgis', '2.4', GREATER | EQUAL)
     requires('python-unittest2')
@@ -769,7 +783,12 @@ built from raster, vector, and location properties data.
     autoFindProvides = true
     autoFindRequires = true
 
+    // "requires" is for runtime dependencies. "requiresPre" is for pre-install
+    // script dependencies. We need both because pre- and post-install scripts
+    // call Open GEE binaries, and they may fail if a different version of
+    // common libraries is installed.
     requires('opengee-common', ospackage.version, GREATER | EQUAL)
+    requiresPre('opengee-common', ospackage.version, GREATER | EQUAL)
     requires('proj-devel') /* This dependency is not being picked up automatically by GeeRpm task */
     requires('/etc/rc.d/init.d/functions')
     requiresCommands(
@@ -937,13 +956,10 @@ task openGeeExtraRpm(type: GeeRpm, dependsOn: openGeeExtraInitScripts) {
     autoFindRequiresFilter = rpmCapabilityFilter
     requiresCommandFilter = rpmCommandFilter
 
-    // opengee-extra can be installed independently, but if Server or Fusion
-    // have been previously installed they must be upgraded before upgrading
-    // opengee-extra. This is because extra will use binaries installed by
-    // Server and Fusion if they are available to set up the tutorial volume
-    // and install example search.
-    conflicts('opengee-server', ospackage.version, LESS)
-    conflicts('opengee-fusion', ospackage.version, LESS)
+    // This package contains files that were in opengee-server and
+    // opengee-fusion in versions 5.3.4.1 and before.
+    conflicts('opengee-server', "5.3.4.1", LESS | EQUAL)
+    conflicts('opengee-fusion', "5.3.4.1", LESS | EQUAL)
 
     postInstall = file("${buildDir}/opengee-extra/post-install.sh")
     preUninstall = file("${buildDir}/opengee-extra/pre-uninstall.sh")
@@ -1039,13 +1055,10 @@ task openGeeExtraDeb(type: GeeDeb, dependsOn: openGeeExtraInitScripts) {
     license = openGeeExtraRpm.license
     url = openGeeExtraRpm.url
 
-    // opengee-extra can be installed independently, but if Server or Fusion
-    // have been previously installed they must be upgraded before upgrading
-    // opengee-extra. This is because extra will use binaries installed by
-    // Server and Fusion if they are available to set up the tutorial volume
-    // and install example search.
-    conflicts('opengee-server', ospackage.version, LESS)
-    conflicts('opengee-fusion', ospackage.version, LESS)
+    // This package contains files that were in opengee-server and
+    // opengee-fusion in versions 5.3.4.1 and before.
+    conflicts('opengee-server', "5.3.4.1", LESS | EQUAL)
+    conflicts('opengee-fusion', "5.3.4.1", LESS | EQUAL)
 
     postInstallFile file("${buildDir}/opengee-extra/post-install.sh")
     preUninstallFile file("${buildDir}/opengee-extra/pre-uninstall.sh")
