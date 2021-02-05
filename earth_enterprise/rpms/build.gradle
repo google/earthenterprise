@@ -937,10 +937,13 @@ task openGeeExtraRpm(type: GeeRpm, dependsOn: openGeeExtraInitScripts) {
     autoFindRequiresFilter = rpmCapabilityFilter
     requiresCommandFilter = rpmCommandFilter
 
-    // This package contains files that were in opengee-server and
-    // opengee-fusion in versions 5.3.4.1 and before.
-    conflicts('opengee-server', "5.3.4.1", LESS | EQUAL)
-    conflicts('opengee-fusion', "5.3.4.1", LESS | EQUAL)
+    // opengee-extra can be installed independently, but if Server or Fusion
+    // have been previously installed they must be upgraded before upgrading
+    // opengee-extra. This is because extra will use binaries installed by
+    // Server and Fusion if they are available to set up the tutorial volume
+    // and install example search.
+    conflicts('opengee-server', ospackage.version, LESS)
+    conflicts('opengee-fusion', ospackage.version, LESS)
 
     postInstall = file("${buildDir}/opengee-extra/post-install.sh")
     preUninstall = file("${buildDir}/opengee-extra/pre-uninstall.sh")
@@ -1036,10 +1039,13 @@ task openGeeExtraDeb(type: GeeDeb, dependsOn: openGeeExtraInitScripts) {
     license = openGeeExtraRpm.license
     url = openGeeExtraRpm.url
 
-    // This package contains files that were in opengee-server and
-    // opengee-fusion in versions 5.3.4.1 and before.
-    conflicts('opengee-server', "5.3.4.1", LESS | EQUAL)
-    conflicts('opengee-fusion', "5.3.4.1", LESS | EQUAL)
+    // opengee-extra can be installed independently, but if Server or Fusion
+    // have been previously installed they must be upgraded before upgrading
+    // opengee-extra. This is because extra will use binaries installed by
+    // Server and Fusion if they are available to set up the tutorial volume
+    // and install example search.
+    conflicts('opengee-server', ospackage.version, LESS)
+    conflicts('opengee-fusion', ospackage.version, LESS)
 
     postInstallFile file("${buildDir}/opengee-extra/post-install.sh")
     preUninstallFile file("${buildDir}/opengee-extra/pre-uninstall.sh")
