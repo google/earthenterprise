@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -126,7 +127,7 @@ class SearchSchemaParser(object):
     self.__StartDocument()
     try:
       context = ET.iterparse(search_file, SearchSchemaParser.EVENTS)
-    except ET.ParseError, e:
+    except ET.ParseError as e:
       row, column = e.position
       raise exceptions.SearchSchemaParserException(
           "Unable to parse POI file %s."
@@ -363,7 +364,7 @@ class SearchSchemaParser(object):
       self.tmp_file.seek(0)
       self._db_updater.CopyFrom(self.tmp_file)
       elapsed = time.time() - start
-      print "File import time: ", elapsed
+      print(("File import time: ", elapsed))
 
     self.tmp_file.close()  # deletes file
 
@@ -394,20 +395,20 @@ def main(argv):
   try:
     opts, unused_args = getopt.getopt(argv, "hi:", ["help", "poifile="])
     if not opts:
-      print "search_schema_parser.py -i <input poifile>"
+      print("search_schema_parser.py -i <input poifile>")
       sys.exit(1)
   except getopt.GetoptError:
-    print "search_schema_parser.py -i <input poifile>"
+    print("search_schema_parser.py -i <input poifile>")
     sys.exit(2)
 
   for opt, arg in opts:
     if opt == "-h":
-      print "search_schema_parser.py -i <input poifile>"
+      print("search_schema_parser.py -i <input poifile>")
       sys.exit()
     elif opt in ("-i", "--poifile"):
       poifile = arg
 
-  print "Input poifile is ", poifile
+  print(("Input poifile is ", poifile))
 
   db_updater = MockDatabaseUpdater()
   parser = SearchSchemaParser(db_updater)
@@ -416,7 +417,7 @@ def main(argv):
   # TODO(RAW): add prefix path to test this
   (num_fields, sql_search, balloon_style) = parser.Parse(poifile, "test_poi", None)
   elapsed = time.time() - start
-  print "Elapsed time: ", elapsed
+  print(("Elapsed time: ", elapsed))
   logger.info("Num fields: %s", num_fields)
   logger.info("SQL Search: %s", sql_search)
   logger.info("Balloon style: %s", balloon_style)
