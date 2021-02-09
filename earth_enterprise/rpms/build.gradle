@@ -147,7 +147,10 @@ def stagedInstallDir_postgis_opt = new File(stagedInstallDir, 'postgis/opt')
 // Commands used in install-utils.sh:
 def packageSharedCommands = ['bash', 'flock', 'sed', 'xmllint']
 
-// Since </bin> is symlinked to </usr/bin> on Cent OS 7, some
+// Since some libraries (i.e., MrSid)  cannot be redistributed without
+// a license and are not packaged as an RPM, we need to filter these
+// out from the automatic 'requires' dependency generation.
+//     Since </bin> is symlinked to </usr/bin> on Cent OS 7, some
 // build scripts misdetect the location of interpreters and utilities,
 // such as `perl` and `sudo`.  The RPM packages for those utilities
 // only provide RPM capabilities at the canonical paths
@@ -157,6 +160,7 @@ def packageSharedCommands = ['bash', 'flock', 'sed', 'xmllint']
 // Capabilities mapped to `null` are removed from the dependency list.
 // The ones mapped to strings are rewritten.
 def rpmCapabilityMap = [
+    'libltidsdk.so()(64bit)': null,
     '/bin/perl': '/usr/bin/perl',
     '/bin/python': '/usr/bin/python',
     '/bin/sudo': '/usr/bin/sudo'
