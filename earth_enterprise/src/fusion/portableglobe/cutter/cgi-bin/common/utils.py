@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
 #
@@ -182,7 +182,7 @@ def OutputFile(file_name, replace_params):
   fp = open(file_name)
   text = fp.read()
   fp.close()
-  print ReplaceParams(text, replace_params)
+  print(ReplaceParams(text, replace_params))
 
 
 def CreateInfoFile(path, description):
@@ -201,7 +201,7 @@ def CreateFile(path, content):
     fp.write(content)
     fp.close()
   except IOError as error:
-    print error
+    print(error)
     sys.exit(1)
 
 
