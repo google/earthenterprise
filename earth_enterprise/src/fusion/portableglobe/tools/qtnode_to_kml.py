@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
 #
@@ -72,7 +72,7 @@ def GetNextQtnodeBounds(qtnode, x, y, size):
     Exception: if qtnode is not well formed.
   """
   if qtnode:
-    size /= 2
+    size = int(size/2)
     if qtnode[0] == "3":
       return GetNextQtnodeBounds(qtnode[1:], x, y + size, size)
     elif qtnode[0] == "2":
@@ -113,7 +113,7 @@ def OutputCoords(name, bounds):
             (bounds[0], bounds[1], bounds[2], bounds[1],
              bounds[2], bounds[3], bounds[0], bounds[3],
              bounds[0], bounds[1]))
-  print g_kml_polygon_template % (name, coords)
+  print(g_kml_polygon_template % (name, coords))
 
 
 def MergeBounds(bounds1, bounds2):
@@ -196,7 +196,7 @@ def ProcessFile(qtnode_file, use_kml, ignore_zero, max_level):
 
 def Help():
   """Prints help information for this tool."""
-  print """
+  print("""
 Usage: ./qtnode_to_kml.py [options] [required_arg]
 
 Outputs bounds or kml for one or more quadtree nodes. The kml includes
@@ -222,7 +222,7 @@ Examples:
   ./qtnode_to_kml.py --kml --max_level 15 /tmp/globe_builder/my_globe_env/qt_nodes.txt
   ./qtnode_to_kml.py --bounds_as_kml /tmp/globe_builder/my_globe_env/qt_nodes.txt
   ./qtnode_to_kml.py --ignore_zero 030132030222112
-"""
+""")
   sys.exit(0)
 
 
@@ -241,7 +241,7 @@ if __name__ == "__main__":
   elif re.match("^[0123]+$", arg):
     g_qtnode = arg
   else:
-    print "ERROR: Argument was not a file or a qtnode."
+    print("ERROR: Argument was not a file or a qtnode.")
     Help()
 
   g_output_kml = "--kml" in sys.argv
@@ -255,7 +255,7 @@ if __name__ == "__main__":
 
   # If printing kml, start with the header.
   if g_output_kml or g_bounds_as_kml:
-    print g_kml_header
+    print(g_kml_header)
 
   # Process either the qtnode file or a single qtnode address.
   if g_qtnode_file:
@@ -270,7 +270,7 @@ if __name__ == "__main__":
 
   # If printing kml, end with the footer.
   if g_output_kml or g_bounds_as_kml:
-    print g_kml_footer
+    print(g_kml_footer)
   # If not printing kml, show the bounds.
   else:
-    print g_bounds
+    print(g_bounds)

@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
 #
@@ -56,7 +56,7 @@ def StartServer(globe=""):
   globe = globe.replace("'", "\\'")
   cmd = ("../../../portable_server.app/Contents/MacOS/portable_server '%s' &" %
          globe)
-  print "Running %s" % cmd
+  print("Running %s" % cmd)
   os.system(cmd)
 
 
@@ -74,9 +74,9 @@ def main(argv):
   time.sleep(2)
 
   cmd = "open http://localhost:%s" % port
-  print "Running %s" % cmd
+  print("Running %s" % cmd)
   os.system(cmd)
-  print "Done."
+  print("Done.")
 
 if __name__ == "__main__":
   main(sys.argv)

@@ -277,6 +277,8 @@ bool GlcUnpacker::FindDataPacket(const char* qtpath,
  * Find map data packet and set offset and size for the packet.
  * Map data packets can be imagery or vectors.
  */
+#include <iostream>
+
 bool GlcUnpacker::FindMapDataPacket(const char* qtpath,
                                     int packet_type,
                                     int channel,
@@ -470,7 +472,6 @@ bool GlcUnpacker::FindFile(const char* file_name,
     file_loc->Set(it->second.Offset(), it->second.Size());
     return true;
   } else {
-    std::cerr << "Unable to find: " << file_name << std::endl;
     file_loc->Set(0, 0);
     return false;
   }

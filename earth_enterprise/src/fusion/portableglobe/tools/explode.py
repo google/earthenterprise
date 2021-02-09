@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
 #
@@ -98,9 +98,9 @@ def ExtractPackets(path, start_idx, end_idx=None, layer_idx=None):
     cmd += " --layer_idx %d" % layer_idx
   # Run in background and discard output
   cmd += " 2>&1 > /dev/null &"
-  print cmd
+  print(cmd)
   Launch(cmd)
-  print "... launched."
+  print("... launched.")
 
 
 def Wait(names):
@@ -112,38 +112,38 @@ def Wait(names):
   while True:
     time.sleep(3)
     results = Run(cmd).strip()
-    print "... running ..."
+    print("... running ...")
     if not results:
       break
 
 
 def ExplodeGlm(path, num_processes):
   """Extract all tiles in the glm to disk."""
-  print "Exploding %s ..." % path
+  print("Exploding %s ..." % path)
   num_packets = GetNumPackets(path)[0]
-  packets_per_process = num_packets / num_processes
+  packets_per_process = int(num_packets / num_processes)
   next_idx = 0
-  for unused_i in xrange(num_processes - 1):
+  for unused_i in range(num_processes - 1):
     ExtractPackets(path, next_idx, next_idx + packets_per_process)
     next_idx += packets_per_process
   ExtractPackets(path, next_idx)
   Wait(["geglxinfo", path])
-  print "Done!"
+  print("Done!")
 
 
 def ExplodeGlc(path, layer_idx, num_processes):
   """Extract all tiles in the given glc layer to disk."""
-  print "Exploding layer %d of %s ..." % (layer_idx, path)
+  print("Exploding layer %d of %s ..." % (layer_idx, path))
   num_packets = GetNumPackets(path)[layer_idx]
-  packets_per_process = num_packets / num_processes
+  packets_per_process = int(num_packets / num_processes)
   next_idx = 0
-  for unused_i in xrange(num_processes - 1):
+  for unused_i in range(num_processes - 1):
     ExtractPackets(path, next_idx, next_idx + packets_per_process,
                    layer_idx=layer_idx)
     next_idx += packets_per_process
   ExtractPackets(path, next_idx, layer_idx=layer_idx)
   Wait(["geglxinfo", path])
-  print "Done!"
+  print("Done!")
 
 
 def main():
@@ -165,23 +165,23 @@ def main():
   args = parser.parse_args()
 
   if os.path.exists("maptiles"):
-    print "** ERROR **: 'maptiles' directory already exists."
+    print("** ERROR **: 'maptiles' directory already exists.")
     parser.print_help()
     exit()
 
   if not os.path.exists(args.glx):
-    print "** ERROR **: %s was not found." % args.glx
+    print("** ERROR **: %s was not found." % args.glx)
     parser.print_help()
     exit()
 
   if args.num_processes < 1:
-    print "Setting number of processes to 1."
+    print("Setting number of processes to 1.")
     args.num_processes = 1
 
   suffix = args.glx[-4:]
   if suffix == ".glm":
     if args.layer_idx:
-      print "** WARNING **: Layer idx is ignored. Only used for glcs."
+      print("** WARNING **: Layer idx is ignored. Only used for glcs.")
       parser.print_help()
     ExplodeGlm(args.glx, args.num_processes)
   elif suffix == ".glc":
@@ -189,7 +189,7 @@ def main():
     # tend to only have a single imagery layer at the moment.
     ExplodeGlc(args.glx, args.layer_idx, args.num_processes)
   else:
-    print "** ERROR **: %s is not a glm or glc." % args.glx
+    print("** ERROR **: %s is not a glm or glc." % args.glx)
     parser.print_help()
 
 

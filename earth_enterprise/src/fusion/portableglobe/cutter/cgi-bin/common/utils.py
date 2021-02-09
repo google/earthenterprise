@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
 #
@@ -182,7 +182,7 @@ def OutputFile(file_name, replace_params):
   fp = open(file_name)
   text = fp.read()
   fp.close()
-  print ReplaceParams(text, replace_params)
+  print(ReplaceParams(text, replace_params))
 
 
 def CreateInfoFile(path, description):
@@ -201,7 +201,7 @@ def CreateFile(path, content):
     fp.write(content)
     fp.close()
   except IOError as error:
-    print error
+    print(error)
     sys.exit(1)
 
 
@@ -219,7 +219,7 @@ def ConvertToQtNode(level, col, row):
   """Converts col, row, and level to corresponding qtnode string."""
   qtnode = "0"
   half_ndim = 1 << (level - 1)
-  for unused_ in xrange(level):
+  for unused_ in range(level):
     if row >= half_ndim and col < half_ndim:
       qtnode += "0"
       row -= half_ndim
@@ -249,7 +249,7 @@ def JsBoolString(bool_value):
 def WriteHeader(content_type="text/html"):
   """Output header for web page."""
   # Pick up one print from the Python print.
-  print "Content-Type: %s\n" % content_type
+  print("Content-Type: %s\n" % content_type)
 
 
 def ExecuteCmd(os_cmd, logger, dry_run=False):
@@ -285,7 +285,7 @@ def ExecuteCmd(os_cmd, logger, dry_run=False):
       raise OsCommandError()
     else:
       PrintAndLog("SUCCESS", logger, None)
-  except Exception, e:
+  except Exception as e:
     PrintAndLog("FAILED: %s" % e.__str__(), logger)
     raise OsCommandError()
 
@@ -308,7 +308,7 @@ def ExecuteCmdInBackground(os_cmd, logger):
     subprocess.Popen(os_cmd + " &", shell=True,
                      stdout=subprocess.PIPE,
                      stderr=subprocess.PIPE)
-  except Exception, e:
+  except Exception as e:
     PrintAndLog("FAILED: %s" % e.__str__(), logger)
     raise OsCommandError()
 
@@ -342,16 +342,16 @@ def RunCmd(os_cmd):
       return ["", results]
     else:
       return results.split("\n")
-  except Exception, e:
+  except Exception as e:
     # print "FAILURE: %s" % e.__str__()
     return ["", e.__str__()]
 
 
 def PrintAndLog(msg, logger=None, prefix="\n"):
   if prefix:
-    print "%s%s" % (prefix, msg)
+    print("%s%s" % (prefix, msg))
   else:
-    print msg
+    print(msg)
 
   if logger:
     logger.Log(msg)

@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
 #
@@ -168,7 +168,7 @@ datastoreName: "%s", searchTerm: "%s", success: true,  data:
   # Methods to override with custom service.
 
   def KmlSearch(self, unused_handler):
-    print "Need to override KmlSearch."
+    print("Need to override KmlSearch.")
 
   def JsonSearch(self, unused_handler, unused_cb):
-    print "Need to override JsonSearch."
+    print("Need to override JsonSearch.")

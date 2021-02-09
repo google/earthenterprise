@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
 #
@@ -36,8 +36,8 @@ class BaseHandler(tornado.web.RequestHandler):
     """Return a simple file as content."""
     # If local override is on, return the local file if it exists.
     if (tornado.web.globe_.config_.LocalOverride() and
-        os.path.isfile("./local/%s" % path)):
-      print "Using local file:", path
+        os.path.isfile("./local/{0}".format(path))):
+      print("Using local file:{0}".format(path))
       return self.WriteLocalFile(path)
 
     # Write the file from the package.
@@ -60,14 +60,18 @@ class BaseHandler(tornado.web.RequestHandler):
       return True
 
     except portable_globe.UnableToFindException as e:
-      print e.message
+      print(e.message)
       return False
+
+    except FileNotFoundError:
+      print('BaseHandler.WriteLocalFile file not found: %s' % path)
+      return False 
 
   def ShowUri(self, host):
     """Show the uri that was requested."""
     # Comment out next line to increase performance.
     if tornado.web.globe_.config_.Debug():
-      print "Host: %s Request: %s" % (host, self.request.uri)
+      print("Host: {0} Request: {1}".format(host, self.request.uri))
 
   def IsLocalhost(self):
     """Checks if request is from localhost."""

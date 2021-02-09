@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
 #
@@ -114,12 +114,12 @@ class Tester(object):
     elif not self._TestUrl(ping_url):
       self.Error("Server may not be running.")
       return False
-    print "Check Portable server."
+    print("Check Portable server.")
     return True
 
   def CheckGlobes(self):
     """Makes sure that all necessary globes exist on the server."""
-    print "Check globes."
+    print("Check globes.")
     for globe in self.globes_:
       if not os.path.exists(self._GlobePath(globe)):
         self.Failure("No such globe: %s" % globe)
@@ -140,23 +140,23 @@ class Tester(object):
         url = next_test["url"]
         if not self._TestUrl(url):
           return
-    print "**SUCCESS**"
+    print("**SUCCESS**")
 
   def Error(self, message):
     """Output error message in consistent manner."""
-    print "**ERROR**: %s" % message
+    print("**ERROR**: %s" % message)
 
   def Failure(self, message):
     """Output failure message in consistent manner."""
-    print "**FAILURE**: %s" % message
+    print("**FAILURE**: %s" % message)
 
   def Warning(self, message):
     """Output failure message in consistent manner."""
-    print "**WARNING**: %s" % message
+    print("**WARNING**: %s" % message)
 
   def _ChangeGlobe(self, globe_name):
     """Ask server to serve the given globe."""
-    print "change globe", globe_name
+    print("change globe", globe_name)
     self.current_globe_ = globe_name
     if self.platform_ == "earthserver":
       return
@@ -289,7 +289,7 @@ class Tester(object):
 
   def _TestUrl(self, url):
     """Compare result from the url to the contents of the given file."""
-    print "Test", url
+    print("Test {0}".format(url))
     (path, file_name) = self._ConvertUrlToPath(url)
     if self.platform_ == "earthserver":
       full_url_path = "%s/%s" % (self.current_globe_, url)
@@ -308,7 +308,7 @@ class Tester(object):
           # Ok if directory already exists
           pass
 
-        print "Writing", file_name
+        print("Writing {0}".format(file_name))
         fp = open(file_name, "wb")
         fp.write(data)
         fp.close()
@@ -332,7 +332,7 @@ class Tester(object):
         actual = data.split("\n")
         # This must explain the inequality if all lines match.
         message = "Actual contains  more data than expected."
-        for i in xrange(len(expected)):
+        for i in range(len(expected)):
           if expected[i] != actual[i]:
             message = ("\nExpected %s:\n%s\nActual %s:\n%s"
                        % (file_name, expected[i], url, actual[i]))
@@ -349,7 +349,7 @@ class Tester(object):
       content = fp.read()
       fp.close()
     except Exception as e:
-      print e
+      print(e)
       return None
 
     return content
