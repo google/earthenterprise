@@ -32,7 +32,7 @@ import sys
 import time
 import ssl
 import urllib
-import urllib2
+from urllib.request import urlopen
 from contextlib import closing
 
 import defusedxml.ElementTree as etree
@@ -371,7 +371,7 @@ class GlobeBuilder(object):
       # TODO: When Python 2.7 is used on Centos6, this if version<=2.6 block can be removed
       # and the 'else' ssl.SSLContext based block can be used instead.
       if sys.version_info[0] == 2 and sys.version_info[1] <= 6:
-        with closing(urllib2.urlopen(url)) as fp:
+        with closing(urlopen(url)) as fp:
           http_status_code = fp.getcode()
           response_data = fp.read()
       else:
@@ -385,7 +385,7 @@ class GlobeBuilder(object):
           context = ssl.create_default_context()
           context.check_hostname = False
           context.verify_mode = ssl.CERT_NONE
-        with closing(urllib2.urlopen(url, context=context)) as fp:
+        with closing(urlopen(url, context=context)) as fp:
           http_status_code = fp.getcode()
           response_data = fp.read()
 
