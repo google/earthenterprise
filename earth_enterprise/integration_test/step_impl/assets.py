@@ -38,7 +38,7 @@ def list_from_table(table):
   return [row[0] for row in table]
 
 def get_status(asset):
-  return subprocess.check_output(["/opt/google/bin/gequery", "--status", asset]).strip()
+  return subprocess.check_output(["/opt/google/bin/gequery", "--status", asset]).decode('ascii').strip()
 
 def do_create_imagery_proj(project, isMercator):
   commandLine = ["/opt/google/bin/genewimageryproject", "-o", os.path.join(IMAGERY_PROJECT_PATH, project)]
@@ -148,7 +148,8 @@ def create_vector_resource_add_to_proj(resource, srcPath, project):
 
 @step("Verify that imagery project <project> has no versions")
 def verify_imagery_proj_no_versions(project):
-  output = subprocess.check_output(["/opt/google/bin/gequery", "--versions", os.path.join(IMAGERY_PROJECT_PATH, project)])
+  output = subprocess.check_output(["/opt/google/bin/gequery", "--versions", 
+                                    os.path.join(IMAGERY_PROJECT_PATH, project)]).decode('ascii')
   assert output.strip() == "NO VERSIONS", "Imagery project %s has more than 0 versions. Output: %s" % (project, output)
 
 def asset_operation(operation, asset, assetType):
@@ -278,7 +279,7 @@ def verify_state(path, states):
 
 def get_one_input(path, project, extension):
   hasInput = re.compile(r".*/(\w*\." + extension + ").*")
-  deps = subprocess.check_output(["/opt/google/bin/gequery", "--dependencies", os.path.join(path, project)])
+  deps = subprocess.check_output(["/opt/google/bin/gequery", "--dependencies", os.path.join(path, project)]).decode('ascii')
   depsIter = iter(deps.splitlines())
   for line in depsIter:
     match = hasInput.match(line)

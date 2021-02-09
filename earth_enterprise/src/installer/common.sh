@@ -1,5 +1,6 @@
 #!/bin/bash
 #
+# Copyright 2021 The Open GEE Contributors
 # Copyright 2017 Google Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -188,7 +189,7 @@ show_no_tmp_dir_message()
 {
     echo -e "\nThe temp install directory specified [$1] does not exist."
     echo -e "Please specify the path of the extracted install files or first run"
-    echo -e "python2.7 /usr/bin/scons [-j8] release=1 [installdir=$1] stage_install\n"
+    echo -e "scons [-j8] release=1 [installdir=$1] stage_install\n"
 }
 
 show_corrupt_tmp_dir_message()
@@ -196,7 +197,7 @@ show_corrupt_tmp_dir_message()
     echo -e "\nThe temp install directory specified [$1] is corrupt (failed on copy)."
     echo -e "Please see $2 for details"
     echo -e "Please specify the path of the extracted install files or first run"
-    echo -e "python2.7 /usr/bin/scons [-j8] release=1 [installdir=$1] stage_install\n"
+    echo -e "scons [-j8] release=1 [installdir=$1] stage_install\n"
 }
 
 check_bad_hostname() {

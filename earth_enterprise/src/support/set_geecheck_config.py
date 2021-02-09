@@ -1,5 +1,6 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
+# Copyright 2021 The Open GEE Contributors
 # Copyright 2017 Google Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

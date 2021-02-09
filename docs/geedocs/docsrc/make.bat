@@ -11,8 +11,8 @@ set SOURCEDIR=.
 set BUILDDIR=build
 set SPHINXPROJ=GoogleEarthEnterpriseDocumentation
 
-set SPHINX2GITHUB=python sphinxtogithub.py
-set GETOPENGEEVER=python ..\..\..\earth_enterprise\src\scons\getversion.py
+set SPHINX2GITHUB=python3.8 sphinxtogithub.py
+set GETOPENGEEVER=python3.8 ..\..\..\earth_enterprise\src\scons\getversion.py
 
 %GETOPENGEEVER% > temp.txt
 set /p OPENGEEVER=< temp.txt

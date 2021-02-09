@@ -1,5 +1,6 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
+# Copyright 2021 The Open GEE Contributors
 # Copyright 2017 Google Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -147,18 +148,18 @@ def ErrorInPixels(y, num_tiles, pos_flat_tile_0_to_1):
 
 
 def main():
-  for lod in xrange(START_LOD, END_LOD + 1):
-    print "LOD", lod
+  for lod in range(START_LOD, END_LOD + 1):
+    print("LOD", lod)
     num_tiles = 1 << lod
-    middle = num_tiles / 2
-    lod_step = middle / NUM_LOD_STEPS
-    for i in xrange(NUM_LOD_STEPS):
+    middle = num_tiles // 2
+    lod_step = middle // NUM_LOD_STEPS
+    for i in range(NUM_LOD_STEPS):
       y = middle + lod_step * i
-      print "  Tile at %3.1f degrees" % ToMercDegrees(y, num_tiles)
+      print("  Tile at %3.1f degrees" % ToMercDegrees(y, num_tiles))
       tile_position = TILE_START_POSITION
-      for unused_ in xrange(NUM_TILE_STEPS):
-        print "    Error at %3.2f: %6.5f pixels" % (
-            tile_position, ErrorInPixels(y, num_tiles, tile_position))
+      for unused_ in range(NUM_TILE_STEPS):
+        print("    Error at %3.2f: %6.5f pixels" % (
+            tile_position, ErrorInPixels(y, num_tiles, tile_position)))
         tile_position += TILE_STEP_SIZE
 
 if __name__ == "__main__":

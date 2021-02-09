@@ -1,5 +1,6 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
+# Copyright 2021 The Open GEE Contributors
 # Copyright 2017 Google Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,20 +36,6 @@ import fileinput
 import os
 import sys
 
-from pyglib import app
-from pyglib import flags
-
-
-FLAGS = flags.FLAGS
-
-flags.DEFINE_string('long',
-                    '',
-                    'Long version string for fusion (e.g 3.2.0')
-
-flags.DEFINE_string('short',
-                    '',
-                    'Short version string for fusion (e.g 3.2')
-
 
 def FindUpdateCurrentVersion(fusion_version_file, long_version, short_version,
                              year):
@@ -67,26 +54,22 @@ def FindUpdateCurrentVersion(fusion_version_file, long_version, short_version,
   Raises:
     AssertionError: Whenever anything fails.
   """
-  cmd = 'cd %s; g4 open %s' % (os.path.dirname(fusion_version_file),
-                               os.path.basename(fusion_version_file))
-  if os.system(cmd):
-    raise AssertionError('Cannot run command "%s"' % cmd)
   stage = 0  # not yet reached long_version
   for line in fileinput.FileInput(fusion_version_file, inplace=1):
     if stage == 0:
       if not line.startswith('#'):
         stage = 1  # long_version reached
         old_long = line[:-1]
-        print long_version
+        print(long_version)
       else:
         # TODO: Create script to do this for all copyrights.
         if line.startswith('# Copyright'):
-          print '# Copyright %d Google Inc. All Rights Reserved.' % year
+          print('# Copyright %d Google Inc. All Rights Reserved.' % year)
         else:
-          print line,
+          print(line, end=' ')
     elif stage == 1:
       old_short = line[:-1]
-      print short_version
+      print(short_version)
       stage = 2  # short version reached
     else:
       raise AssertionError('Cannot comprehend line "%s" in %s' % (
@@ -119,11 +102,6 @@ def ChangeVersionInInstallerFiles(
   short_key = 'CDATA[$SHORT_VERSION$]'
   for file_name in installer_files:
     file_name = '%s/%s' % (common_prefix, file_name)
-    cmd = 'cd %s; g4 open %s' % (os.path.dirname(file_name),
-                                 os.path.basename(file_name))
-    if os.system(cmd):
-      raise AssertionError('Cannot run command "%s"' % cmd)
-
     in_defered_mode = False
     defered_lines = []
     for line in fileinput.FileInput(file_name, inplace=1):
@@ -133,38 +111,62 @@ def ChangeVersionInInstallerFiles(
           defered_lines.append(line)
         else:
           line = line.replace(old_long, new_long)
-          print line,
+          print(line, end=' ')
       else:
         long_key_found = (line.find(long_key) >= 0)
         if long_key_found or (line.find(short_key) >= 0):
           if long_key_found:
-            print defered_lines[0].replace(old_long_cdata, new_long_cdata),
+            print(defered_lines[0].replace(old_long_cdata, new_long_cdata), end=' ')
           else:
-            print defered_lines[0].replace(old_short_cdata, new_short_cdata),
+            print(defered_lines[0].replace(old_short_cdata, new_short_cdata), end=' ')
           for index in range(1, len(defered_lines)):
-            print defered_lines[index],
-          print line,
+            print(defered_lines[index], end=' ')
+          print(line, end=' ')
           defered_lines = []
           in_defered_mode = False
         else:
           defered_lines.append(line)
 
 
+def print_and_exit(argv):
+  """
+  Prints help info, and exits.
+  """
+  sys.stderr.write('Wrong Usage of the script %s \n\n' % argv[0])
+  sys.stderr.write('Must provide both a short and long version that match!\n')
+  sys.stderr.write('Short version must be in the form "x.x"\n')
+  sys.stderr.write('Long version must be in the form "x.x.x"\n')
+  sys.stderr.write('Example usage:\n')
+  sys.stderr.write('    ./update_fusion_version.py --long "3.2.0" --short "3.2"\n')
+  sys.exit(-1) 
+
+
 def main(argv):
-  if not (len(argv) == 1 and FLAGS.long and FLAGS.short and
-          FLAGS.long.startswith(FLAGS.short)):
-    sys.stderr.write('Wrong Usage of the script %s \n\n' % argv[0])
-    sys.stderr.write(__doc__)
-    sys.exit(-1)
+  short_ver = ''
+  long_ver = ''
+  if (('--short' not in argv) or ('--long' not in argv) or (len(argv) < 5)):
+    print_and_exit(argv)
+  elif ((argv[1] == '--short') and (argv[3] == '--long')):
+    short_ver = argv[2]
+    long_ver = argv[4]
+  elif ((argv[1] == '--long') and (argv[3] == '--short')):
+    short_ver = argv[4]
+    long_ver = argv[2]
+  else:
+    print_and_exit(argv)
+  
+  if (short_ver.split('.') != long_ver.split('.')[:2]):
+    print_and_exit(argv)
+    
   script_path = os.path.abspath(argv[0])
   common_prefix = os.path.dirname(os.path.dirname(script_path))
   fusion_version_file = '%s/%s' % (common_prefix, 'src/fusion_version.txt')
   (old_long, old_short) = FindUpdateCurrentVersion(fusion_version_file,
-                                                   FLAGS.long, FLAGS.short,
+                                                   long_ver, short_ver,
                                                    datetime.datetime.now().year)
   ChangeVersionInInstallerFiles(
-      common_prefix, old_long, FLAGS.long, old_short, FLAGS.short)
+      common_prefix, old_long, long_ver, old_short, short_ver)
 
 
 if __name__ == '__main__':
-  app.run()
+  main(sys.argv)

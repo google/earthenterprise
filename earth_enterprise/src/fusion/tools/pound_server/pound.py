@@ -1,5 +1,6 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
+# Copyright 2021 The Open GEE Contributors
 # Copyright 2017 Google Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +25,7 @@
 #
 
 import sys
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 
 DEFAULT_HOST = "hostname.com"
 
@@ -38,8 +39,8 @@ def InitGoldData(packet_addresses, gold_data, host):
   """Gold standard is data from first read."""
   packet_addresses.append(TEST_PACKET0_ADDRESS % host)
   packet_addresses.append(TEST_PACKET1_ADDRESS % host)
-  gold_data.append(urllib2.urlopen(packet_addresses[0]).read())
-  gold_data.append(urllib2.urlopen(packet_addresses[1]).read())
+  gold_data.append(urllib.request.urlopen(packet_addresses[0]).read())
+  gold_data.append(urllib.request.urlopen(packet_addresses[1]).read())
 
 
 def CheckData(packet1, packet2, gold_data):
@@ -52,19 +53,19 @@ def CheckData(packet1, packet2, gold_data):
 
 def RunTrial(packet_addresses, check_data, gold_data):
   """Read packets for next trial."""
-  packet0 = urllib2.urlopen(packet_addresses[0]).read()
-  packet1 = urllib2.urlopen(packet_addresses[1]).read()
+  packet0 = urllib.request.urlopen(packet_addresses[0]).read()
+  packet1 = urllib.request.urlopen(packet_addresses[1]).read()
   if check_data == "t":
     CheckData(packet0, packet1, gold_data)
 
 
 def Usage():
   """Show usage information."""
-  print "usage: pound.py host [num_trials] [check_data]"
-  print "  host: host server (default = hotname)"
-  print "  num_trials: number of times data is read (default = 50000)"
-  print "  check_data: (t or f) whether data is checked (default = f)"
-  print "  E.g. ./pound.py localhost 10000 t"
+  print("usage: pound.py host [num_trials] [check_data]")
+  print("  host: host server (default = hotname)")
+  print("  num_trials: number of times data is read (default = 50000)")
+  print("  check_data: (t or f) whether data is checked (default = f)")
+  print("  E.g. ./pound.py localhost 10000 t")
 
 
 def main():
@@ -90,25 +91,25 @@ def main():
   if len(sys.argv) > 3:
     check_data = sys.argv[3]
 
-  print "Sever:", host
-  print "Trials:", num_trials
-  print "Checking data:", check_data
+  print("Sever:", host)
+  print("Trials:", num_trials)
+  print("Checking data:", check_data)
   had_error = False
   gold_data = []
   packet_addresses = []
   InitGoldData(packet_addresses, gold_data, host)
-  for i in xrange(num_trials):
+  for i in range(num_trials):
     try:
       RunTrial(packet_addresses, check_data, gold_data)
-    except urllib2.URLError, e:
+    except urllib.error.URLError as e:
       had_error = True
-      print "Error at", i, ":", e
+      print("Error at", i, ":", e)
       break
 
   if not had_error:
-    print "No errors.", num_trials, "trials."
+    print("No errors.", num_trials, "trials.")
 
-  print "Done."
+  print("Done.")
 
 
 if __name__ == "__main__":
