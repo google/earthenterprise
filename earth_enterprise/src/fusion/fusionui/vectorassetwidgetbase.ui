@@ -27,7 +27,7 @@
         <string>Vector Asset Widget</string>
     </property>
     <grid>
-        <widget class="QGroupBox" row="0" column="0" colspan="5">
+        <widget class="QLayoutWidget" row="0" column="0">
             <property name="name">
               <cstring>acqusition_date_box</cstring>
             </property>
@@ -92,7 +92,7 @@
                         <number>2</number>
                     </property>
                 </widget>
-                <widget class="QLabel" row="0" column="4">
+                <widget class="QLabel" row="0" column="5">
                     <property name="name">
                         <cstring>TextLabel3_3</cstring>
                     </property>
@@ -100,7 +100,7 @@
                         <string>Provider:</string>
                     </property>
                 </widget>
-                <widget class="QComboBox" row="0" column="5">
+                <widget class="QComboBox" row="0" column="6">
                     <item>
                         <property name="text">
                             <string>&lt;none&gt;</string>
@@ -112,7 +112,7 @@
                 </widget>
             </grid>
         </widget>
-        <widget class="QLayoutWidget" row="5" column="0" rowspan="1" colspan="5">
+        <widget class="QLayoutWidget" row="5" column="0" rowspan="1" colspan="4">
             <property name="name">
                 <cstring>layout51</cstring>
             </property>
@@ -272,7 +272,7 @@
                 </widget>
             </grid>
         </widget>
-        <widget class="QComboBox" row="1" column="1" rowspan="1" colspan="3">
+        <widget class="QComboBox" row="1" column="1" rowspan="1">
             <item>
                 <property name="text">
                     <string>&lt;none&gt;</string>
@@ -317,7 +317,7 @@
                 <cstring>elev_units_combo</cstring>
             </property>
         </widget>
-        <widget class="QLayoutWidget" row="0" column="4" rowspan="4" colspan="1">
+        <widget class="QLayoutWidget" row="0" column="4" rowspan="3" colspan="1">
             <property name="name">
                 <cstring>layout12</cstring>
             </property>
@@ -410,7 +410,7 @@
                             <property name="sizeHint">
                                 <size>
                                     <width>91</width>
-                                    <height>20</height>
+                                    <height>15</height>
                                 </size>
                             </property>
                         </spacer>
@@ -448,7 +448,7 @@
                             <property name="sizeHint">
                                 <size>
                                     <width>71</width>
-                                    <height>20</height>
+                                    <height>15</height>
                                 </size>
                             </property>
                         </spacer>
