@@ -343,6 +343,7 @@ class GlcAssembler(object):
             self.ExtractFileFromGlx(
                 layer_info["path"], search_file, output_file)
             print("Writing {0} to {1} ...".format(search_file, output_file))
+
       except KeyError:
         if layer_info["grab_kml"]:
           try:
@@ -366,6 +367,7 @@ class GlcAssembler(object):
             layer_info["url"] = "/kml/%s" % kml_file
             print("Downloaded to {0} and made it available at {1}.". 
                   format(kml_path, layer_info["url"]))
+
           except IOError:
             print("Unable to write kml.")
 
@@ -788,6 +790,7 @@ class GlcAssembler(object):
         logger.Log("ERROR: %s\n%s\n" % (err_msg, stack_trace))
       else:
         print("ERROR: {0}\n{1}\n".format(err_msg, stack_trace))
+
       return "FAILED %s" % err_msg
 
 

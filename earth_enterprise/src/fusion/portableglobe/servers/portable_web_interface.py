@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
 #
@@ -351,21 +351,21 @@ now serving</div>
           description, PosixPath(globe_path), is_2d,
           is_3d, has_polygon, is_mercator, is_being_served))
     except Exception as e:
-      print "Bad globe: ", globe_name
-      print e
+      print("Bad globe: {0}".format(globe_name))
+      print(e)
     return globe_info_obj
 
   def get(self, path):
     """Handles GET request for set-up."""
-    print "SetupHandler get", self.request.uri
+    print("SetupHandler get {0}".format(self.request.uri))
 
     if "cmd" not in self.request.arguments:
       self.servePortablePage(path)
       return
 
     try:
-      cmd = self.request.arguments["cmd"][0]
-      print "cmd (get): \"%s\"" % cmd
+      cmd = self.decode_argument(self.request.arguments["cmd"][0])
+      print("cmd (get): \"%s\"" % cmd)
 
       if cmd in ["globe_info_json", "globe_info"]:
         if not self.IsValidRequest():
@@ -397,11 +397,11 @@ now serving</div>
         self.set_header("Content-Type", "application/json")
         self.WriteGlobesInfoJson()
       elif cmd == "show_info":
-        globe = self.request.arguments["globe"][0]
-        self.WriteForm(globe_info=globe)
+        globe_file = self.decode_argument(self.request.arguments["globe"][0])
+        self.WriteForm(globe_info=globe_file)
       elif cmd == "serve_globe":
         self.set_header("Content-Type", "text/html")
-        globe_file = self.request.arguments["globe"][0]
+        globe_file = self.decode_argument(self.request.arguments["globe"][0])
         tornado.web.globe_.ServeGlobe(globe_file)
         self.servePortablePage(path)
       elif cmd == "confirmation_id":
@@ -448,9 +448,9 @@ now serving</div>
       self.servePortablePage(path)
       return
 
-    cmd = self.request.arguments["cmd"][0]
+    cmd = self.decode_argument(self.request.arguments["cmd"][0])
     self.set_header("Content-Type", "text/html")
-    print "cmd (post) : \"%s\"" % cmd
+    print("cmd (post) : \"%s\"" % cmd)
     if cmd == "quit":
       tornado.ioloop.IOLoop.instance().stop()
     elif cmd == "local_only":

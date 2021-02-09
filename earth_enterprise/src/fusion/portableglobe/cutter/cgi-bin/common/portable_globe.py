@@ -260,13 +260,14 @@ class Globe(object):
 
     if self.unpacker_.FindLayerFile(path, layer_id, self.file_loc_):
       data = self._GetData()
-      print("path dbroot: {0} {1}".format(path, len(data))
+      print("path dbroot: {0} {1}".format(path, len(data)))
       return data
     elif self.unpacker_.FindQtpPacket(
         "0", glc_unpacker.kDbRootPacket, 0, layer_id, self.file_loc_):
       return self._GetData()
     else:
-      print("Did not find dbRoot for: ", layer_id)
+
+      print("Did not find dbRoot for: {0}".format(layer_id))
       raise portable_exceptions.UnableToFindException("Unable to find dbroot.")
 
   def ReadDataPacket(self, qtpath, packet_type, channel, layer_id):

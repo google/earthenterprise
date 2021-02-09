@@ -115,17 +115,17 @@ def PrintTextSuiteResults(results,
   num_errors = 0
   num_skipped = 0
   for result in results["test_results"]:
-    print("-- (%s) %s %s" % (result["module"], result["test"], result["status"]))
+    print("-- ({0}) {1} {2}".format(result["module"], result["test"], result["status"]))
     if result["status"] == "SUCCESS":
       num_successes += 1
     else:
       if result["status"] == "FAILURE":
         num_failures += 1
-        print("  %s: %s" % (result["error_type"], result["error_msg"]))
+        print("  {0}: {1}".format(result["error_type"], result["error_msg"]))
         print("Traceback\n%s" % result["error_traceback"])
       elif result["status"] == "ERROR":
         num_errors += 1
-        print("  %s: %s" % (result["error_type"], result["error_msg"]))
+        print("  {0}: {1}".format(result["error_type"], result["error_msg"]))
         print("Traceback\n%s" % result["error_traceback"])
       elif result["status"] == "SKIPPED":
         num_skipped += 1
@@ -187,6 +187,7 @@ def Usage(app):
   print("Usage:")
   print("  %s [--no_user_tests] [--no_fusion_tests] [--no_server_tests]"
         " [format]") % app)
+
   print("     format - Output format ('json' or 'text'). Default: 'json'")
   exit(0)
 

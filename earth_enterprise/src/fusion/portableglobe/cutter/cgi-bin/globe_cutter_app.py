@@ -463,7 +463,7 @@ class GlobeBuilder(object):
           is_altered = True
 
     if not is_altered:
-      print "Json has not been altered."
+      print("Json has not been altered.")
 
     # Write modified JSON to portable server file.
     fp = open(json_file, "w")
