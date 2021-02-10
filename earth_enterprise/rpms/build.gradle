@@ -932,6 +932,7 @@ task openGeeExtraInitScripts(type: Copy, dependsOn: openGeeSharedFiles) {
 
     CopySpecTemplates.expand(delegate, [
             'openGeeVersion': ospackage.version,
+            'openGeeRelease': ospackage.release,
             'project': project
         ])
 }
