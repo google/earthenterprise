@@ -26,10 +26,6 @@ main_postinstall()
     SERVER_VERSION=$(get_package_version opengee-server)
     FUSION_VERSION=$(get_package_version opengee-fusion)
 
-    echo "${EXTRA_VERSION}"
-    echo "${SERVER_VERSION}"
-    echo "${FUSION_VERSION}"
-
     if [ "$SERVER_VERSION" == "$EXTRA_VERSION" ]; then
         install_searchexample_database
 
