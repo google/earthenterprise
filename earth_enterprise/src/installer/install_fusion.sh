@@ -588,6 +588,9 @@ copy_files_to_target()
 	mkdir -p $BASEINSTALLDIR_OPT/share/fonts
 	mkdir -p $BASEINSTALLDIR_OPT/gepython
 	mkdir -p $BASEINSTALLDIR_OPT/lib
+	mkdir -p $BASEINSTALLDIR_VAR/openssl/private
+	mkdir -p $BASEINSTALLDIR_VAR/openssl/misc
+	mkdir -p $BASEINSTALLDIR_VAR/openssl/certs
 	mkdir -p $BASEINSTALLDIR_ETC/openldap
 	mkdir -p $BASEINSTALLDIR_VAR/run
 	mkdir -p $BASEINSTALLDIR_VAR/log
@@ -617,6 +620,19 @@ copy_files_to_target()
 	cp -f $TMPINSTALLDIR/fusion/etc/profile.d/ge-fusion.sh $BININSTALLPROFILEDIR
 	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -f $TMPINSTALLDIR/fusion/etc/init.d/gefusion $BININSTALLROOTDIR
+
+	TMPOPENSSLPATH=$TMPINSTALLDIR/common/user_magic/var/opt/google/openssl
+
+	cp -f $TMPOPENSSLPATH/openssl.cnf $BASEINSTALLDIR_VAR/openssl
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
+	cp -rf $TMPOPENSSLPATH/private $BASEINSTALLDIR_VAR/openssl
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
+	cp -f $TMPOPENSSLPATH/misc/tsget $BASEINSTALLDIR_VAR/openssl/misc
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
+	cp -f $TMPOPENSSLPATH/misc/CA.pl $BASEINSTALLDIR_VAR/openssl/misc
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
+	cp -rf $TMPOPENSSLPATH/certs $BASEINSTALLDIR_VAR/openssl
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
 
 	TMPOPENLDAPPATH=$TMPINSTALLDIR/common/user_magic/etc/opt/google/openldap
 
