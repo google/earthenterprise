@@ -33,9 +33,9 @@ my $VERBOSE = 0;
 # List tests that should be skipped here:
 my %DISABLE_TESTS;
 
-# for my $name ('parse-raster-project-xml-no-content_unittest') {
-#   $DISABLE_TESTS{$name} = 1;
-# }
+for my $name ('parse-raster-project-xml-no-content_unittest') {
+  $DISABLE_TESTS{$name} = 1;
+}
 
 sub usage() {
   print "USAGE:  RunAllTests.pl [OPTIONAL ARGUMENTS]\n";
