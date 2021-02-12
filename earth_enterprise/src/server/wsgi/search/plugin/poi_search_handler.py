@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,7 +22,7 @@ import logging
 import os
 import re
 from string import Template
-import urlparse
+import urllib.parse
 
 import psycopg2
 from psycopg2.pool import ThreadedConnectionPool
@@ -553,7 +554,7 @@ class POISearch(object):
     # Extract target path from 'SCRIPT_URL'.
     # SAMPLE SCRIPT_URL IS '/sf2d/POISearch'.
 
-    parse_res = urlparse.urlparse(environ["SCRIPT_URL"])
+    parse_res = urllib.parse.urlparse(environ["SCRIPT_URL"])
     match_tp = re.match(r"(.*)/POISearch", parse_res.path)
     if match_tp:
       target_path = match_tp.groups()[0]

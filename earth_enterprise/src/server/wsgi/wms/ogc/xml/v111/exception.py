@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,15 +25,8 @@
 import sys
 import getopt
 import re as re_
+import defusedxml.ElementTree as etree_
 
-etree_ = None
-Verbose_import_ = False
-try:
-    import defusedxml.ElementTree as etree_
-    if Verbose_import_:
-        print("running with defusedxml.ElementTree")
-except ImportError:
-    raise ImportError("Failed to import defusedxml.ElementTree")
 
 def parsexml_(*args, **kwargs):
   doc = etree_.parse(*args, **kwargs)
@@ -47,7 +41,7 @@ def parsexml_(*args, **kwargs):
 
 try:
   from generatedssuper import GeneratedsSuper
-except ImportError, exp:
+except ImportError as exp:
 
   class GeneratedsSuper(object):
     def gds_format_string(self, input_data, input_name=''):
@@ -65,7 +59,7 @@ except ImportError, exp:
       for value in values:
         try:
           fvalue = float(value)
-        except (TypeError, ValueError), exp:
+        except (TypeError, ValueError) as exp:
           raise_parse_error(node, 'Requires sequence of integers')
       return input_data
     def gds_format_float(self, input_data, input_name=''):
@@ -79,7 +73,7 @@ except ImportError, exp:
       for value in values:
         try:
           fvalue = float(value)
-        except (TypeError, ValueError), exp:
+        except (TypeError, ValueError) as exp:
           raise_parse_error(node, 'Requires sequence of floats')
       return input_data
     def gds_format_double(self, input_data, input_name=''):
@@ -93,7 +87,7 @@ except ImportError, exp:
       for value in values:
         try:
           fvalue = float(value)
-        except (TypeError, ValueError), exp:
+        except (TypeError, ValueError) as exp:
           raise_parse_error(node, 'Requires sequence of doubles')
       return input_data
     def gds_format_boolean(self, input_data, input_name=''):
@@ -160,7 +154,7 @@ def showIndent(outfile, level):
 def quote_xml(inStr):
   if not inStr:
     return ''
-  s1 = (isinstance(inStr, basestring) and inStr or
+  s1 = (isinstance(inStr, str) and inStr or
         '%s' % inStr)
   s1 = s1.replace('&', '&amp;')
   s1 = s1.replace('<', '&lt;')
@@ -168,7 +162,7 @@ def quote_xml(inStr):
   return s1
 
 def quote_attrib(inStr):
-  s1 = (isinstance(inStr, basestring) and inStr or
+  s1 = (isinstance(inStr, str) and inStr or
         '%s' % inStr)
   s1 = s1.replace('&', '&amp;')
   s1 = s1.replace('<', '&lt;')
@@ -213,7 +207,7 @@ def find_attr_value_(attr_name, node):
   value = attrs.get(attr_name)
   if value is None:
     # Now try the other possible namespaces.
-    namespaces = node.nsmap.itervalues()
+    namespaces = iter(node.nsmap.values())
     for namespace in namespaces:
       value = attrs.get('{%s}%s' % (namespace, attr_name, ))
       if value is not None:
@@ -499,7 +493,7 @@ Usage: python <Parser>.py [ -s ] <in_xml_file>
 """
 
 def usage():
-  print USAGE_TEXT
+  print(USAGE_TEXT)
   sys.exit(1)
 
 
@@ -527,7 +521,7 @@ def parse(inFileName):
 
 
 def parseString(inString):
-  from StringIO import StringIO
+  from io import StringIO
   doc = parsexml_(StringIO(inString))
   rootNode = doc.getroot()
   rootTag, rootClass = get_root_tag(rootNode)

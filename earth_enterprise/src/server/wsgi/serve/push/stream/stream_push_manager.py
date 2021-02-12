@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -313,7 +314,7 @@ class StreamPushManager(stream_manager.StreamManager):
       try:
         datetime.datetime.strptime(db_timestamp[:10],
                                    serve_utils.DATE_ISO_FORMAT)
-      except ValueError, e:
+      except ValueError as e:
         logger.warning(
             "Database/Portable timestamp format is not valid. Error: %s", e)
         db_timestamp = None
@@ -691,10 +692,10 @@ class StreamPushManager(stream_manager.StreamManager):
              " GROUP BY file_id ORDER BY file_id")
     rs_db_files = self.DbQuery(query)
 
-    db_file_id = sys.maxint
+    db_file_id = sys.maxsize
     if rs_db_files:
       db_file_iter = iter(rs_db_files)
-      db_file_id = int(db_file_iter.next())
+      db_file_id = int(next(db_file_iter))
 
     # Use a BatchSqlManager to batch up many individual SQL commands into
     # one postgres invocation.
@@ -713,7 +714,7 @@ class StreamPushManager(stream_manager.StreamManager):
       file_id = int(rs_file[0])
       # Check the boundary case...this could happen and would basically mean
       # pain for whomever this happens to.
-      if file_id == sys.maxint:
+      if file_id == sys.maxsize:
         logger.error("HandleGarbageCollectRequest has encountered a file_id "
                      "equal to the max int value. "
                      "The database has run out of valid file id's.")
@@ -754,9 +755,9 @@ class StreamPushManager(stream_manager.StreamManager):
       elif file_id == db_file_id:
         # This file is ok, skip to the next db_file_id
         try:
-          db_file_id = int(db_file_iter.next())
+          db_file_id = int(next(db_file_iter))
         except StopIteration:
-          db_file_id = sys.maxint
+          db_file_id = sys.maxsize
       else:
         # Note: db_files_table's file_id(s) should be a subset of
         # files_table's file_id(s), if we encounter a db_files_table entry
@@ -766,9 +767,9 @@ class StreamPushManager(stream_manager.StreamManager):
         while db_file_id < file_id:
           batcher.AddModify(delete_db_files_table_cmd, [db_file_id])
           try:
-            db_file_id = int(db_file_iter.next())
+            db_file_id = int(next(db_file_iter))
           except StopIteration:
-            db_file_id = sys.maxint
+            db_file_id = sys.maxsize
     # Close up the sql objects and execute the remaining batch commands.
     batcher.ExecuteRemaining()
     batcher.Close()
@@ -875,7 +876,7 @@ class StreamPushManager(stream_manager.StreamManager):
     remaining = len(file_paths)
     groups = int(math.ceil(float(len(file_paths)) / float(group_size)))
     # Loop through the groups of group_size- paths and check their existence.
-    for unused_i in xrange(groups):
+    for unused_i in range(groups):
       count = min(group_size, remaining)
       file_paths_temp = file_paths[cur_idx : cur_idx + count]
       assert file_paths_temp
@@ -956,7 +957,7 @@ class StreamPushManager(stream_manager.StreamManager):
     remaining = len(file_paths)
     groups = int(math.ceil(float(remaining) / float(group_size)))
     # Loop through the groups of group_size- paths and check their existence.
-    for unused_i in xrange(groups):
+    for unused_i in range(groups):
       count = min(group_size, remaining)
       file_paths_temp = file_paths[cur_idx : cur_idx + count]
       assert file_paths_temp

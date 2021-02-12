@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,7 +31,7 @@ import re
 import shutil
 import subprocess
 import tempfile
-import urlparse
+import urllib.parse
 from inspect import getmembers
 from pprint import pprint
 
@@ -842,7 +843,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
     results = self.DbQuery(query_string)
     vh_list = []
     for vh_url in results:
-      url_parse_res = urlparse.urlparse(vh_url)
+      url_parse_res = urllib.parse.urlparse(vh_url)
       vh_list.append(url_parse_res.path)
 
     return vh_list
@@ -1266,7 +1267,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
       vs_url: virtual server URL.
     """
     logger.debug("_CreateVsConfig...")
-    url_parse_res = urlparse.urlparse(vs_url)
+    url_parse_res = urllib.parse.urlparse(vs_url)
 
     if url_parse_res.scheme == "https":
       vs_config_file_path = os.path.normpath(
@@ -1415,7 +1416,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
               db_name)
 
       # Put the rules into htacces file for current target
-      url_parse_res = urlparse.urlparse(virtual_host_url)
+      url_parse_res = urllib.parse.urlparse(virtual_host_url)
       virtual_host_path = url_parse_res.path
       relative_target_path = target_path[1:]
 
@@ -1529,7 +1530,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
     Returns:
       virtual host base URL - scheme://host[:port]
     """
-    url_parse_res = urlparse.urlparse(vh_url)
+    url_parse_res = urllib.parse.urlparse(vh_url)
     if url_parse_res.scheme and url_parse_res.netloc:
       return "{0}://{1}".format(url_parse_res.scheme, url_parse_res.netloc)
     else:
@@ -1575,7 +1576,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
       virtual host complete URL - scheme://host[:port]/path
     """
     vh_base_url = self.GetVhBaseUrl(vh_url, vh_ssl)
-    return urlparse.urljoin(vh_base_url, vh_url)
+    return urllib.parse.urljoin(vh_base_url, vh_url)
 
   def _IsFusionDbRemote(self, db_info):
     """Determines whether a Fusion database has been pushed from remote host.
@@ -1643,9 +1644,9 @@ class PublishManagerHelper(stream_manager.StreamManager):
     http_io.ResponseWriter.AddBodyElement(response, constants.HDR_STATUS_CODE,
                                           constants.STATUS_SUCCESS)
 
-    for key, value in target_details.iteritems():
+    for key, value in list(target_details.items()):
       if key == "publishcontext":
-        for publish_context_key, publish_context_value in value.iteritems():
+        for publish_context_key, publish_context_value in list(value.items()):
           http_io.ResponseWriter.AddBodyElement(
               response, constants.HDR_DATA,
               "%s : %s" % (publish_context_key, publish_context_value))
@@ -1708,7 +1709,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
           "HandleSwapTargetsRequest: Make sure the target path %s "
           "exists and is currently published." % target_path_a)
 
-    if "publishcontext" not in target_details_a.keys():
+    if "publishcontext" not in list(target_details_a.keys()):
       error_msg = ("SwapTargets: publish context does not exist "
                    "for target path %s. This command is not supported "
                    "for databases published with GEE 5.1.2 or earlier." %
@@ -1723,7 +1724,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
           "HandleSwapTargetsRequest: Make sure the target path '%s' "
           "exists and is currently published." % target_path_b)
 
-    if "publishcontext" not in target_details_b.keys():
+    if "publishcontext" not in list(target_details_b.keys()):
       error_msg = (
           "SwapTargets: publish context does not exist "
           "for target path %s. This command is not supported for databases "

@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -36,7 +37,7 @@ def IsKnownFormat(fmt):
   Returns:
     boolean: If the format is supported.
   """
-  for spec in IMAGE_SPECS.values():
+  for spec in list(IMAGE_SPECS.values()):
     if spec.content_type == fmt:
       return True
   return False
@@ -50,7 +51,7 @@ def GetImageSpec(fmt):
   Returns:
     image_spec: image spec.
   """
-  for spec in IMAGE_SPECS.values():
+  for spec in list(IMAGE_SPECS.values()):
     if spec.content_type == fmt:
       return spec
 
@@ -65,7 +66,7 @@ def FormatIsPng(fmt):
   Returns:
     boolean: If the format is png or not.
   """
-  for typ, spec in IMAGE_SPECS.iteritems():
+  for typ, spec in IMAGE_SPECS.items():
     if spec.content_type == fmt:
       return typ == "png"
   return False
@@ -73,7 +74,7 @@ def FormatIsPng(fmt):
 
 def main():
   is_format = IsKnownFormat("jpeg")
-  print is_format
+  print(is_format)
 
 if __name__ == "__main__":
   main()

@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -204,7 +205,7 @@ def _EnumValFromText(fdesc, enum_text_val, log):
     integer value of enum text.
   """
   log.debug("converting enum val:" + enum_text_val)
-  log.debug("possible enum vals:" + str(fdesc.enum_type.values_by_name.keys()))
+  log.debug("possible enum vals:" + str(list(fdesc.enum_type.values_by_name.keys())))
 
   enum_val = fdesc.enum_type.values_by_name[enum_text_val.upper()].number
   log.debug("done enum vals")
@@ -266,7 +267,7 @@ def _MassageSpecialCases(almost_snippet_values, log):
           log.debug("enum text: " + enum_text)
           log.debug("all enum vals: " + fdesc.name)
           log.debug("all enum vals: " +
-                    str(fdesc.enum_type.values_by_name.keys()))
+                    str(list(fdesc.enum_type.values_by_name.keys())))
           enum_val = _EnumValFromText(fdesc, enum_text, log)
           log.debug("whew, found enum val!")
           # need to concretize, now! No way around it.

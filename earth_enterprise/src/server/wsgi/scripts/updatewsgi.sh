@@ -1,6 +1,7 @@
 #!/bin/bash -eu
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,7 +22,7 @@
 # Simply run this script after building and it will install wsgi modules under
 # the /opt/google/gehttpd/wsg-bin/.
 #
-# Note: to build python modules run 'python2.7 /usr/bin/scons -j8 optimize=1 build_py'
+# Note: to build python modules run 'scons -j8 optimize=1 build_py'
 
 set -x
 set -e

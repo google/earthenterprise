@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,9 +21,9 @@ Handles Fdb module serving requests by issuing corresponding http request to
 mod_fdb service.
 """
 
-import httplib
+import http.client
 import logging
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 
 from common import exceptions
 from common import utils
@@ -49,11 +50,11 @@ class ModFdbServeHandler(object):
     url = "{0}/fdb/reset".format(server_url)
     try:
       response = self._url_opener.Open(url)
-    except urllib2.URLError as e:
+    except urllib.error.URLError as e:
       if hasattr(e, "code"):  # HTTPError
         raise exceptions.ModFdbServeException(
             "Failed to reset FdbService."
-            " Error: %s.\n" % httplib.responses[e.code])
+            " Error: %s.\n" % http.client.responses[e.code])
       elif hasattr(e, "reason"):  # URLError
         raise exceptions.ModFdbServeException(
             "Failed to reach a server to reset FdbService."
@@ -79,11 +80,11 @@ class ModFdbServeHandler(object):
 
     try:
       response = self._url_opener.Open(url)
-    except urllib2.URLError as e:
+    except urllib.error.URLError as e:
       if hasattr(e, "code"):  # HTTPError
         raise exceptions.ModFdbServeException(
             "Failed to register for serving target path: %s."
-            " Error: %s." % (target_path, httplib.responses[e.code]))
+            " Error: %s." % (target_path, http.client.responses[e.code]))
       elif hasattr(e, "reason"):  # URLError
         raise exceptions.ModFdbServeException(
             "Failed to reach a server registering for serving"
@@ -104,11 +105,11 @@ class ModFdbServeHandler(object):
     url = "{0}/fdb/unpublish?target_path={1}".format(server_url, target_path)
     try:
       response = self._url_opener.Open(url)
-    except urllib2.URLError as e:
+    except urllib.error.URLError as e:
       if hasattr(e, "code"):  # HTTPError
         raise exceptions.ModFdbServeException(
             "Failed to unregister for serving target path: %s."
-            " Error: %s.\n" % (target_path, httplib.responses[e.code]))
+            " Error: %s.\n" % (target_path, http.client.responses[e.code]))
       elif hasattr(e, "reason"):  # URLError
         raise exceptions.ModFdbServeException(
             "Failed to reach a server unregistering for serving"
@@ -140,11 +141,11 @@ class ModFdbServeHandler(object):
                % ([server_url] + cut_spec[0:2] + cut_spec[3:]))
       try:
         response = self._url_opener.Open(url)
-      except urllib2.URLError as e:
+      except urllib.error.URLError as e:
         if hasattr(e, "code"):  # HTTPError
           logger.warning("Failed to initialize cut spec %s.\nUrl: %s.\n"
                          "Error: %s.",
-                         cut_spec[0], url, httplib.responses[e.code])
+                         cut_spec[0], url, http.client.responses[e.code])
         elif hasattr(e, "reason"):   # URLError
           logger.warning(
               "Failed to reach a server to initialize cut spec %s.\nUrl: %s\n"

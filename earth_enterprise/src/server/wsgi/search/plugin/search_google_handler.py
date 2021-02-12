@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributor
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,7 @@
 
 """Module for implementing the Google search."""
 
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 from search.common import utils
 
 
@@ -58,10 +59,10 @@ class SearchGoogle(object):
       http_url = "%s?%s" % (SearchGoogle.MAPS_GEOCODE_URL,
                             query_string.replace("q=", "address=", 1))
 
-    req = urllib2.Request(http_url)
+    req = urllib.request.Request(http_url)
     req.add_header('User-Agent', user_agent)
     self.logger.debug("Search Google URL: %s", http_url)
-    search_results = urllib2.urlopen(req).read()
+    search_results = urllib.request.urlopen(req).read()
 
     # TODO: Use try.. except block and
     # send appropriate error based on the return code/reason, as below

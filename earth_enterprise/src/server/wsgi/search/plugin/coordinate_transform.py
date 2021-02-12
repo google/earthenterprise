@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 # -*- coding: utf-8 -*-
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -193,7 +194,7 @@ class CoordinateTransform(object):
           (degrees,) = matched.groups()
           decimal_degrees_coordinates.append(float(degrees))
           is_valid_input = True
-        except ValueError, e:
+        except ValueError as e:
           is_valid_input = False
           self._logger.error(
               "DD coordinates %s not in proper format, %s.", coordinate, e)
@@ -263,7 +264,7 @@ class CoordinateTransform(object):
             is_valid_longitude = True
 
           decimal_degrees_coordinates.append(decimal_degrees)
-        except ValueError, e:
+        except ValueError as e:
           self._logger.error(
               "DMS coordinates %s not in proper format, %s.", coordinate, e)
 
@@ -328,7 +329,7 @@ class CoordinateTransform(object):
           if iteration == 1 and direction in self._valid_longitude_directions:
             is_valid_longitude = True
           decimal_degrees_coordinates.append(decimal_degrees)
-        except ValueError, e:
+        except ValueError as e:
           self._logger.error(
               "DDM coordinates %s not in proper format, %s.", coordinate, e)
 
@@ -369,7 +370,7 @@ class CoordinateTransform(object):
       mgrs_obj = mgrs.MGRS()
       (latitude, longitude) = mgrs_obj.toLatLon(str(coordinate[0]))
       conversion_status = True
-    except Exception, e:
+    except Exception as e:
       self._logger.error("MGRS coordinates %s not in proper format, %s.",
                          coordinate[0], e)
 
@@ -418,7 +419,7 @@ class CoordinateTransform(object):
     if matched:
       try:
         (zone_number, zone_letter, easting, northing) = matched.groups()
-      except Exception, e:
+      except Exception as e:
         conversion_status = False
         self._logger.error(
             "UTM coordinates %s not in proper format, %s.", coordinates, e)
@@ -431,7 +432,7 @@ class CoordinateTransform(object):
 
     if (
         (zone_letter in ["A", "B", "I", "O", "Y", "Z"]) or
-        (zone_number not in xrange(1, 61)) or
+        (zone_number not in range(1, 61)) or
         ((zone_letter in ["X"]) and (zone_number in [32, 34, 36]))
         ):
       conversion_status = False

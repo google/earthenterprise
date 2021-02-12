@@ -23,14 +23,16 @@ import fnmatch
 import os
 import shlex
 import subprocess
-
+import py_compile
 Import('env')
 
 cgi_env = env.Clone()
 
 root_dir = Dir(cgi_env.exportdirs['root']).abspath
 python_bin = cgi_env['python_bin']
-compiler_cmd = '%s -m py_compile' % python_bin
+compiler_cmd = python_bin + " -c 'import py_compile; py_compile.compile({0}, {1})'"
+# compiler_cmd = '%s -m py_compile' % python_bin
+# command_line = compiler_cmd.format(python_file, python_file.split('.')[0] + '.pyc')
 cgi_src_path = Dir('#/fusion/portableglobe/cutter/cgi-bin').abspath
 
 # List of directories to be compiled for installer.
@@ -46,9 +48,9 @@ if 'build_py' in COMMAND_LINE_TARGETS:
       for file in fnmatch.filter(filenames,'*.py'):
         python_file = os.path.join(py_dir_abspath, file)
         # Create '*.pyc' for the python file.
-        command_line = '%s %s' % (compiler_cmd, python_file)
-        args = shlex.split(command_line)
-        subprocess.Popen(args)
+        py_compile(python_file, python_file.split('.')[0] + '.pyc')  #'%s %s' % (compiler_cmd, python_file)
+        #args = shlex.split(command_line)
+        #subprocess.Popen(args)
 
 
 if 'install' in COMMAND_LINE_TARGETS:
@@ -90,9 +92,10 @@ if 'install' in COMMAND_LINE_TARGETS:
       for file in fnmatch.filter(filenames, '*.py'):
         python_file = os.path.join(py_dir_abspath, file)
         # Create '*.pyc' for the python file.
-        command_line = '%s %s' % (compiler_cmd, python_file)
-        args = shlex.split(command_line)
-        subprocess.Popen(args)
+        py_compile.compile(python_file, python_file.split('.')[0] + '.pyc')  #'%s %s' % (compiler_cmd, python_file)
+        # command_line = '%s %s' % (compiler_cmd, python_file)
+        # args = shlex.split(command_line)
+        #subprocess.Popen(args)
         compiled_file = file.split('.')[0] + '.pyc'
         compiled_files.append(os.path.join(py_dir_abspath, compiled_file))
 
