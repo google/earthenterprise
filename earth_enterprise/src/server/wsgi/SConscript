@@ -24,7 +24,7 @@ import pdb
 import os
 import shlex
 import subprocess
-
+import py_compile
 Import('env')
 
 wsgi_env = env.Clone()
@@ -48,9 +48,12 @@ if 'build_py' in COMMAND_LINE_TARGETS:
       for file in fnmatch.filter(filenames, '*.py'):
         python_file = os.path.join(py_src_path, file)
         # Create '*.pyc' for the python file.
-        command_line = '%s %s' % (compiler_cmd, python_file)
-        args = shlex.split(command_line)
-        subprocess.Popen(args)
+        #command_line = '%s %s' % (compiler_cmd, python_file)
+        #args = shlex.split(command_line)
+        #subprocess.Popen(args)
+        py_compile.compile(python_file, python_file.split('.')[0] + '.pyc')
+        compiled_file = file.split('.')[0] + '.pyc'
+        compiled_files.append(os.path.join(root, compiled_file))
 
 
 if 'install' in COMMAND_LINE_TARGETS:
@@ -71,10 +74,11 @@ if 'install' in COMMAND_LINE_TARGETS:
       # Check for python files.
       for file in fnmatch.filter(filenames, '*.py'):
         python_file = os.path.join(py_src_path, file)
+        py_compile.compile(python_file, python_file.split('.')[0]+'.pyc')
         # Create '*.pyc' for the python file.
-        command_line = '%s %s' % (compiler_cmd, python_file)
-        args = shlex.split(command_line)
-        subprocess.Popen(args)
+        #command_line = '%s %s' % (compiler_cmd, python_file)
+        #args = shlex.split(command_line)
+        #subprocess.Popen(args)
         compiled_file = file.split('.')[0] + '.pyc'
         compiled_files.append(os.path.join(root, compiled_file))
       wsgi_env.install('httpdwsgi', compiled_files, root)
