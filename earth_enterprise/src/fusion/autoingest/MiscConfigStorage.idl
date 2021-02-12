@@ -79,7 +79,7 @@ class MiscConfigStorage {
     if (!filename.empty()) {
       return Save(Filename());
     } else {
-      notify(NFY_WARN, "Unable to save MiscConfig to emtpty filename");
+      notify(NFY_WARN, "Unable to save MiscConfig to empty filename");
       return false;
     }
   }

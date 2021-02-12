@@ -92,7 +92,7 @@ class ParseRasterProjectXmlNoContent_Test :
     }
 };
 
-TEST_F(ParseRasterProjectXmlNoContent_Test, DalayedBuildChildrenWorksWithEmptyXmlFields)
+TEST_F(ParseRasterProjectXmlNoContent_Test, DelayedBuildChildrenWorksWithEmptyXmlFields)
 {
     run_delayed_build_children_test();
 

@@ -18,8 +18,6 @@
 Import('env', 'commonobj', 'plugins')
 import string
 
-print("==========================================================================================")
-
 # let subdirs refer to headers as relative to the sysman directory
 env = env.Clone();
 env.Append(CPPPATH = ['#fusion/autoingest/sysman', # static headers
@@ -168,4 +166,3 @@ env.test('CalcState_unittest',
     sysmanObjs + extraObjs + [ 'CalcState_unittest.cpp' ],
     LIBS=testLibs)
 
-print("==========================================================================================")
