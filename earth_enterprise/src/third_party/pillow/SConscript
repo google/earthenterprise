@@ -1,6 +1,7 @@
 #-*- Python -*-
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,15 +19,15 @@
 
 Import('third_party_env')
 
-Imaging_version='Imaging-1.1.7'
-Imaging_ge_version = Imaging_version.replace('Imaging', 'Imaging-ge')
+Imaging_version='Pillow-8.1.0'
+Imaging_ge_version = Imaging_version.replace('Pillow', 'Pillow-ge')
 
 current_dir = Dir('.').abspath
 build_root = '%s/%s' % (current_dir, Imaging_version)
 install_root = '%s/install' % current_dir
 install_root_opt = '%s/opt/google' % install_root
 
-Imaging_source = File('#/../../earth_enterprise/third_party/PIL/%s.tar.gz' %
+Imaging_source = File('#/../../earth_enterprise/third_party/pillow/%s.tar.gz' %
                        Imaging_version).abspath
 
 Imaging_env = third_party_env.DeepCopy()

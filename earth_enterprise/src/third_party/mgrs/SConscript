@@ -1,6 +1,7 @@
 #-*- Python -*-
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,7 +20,7 @@ import sys
 
 Import('third_party_env')
 
-mgrs_version='mgrs-1.1.0'
+mgrs_version='mgrs-1.4.0'
 mgrs_ge_version = mgrs_version.replace('mgrs', 'mgrs-ge')
 
 current_dir = Dir('.').abspath
