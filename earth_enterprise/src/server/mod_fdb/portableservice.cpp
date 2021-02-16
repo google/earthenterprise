@@ -545,7 +545,7 @@ int PortableService::DoFlatfile(request_rec* r,
     // Tokenize first arg: e.g. f1c-03012-i.18
     TokenizeString(arg, tokens, "-");
     if (tokens.size() < 3) {
-      ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, "Could not parse command.");
+      ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, "Could not parse request.");
       return HTTP_NOT_FOUND;
     }
     prefix = tokens[0];
@@ -556,7 +556,7 @@ int PortableService::DoFlatfile(request_rec* r,
     tokens.clear();
     TokenizeString(data_info, tokens, ".");
     if (tokens.size() < 2) {
-      ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, "Could not parse command suffix.");
+      ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, "Could not parse request suffix.");
       return HTTP_NOT_FOUND;
     }
     data_type = tokens[0];
