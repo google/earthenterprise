@@ -75,7 +75,7 @@ env.install('httpdconfvs', ['conf.d/virtual_servers/.vhpasswd',
 env.install('httpdconfvsrt', ['conf.d/virtual_servers/runtime/fdb_runtime'])
 
 # mod_fdb is an Apache module, not a normal library, so the simplest way to
-# create unit tests for it is to simply rebuild it from source.
+# create unit tests for it is to rebuild it from source.
 env.test('portableservice_unittest',
          ['portableservice_unittest.cpp'] + mod_fdb_files,
          LIBS = ['apr-1', 'rt', 'crypt', 'pthread', 'dl', 'geprotobuf', 'gecommon'] + mod_fdb_libs + ['gtest'],

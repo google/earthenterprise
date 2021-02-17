@@ -18,22 +18,30 @@
 
 #include <gtest/gtest.h>
 
+#include "httpd.h"
+
 // Define some functions that Apache normally provides
 int ap_rwrite (const void *buf, int nbyte, request_rec *r) { return nbyte; }
 void ap_internal_redirect(const char * new_uri, request_rec * r) {}
 void ap_log_rerror(const char *file, int line, int module_index, int level, apr_status_t status, const request_rec *r, const char *fmt,...) {}
 void ap_set_last_modified(request_rec *r) {}
 void ap_hook_handler(ap_HOOK_handler_t *pf, const char * const *aszPre, const char * const *aszSucc, int inorder) {}
-apr_time_t apr_date_parse_http (const char *date) { return 0; }
+apr_time_t apr_date_parse_http(const char *date) { return 0; }
 
 class PortableServiceTest : public testing::Test {
   protected:
     PortableService service;
+    request_rec rec;
+    request_rec *r = &rec;
+    ArgMap args;
+    PortableServiceTest() {
+      service.RegisterPortable(r, "target", "database");
+    }
 };
 
-TEST_F(PortableServiceTest, DoFlatfile) {
-  ArgMap map;
-  service.ProcessPortableRequest(nullptr, "", "", "", 0, false, map, "", nullptr);
+TEST_F(PortableServiceTest, NoUnpacker) {
+  auto status = service.ProcessPortableRequest(r, "command", "wrongtarget", "database", 0, false, args, "", nullptr);
+  ASSERT_EQ(status, HTTP_NOT_FOUND);
 }
 
 int main(int argc, char **argv) {
