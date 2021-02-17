@@ -28,6 +28,9 @@ void ap_set_last_modified(request_rec *r) {}
 void ap_hook_handler(ap_HOOK_handler_t *pf, const char * const *aszPre, const char * const *aszSucc, int inorder) {}
 apr_time_t apr_date_parse_http(const char *date) { return 0; }
 
+const std::string TARGET = "target";
+const std::string GLOBE = "portable/test_data/test.glb";
+
 class PortableServiceTest : public testing::Test {
   protected:
     PortableService service;
@@ -35,13 +38,45 @@ class PortableServiceTest : public testing::Test {
     request_rec *r = &rec;
     ArgMap args;
     PortableServiceTest() {
-      service.RegisterPortable(r, "target", "database");
+      service.RegisterPortable(r, TARGET, GLOBE);
     }
+    void TestBadRequest(
+      request_rec* r,
+      const std::string& source_cmd_or_path,
+      const std::string& target_path,
+      const std::string& suffix,
+      int layer_id,
+      bool is_balloon_request,
+      ArgMap& arg_map,
+      const std::string& no_value_arg,
+      fusion_portableglobe::CutSpec* cutspec) {
+        auto status = service.ProcessPortableRequest(
+          r,
+          source_cmd_or_path,
+          target_path, suffix,
+          layer_id,
+          is_balloon_request,
+          arg_map,
+          no_value_arg,
+          cutspec);
+        ASSERT_EQ(status, HTTP_NOT_FOUND);
+      }
 };
 
 TEST_F(PortableServiceTest, NoUnpacker) {
-  auto status = service.ProcessPortableRequest(r, "command", "wrongtarget", "database", 0, false, args, "", nullptr);
-  ASSERT_EQ(status, HTTP_NOT_FOUND);
+  TestBadRequest(r, "command", "wrongtarget", GLOBE, 0, false, args, "", nullptr);
+}
+
+TEST_F(PortableServiceTest, FlatfileQueryNoArgs) {
+  TestBadRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "query", nullptr);
+}
+
+TEST_F(PortableServiceTest, FlatfileNoRequest) {
+  TestBadRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "", nullptr);
+}
+
+TEST_F(PortableServiceTest, FlatfileRequestNoDot) {
+  TestBadRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "f1c-03012-i", nullptr);
 }
 
 int main(int argc, char **argv) {
