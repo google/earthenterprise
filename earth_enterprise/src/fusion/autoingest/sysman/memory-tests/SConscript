@@ -1,6 +1,6 @@
 #-*- Python -*-
 #
-# Copyright 2018 the Open GEE Contributors
+# Copyright 2018-2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
 # limitations under the License.
 #
 
-Import('env', 'sysmanObjs', 'sysmanExtraObjs', 'sysmanTestLibs')
+Import('env', 'sysmanObjs', 'extraObjs', 'testLibs')
 
 env = env.Clone()
 
 env.test('build-raster-project_resourcetest',
-    map(lambda o: "../" + o, sysmanObjs) + sysmanExtraObjs + \
+    map(lambda o: "../" + o, sysmanObjs) + extraObjs + \
     ['build-raster-project_resourcetest.cc'],
-    LIBS = [ 'dbmanifest', 'geautoingest', 'yaml-cpp' ] + sysmanTestLibs)
+    LIBS = [ 'dbmanifest', 'geautoingest', 'yaml-cpp' ] + testLibs)
