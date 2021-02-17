@@ -50,6 +50,50 @@ class PortableServiceTest : public testing::Test {
       ArgMap& arg_map,
       const std::string& no_value_arg,
       fusion_portableglobe::CutSpec* cutspec) {
+        TestRequest(
+          r,
+          source_cmd_or_path,
+          target_path, suffix,
+          layer_id,
+          is_balloon_request,
+          arg_map,
+          no_value_arg,
+          cutspec,
+          HTTP_NOT_FOUND);
+      }
+    void TestGoodRequest(
+      request_rec* r,
+      const std::string& source_cmd_or_path,
+      const std::string& target_path,
+      const std::string& suffix,
+      int layer_id,
+      bool is_balloon_request,
+      ArgMap& arg_map,
+      const std::string& no_value_arg,
+      fusion_portableglobe::CutSpec* cutspec) {
+        TestRequest(
+          r,
+          source_cmd_or_path,
+          target_path, suffix,
+          layer_id,
+          is_balloon_request,
+          arg_map,
+          no_value_arg,
+          cutspec,
+          OK);
+      }
+  private:
+    void TestRequest(
+      request_rec* r,
+      const std::string& source_cmd_or_path,
+      const std::string& target_path,
+      const std::string& suffix,
+      int layer_id,
+      bool is_balloon_request,
+      ArgMap& arg_map,
+      const std::string& no_value_arg,
+      fusion_portableglobe::CutSpec* cutspec,
+      int expected_status) {
         auto status = service.ProcessPortableRequest(
           r,
           source_cmd_or_path,
@@ -59,7 +103,7 @@ class PortableServiceTest : public testing::Test {
           arg_map,
           no_value_arg,
           cutspec);
-        ASSERT_EQ(status, HTTP_NOT_FOUND);
+        ASSERT_EQ(expected_status, status);
       }
 };
 
@@ -71,12 +115,96 @@ TEST_F(PortableServiceTest, FlatfileQueryNoArgs) {
   TestBadRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "query", nullptr);
 }
 
+TEST_F(PortableServiceTest, FlatfileQuery) {
+  args.emplace("blist", "0301324");
+  args.emplace("request", "QTPacket");
+  args.emplace("version", "1");
+  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "query", nullptr);
+}
+
+TEST_F(PortableServiceTest, FlatfileQueryMulti) {
+  args.emplace("blist", "03013240301334");
+  args.emplace("request", "QTPacket");
+  args.emplace("version", "1");
+  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "query", nullptr);
+}
+
+TEST_F(PortableServiceTest, FlatfileQueryNoPath) {
+  args.emplace("request", "QTPacket");
+  args.emplace("version", "1");
+  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "query", nullptr);
+}
+
+TEST_F(PortableServiceTest, FlatfileQueryRawPath) {
+  args.emplace("blist", "");
+  args.emplace("request", "ImageryGE");
+  args.emplace("version", "3");
+  args.emplace("channel", "1000");
+  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "query", nullptr);
+}
+
+TEST_F(PortableServiceTest, FlatfileQueryTerrain) {
+  args.emplace("blist", "0301324");
+  args.emplace("request", "Terrain");
+  args.emplace("version", "3");
+  args.emplace("channel", "1001");
+  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "query", nullptr);
+}
+
+TEST_F(PortableServiceTest, FlatfileQueryVector) {
+  args.emplace("blist", "0301324");
+  args.emplace("request", "VectorGE");
+  args.emplace("version", "3");
+  args.emplace("channel", "1002");
+  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "query", nullptr);
+}
+
 TEST_F(PortableServiceTest, FlatfileNoRequest) {
   TestBadRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "", nullptr);
 }
 
-TEST_F(PortableServiceTest, FlatfileRequestNoDot) {
+TEST_F(PortableServiceTest, FlatfileEncodedNoDot) {
   TestBadRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "f1c-03012-i", nullptr);
+}
+
+TEST_F(PortableServiceTest, FlatfileEncodedInvalidType) {
+  TestBadRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "f1c-030132-x.3", nullptr);
+}
+
+TEST_F(PortableServiceTest, FlatfileEncodedImagery) {
+  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "f1c-030132-i.3", nullptr);
+}
+
+TEST_F(PortableServiceTest, FlatfileEncodedTerrain) {
+  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "f1c-030132030-t.3", nullptr);
+}
+
+TEST_F(PortableServiceTest, FlatfileEncodedVector) {
+  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "f1c-03013203-d.5.2", nullptr);
+}
+
+TEST_F(PortableServiceTest, FlatfileEncodedQuery) {
+  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "q2-03013203-q.3", nullptr);
+}
+
+TEST_F(PortableServiceTest, FlatfileEncodedBadTerrain) {
+  TestBadRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "f1c-030132-t.3", nullptr);
+}
+
+TEST_F(PortableServiceTest, FlatfileEncodedBadVector) {
+  TestBadRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "f1c-030132-d.5", nullptr);
+}
+
+TEST_F(PortableServiceTest, FlatfileEncodedBadPrefix) {
+  TestBadRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "abc-03013203-q.3", nullptr);
+}
+
+TEST_F(PortableServiceTest, FlatfileIconRequest) {
+  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "lf-0-icons/773_l.png", nullptr);
+}
+
+TEST_F(PortableServiceTest, FlatfileBadIconRequest) {
+  TestBadRequest(r, "flatfile", TARGET, GLOBE, 2, false, args, "lf-0-icons/773_l.png", nullptr);
 }
 
 int main(int argc, char **argv) {
