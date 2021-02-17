@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
 #
@@ -38,7 +38,7 @@ class TestVersion(unittest.TestCase):
                  (fusion_version, latest_version))
     self.assertEqual(fusion_version, latest_version, msg=error_msg)
 
-    print ('Currently running the latest version of Fusion (%s).' %
+    print('Currently running the latest version of Fusion (%s).' %
            fusion_version)
 
   @unittest.skipUnless(common.IsGeeServerInstalled(),
@@ -55,7 +55,7 @@ class TestVersion(unittest.TestCase):
                  (gee_server_version, latest_version))
     self.assertEqual(gee_server_version, latest_version, msg=error_msg)
 
-    print ('Currently running the latest version of GEE Server (%s).' %
+    print('Currently running the latest version of GEE Server (%s).' %
            gee_server_version)
 
   @unittest.skipUnless(common.IsFusionInstalled(), 'Fusion is not installed')
@@ -71,7 +71,7 @@ class TestVersion(unittest.TestCase):
                  (fusion_version, gee_server_version))
     self.assertEqual(fusion_version, gee_server_version, msg=error_msg)
 
-    print 'Fusion and GEE Server versions match. Current version is %s.' % (
+    print('Fusion and GEE Server versions match. Current version is %s.' % (
         fusion_version)
 
 

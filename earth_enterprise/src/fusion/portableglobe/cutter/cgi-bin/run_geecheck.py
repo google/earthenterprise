@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
 #
@@ -35,7 +35,7 @@ def GeeCheckNotRun(msg=""):
   """If geecheck was not found, output dict with error msg."""
   # Output empty json.
   msg = "Unable to run geecheck.py. %s" % msg
-  print json.dumps({"error": msg})
+  print(json.dumps({"error": msg}))
   raise Exception(msg)
 
 
@@ -49,9 +49,9 @@ def main():
     results = common.utils.RunCmd(GEE_CHECK_APP)
     # Results returned as list. Print 0th element (json) for web requests.
     if "REQUEST_METHOD" in os.environ:
-      print results[0]
+      print(results[0])
     else:
-      print results
+      print(results)
   except Exception as e:
     GeeCheckNotRun(e.__str__())
 

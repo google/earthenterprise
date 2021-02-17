@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
 #
@@ -38,7 +38,7 @@ class TestRunningServices(unittest.TestCase):
         break
     error_msg = 'Service: %s is NOT running' % service
     self.assertTrue(exists, error_msg)
-    print 'Service %s is running with pid %s.' % (service, pid)
+    print('Service %s is running with pid %s.' % (service, pid))
 
   @unittest.skipUnless(common.IsFusionInstalled(), 'Fusion is not installed')
   def testRunningServiceGesystemmanager(self):

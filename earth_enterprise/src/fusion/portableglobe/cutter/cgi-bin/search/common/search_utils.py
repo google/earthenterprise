@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
 #
@@ -185,7 +185,7 @@ class SearchUtils(object):
 
 
 def main():
-  print "Search utilities instance:", SearchUtils()
+  print("Search utilities instance: {0}".format(SearchUtils())
 
 if __name__ == "__main__":
   main()
