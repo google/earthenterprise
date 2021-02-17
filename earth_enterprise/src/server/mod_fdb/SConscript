@@ -1,6 +1,7 @@
 #-*- Python -*-
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 The Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,13 +22,15 @@ import os
 env = env.Clone();
 env.Append(CPPPATH = ['#common/geindex'])
 
+mod_fdb_files = ['mod_fdb.c', 'mod_fdb_impl.cpp', 'apache_fdb_reader.cpp',
+    'unpackermanager.cpp', 'fdb_reader_manager.cpp',
+    'fdbservice.cpp', 'portableservice.cpp', 'fusiondbservice.cpp',
+    'tileservice.cpp', 'motf_generator.cpp']
+mod_fdb_libs = ['glb', 'qtutils', 'serverdb', 'serverdb_r', 'cutspec', 'gdal']
+
 module = env.sharedLib('mod_fdb',
-               ['mod_fdb.c', 'mod_fdb_impl.cpp', 'apache_fdb_reader.cpp',
-                'unpackermanager.cpp', 'fdb_reader_manager.cpp',
-                'fdbservice.cpp', 'portableservice.cpp', 'fusiondbservice.cpp',
-                'tileservice.cpp', 'motf_generator.cpp'],
-               LIBS=['glb', 'qtutils', 'serverdb',
-                     'serverdb_r', 'cutspec', 'gdal'],
+               mod_fdb_files,
+               LIBS=mod_fdb_libs,
                LINK=['g++'])
 
 # Install /opt/google/gehttpd/auth directory only
@@ -69,7 +72,18 @@ env.install('httpdconfvs', ['conf.d/virtual_servers/.vhpasswd',
                             'conf.d/virtual_servers/local_host.location',
                             'conf.d/virtual_servers/secure_host.location'])
 
-# Deprecated in GEE-5.1.0: all rewritings are implemented in mod_fdb.
-# env.install('httpdconfvscmn', ['conf.d/virtual_servers/common/rewrite_rules.conf'])
-
 env.install('httpdconfvsrt', ['conf.d/virtual_servers/runtime/fdb_runtime'])
+
+
+env.test('portableservice_unittest',
+         ['portableservice_unittest.cpp'] + mod_fdb_files,
+         LIBS = ['apr-1', 'rt', 'crypt', 'pthread', 'dl', 'geprotobuf', 'gecommon'] + mod_fdb_libs + ['gtest'],
+         LIBPATH = env['LIBPATH'] + [os.path.join(env.exportdirs['root'], 'gehttpd/lib')])
+
+'''
+env.test('portableservice_unittest',
+         ['portableservice_unittest.cpp'],
+         LIBS = [':mod_fdb.so.so', 'apr-1', 'rt', 'crypt', 'pthread', 'dl', 'geprotobuf', 'gecommon'] + mod_fdb_libs + ['gtest'],
+         LIBPATH = env['LIBPATH'] + [os.path.join(env.exportdirs['root'], 'gehttpd/lib')])#,
+         #LINKFLAGS = env['LINKFLAGS'] + ['-l:mod_fdb.so'])
+'''
