@@ -19,14 +19,21 @@
 #include <gtest/gtest.h>
 
 #include "httpd.h"
+#include <sstream>
 
 // Define some functions that Apache normally provides
-int ap_rwrite (const void *buf, int nbyte, request_rec *r) { return nbyte; }
 void ap_internal_redirect(const char * new_uri, request_rec * r) {}
 void ap_log_rerror(const char *file, int line, int module_index, int level, apr_status_t status, const request_rec *r, const char *fmt,...) {}
 void ap_set_last_modified(request_rec *r) {}
 void ap_hook_handler(ap_HOOK_handler_t *pf, const char * const *aszPre, const char * const *aszSucc, int inorder) {}
 apr_time_t apr_date_parse_http(const char *date) { return 0; }
+
+// Intercept data that is written out
+std::stringstream write_data;
+int ap_rwrite (const void *buf, int nbyte, request_rec *r) {
+  write_data.write(static_cast<const char *>(buf), nbyte);
+  return nbyte;
+}
 
 const std::string TARGET = "target";
 const std::string GLOBE = "portable/test_data/test.glb";
@@ -39,6 +46,7 @@ class PortableServiceTest : public testing::Test {
     ArgMap args;
     PortableServiceTest() {
       service.RegisterPortable(r, TARGET, GLOBE);
+      write_data.clear();
     }
     void TestBadRequest(
       request_rec* r,
@@ -70,7 +78,8 @@ class PortableServiceTest : public testing::Test {
       bool is_balloon_request,
       ArgMap& arg_map,
       const std::string& no_value_arg,
-      fusion_portableglobe::CutSpec* cutspec) {
+      fusion_portableglobe::CutSpec* cutspec,
+      uint64_t expected_data) {
         TestRequest(
           r,
           source_cmd_or_path,
@@ -81,6 +90,12 @@ class PortableServiceTest : public testing::Test {
           no_value_arg,
           cutspec,
           OK);
+
+        // Check the first few bytes of data written to make sure we're writing
+        // out the correct data.
+        uint64_t written_data;
+        write_data.read(reinterpret_cast<char *>(&written_data), sizeof(written_data));
+        ASSERT_EQ(expected_data, written_data);
       }
   private:
     void TestRequest(
@@ -119,20 +134,20 @@ TEST_F(PortableServiceTest, FlatfileQuery) {
   args.emplace("blist", "0301324");
   args.emplace("request", "QTPacket");
   args.emplace("version", "1");
-  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "query", nullptr);
+  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "query", nullptr, 0x656c626174726f50);
 }
 
 TEST_F(PortableServiceTest, FlatfileQueryMulti) {
   args.emplace("blist", "03013240301334");
   args.emplace("request", "QTPacket");
   args.emplace("version", "1");
-  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "query", nullptr);
+  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "query", nullptr, 0x3a65636976726553);
 }
 
 TEST_F(PortableServiceTest, FlatfileQueryNoPath) {
   args.emplace("request", "QTPacket");
   args.emplace("version", "1");
-  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "query", nullptr);
+  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "query", nullptr, 0x3a74656772617420);
 }
 
 TEST_F(PortableServiceTest, FlatfileQueryRawPath) {
@@ -140,7 +155,7 @@ TEST_F(PortableServiceTest, FlatfileQueryRawPath) {
   args.emplace("request", "ImageryGE");
   args.emplace("version", "3");
   args.emplace("channel", "1000");
-  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "query", nullptr);
+  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "query", nullptr, 0x6573616261746164);
 }
 
 TEST_F(PortableServiceTest, FlatfileQueryTerrain) {
@@ -148,7 +163,7 @@ TEST_F(PortableServiceTest, FlatfileQueryTerrain) {
   args.emplace("request", "Terrain");
   args.emplace("version", "3");
   args.emplace("channel", "1001");
-  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "query", nullptr);
+  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "query", nullptr, 0x7465677261742720);
 }
 
 TEST_F(PortableServiceTest, FlatfileQueryVector) {
@@ -156,7 +171,7 @@ TEST_F(PortableServiceTest, FlatfileQueryVector) {
   args.emplace("request", "VectorGE");
   args.emplace("version", "3");
   args.emplace("channel", "1002");
-  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "query", nullptr);
+  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "query", nullptr, 0x6c626174726f703a);
 }
 
 TEST_F(PortableServiceTest, FlatfileNoRequest) {
@@ -172,19 +187,19 @@ TEST_F(PortableServiceTest, FlatfileEncodedInvalidType) {
 }
 
 TEST_F(PortableServiceTest, FlatfileEncodedImagery) {
-  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "f1c-030132-i.3", nullptr);
+  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "f1c-030132-i.3", nullptr, 0x645f747365742f65);
 }
 
 TEST_F(PortableServiceTest, FlatfileEncodedTerrain) {
-  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "f1c-030132030-t.3", nullptr);
+  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "f1c-030132030-t.3", nullptr, 0x747365742f617461);
 }
 
 TEST_F(PortableServiceTest, FlatfileEncodedVector) {
-  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "f1c-03013203-d.5.2", nullptr);
+  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "f1c-03013203-d.5.2", nullptr, 0x65722027626c672e);
 }
 
 TEST_F(PortableServiceTest, FlatfileEncodedQuery) {
-  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "q2-03013203-q.3", nullptr);
+  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "q2-03013203-q.3", nullptr, 0x6465726574736967);
 }
 
 TEST_F(PortableServiceTest, FlatfileEncodedBadTerrain) {
@@ -200,7 +215,7 @@ TEST_F(PortableServiceTest, FlatfileEncodedBadPrefix) {
 }
 
 TEST_F(PortableServiceTest, FlatfileIconRequest) {
-  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "lf-0-icons/773_l.png", nullptr);
+  TestGoodRequest(r, "flatfile", TARGET, GLOBE, 0, false, args, "lf-0-icons/773_l.png", nullptr, 0x72657320726f6620);
 }
 
 TEST_F(PortableServiceTest, FlatfileBadIconRequest) {
