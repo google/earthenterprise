@@ -30,7 +30,7 @@ import urllib.parse
 from common import exceptions
 from common import utils
 
-import libgepublishmanagerhelper
+from . import libgepublishmanagerhelper
 
 from serve import basic_types
 from serve import constants
