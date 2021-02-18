@@ -115,7 +115,8 @@ def PrintTextSuiteResults(results,
   num_errors = 0
   num_skipped = 0
   for result in results["test_results"]:
-    print("-- ({0}) {1} {2}".format(result["module"], result["test"], result["status"]))
+    print("-- ({0}) {1} {2}".
+          format(result["module"], result["test"], result["status"]))
     if result["status"] == "SUCCESS":
       num_successes += 1
     else:
@@ -131,7 +132,7 @@ def PrintTextSuiteResults(results,
         num_skipped += 1
         print("  %s" % (result["skip_reason"]))
       else:
-        print("Unknown status:", result["status"])
+        print("Unknown status: {0}".format(result["status"])
         break
     num_tests += 1
 
@@ -139,8 +140,8 @@ def PrintTextSuiteResults(results,
     print("Test messages:")
     for line in results["stdout"]:
       print(line.strip())
-  print("Summary: {0} tests  {1} successes  {2} errors  {3} failures {4} skipped".format(
-      num_tests, num_successes, num_errors, num_failures, num_skipped))
+  print("Summary: {0} tests  {1} successes  {2} errors  {3} failures {4} skipped".
+       format(num_tests, num_successes, num_errors, num_failures, num_skipped))
 
 
 def PrintTextResults(results):
@@ -199,7 +200,7 @@ def main(argv):
                        "--no_server_tests",
                        "json",
                        "text"]:
-      print("Unknown parameter:", argv[i])
+      print("Unknown parameter: {0}".format(argv[i]))
       Usage(argv[0])
 
   test_runner = GeeTestRunner()

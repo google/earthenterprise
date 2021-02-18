@@ -116,7 +116,7 @@ class Globe(object):
   def _GetData(self):
     """Returns package or file content currently pointed to by unpacker."""
     assert self.unpacker_
-    offset = 0L + (self.file_loc_.HighOffset() & 0xffffffff) << 32
+    offset = 0 + (self.file_loc_.HighOffset() & 0xffffffff) << 32
     offset += (self.file_loc_.LowOffset() & 0xffffffff)
     fp = open(self.GlobePath(), "rb")
     fp.seek(offset)
@@ -128,7 +128,7 @@ class Globe(object):
 
   def GetVersion(self):
     """Returns format version of the globe."""
-    offset = (0L + os.path.getsize(self.GlobePath())
+    offset = (0 + os.path.getsize(self.GlobePath())
               - glc_unpacker.Package.kVersionOffset)
     fp = open(self.GlobePath(), "rb")
     fp.seek(offset)
@@ -138,7 +138,7 @@ class Globe(object):
 
   def GetCrc(self):
     """Returns crc of the globe."""
-    offset = (0L + os.path.getsize(self.GlobePath())
+    offset = (0 + os.path.getsize(self.GlobePath())
               - glc_unpacker.Package.kCrcOffset)
     fp = open(self.GlobePath(), "rb")
     fp.seek(offset)
@@ -149,7 +149,7 @@ class Globe(object):
 
   def CalculateCrc(self):
     """Returns calculated crc for the globe."""
-    size = ((os.path.getsize(self.GlobePath())
+    size = int((os.path.getsize(self.GlobePath())
              - glc_unpacker.Package.kCrcOffset)
             / glc_unpacker.Package.kCrcSize)
     fp = open(self.GlobePath(), "rb")

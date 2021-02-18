@@ -733,7 +733,7 @@ class GlobeBuilder(object):
   def CancelCut(self, save_temp):
     """Kill processes referencing the temp directory of a cut in progress."""
     for proc_info in self.CutProcesses():
-      print("Killing: (%d) %s " % (proc_info[0], proc_info[1]))
+      print("Killing: ({0}) {1} ".format((proc_info[0], proc_info[1])))
       os.kill(proc_info[0], 1)
     self.CleanUp(save_temp)
 
@@ -972,12 +972,12 @@ if __name__ == "__main__":
       globe_name = FORM.getvalue_filename("globe_name")
       is_2d = FORM.getvalue("is_2d")
       if is_2d == "t":
-        print("<hr>Your map is available at <a href=\"%s/%s.glm\">%s</a>." %
-               (WEB_URL_BASE, globe_name, globe_name))
+        print("<hr>Your map is available at <a href=\"{0}/{1}.glm\">{2}</a>.".
+             format(WEB_URL_BASE, globe_name, globe_name)))
         globe_size = common.utils.FileSizeAsString(globe_builder.map_file)
       else:
-        print("<hr>Your globe is available at <a href=\"%s/%s.glb\">%s</a>." %
-               (WEB_URL_BASE, globe_name, globe_name))
+        print("<hr>Your globe is available at <a href=\"{0}/{1}.glb\">{2}</a>.".
+              format(WEB_URL_BASE, globe_name, globe_name)))
         globe_size = common.utils.FileSizeAsString(globe_builder.globe_file)
       print("<br> Size: %s" % globe_size)
       globe_builder.AppendInfoFile(globe_size)

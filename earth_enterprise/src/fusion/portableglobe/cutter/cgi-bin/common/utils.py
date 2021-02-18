@@ -349,7 +349,7 @@ def RunCmd(os_cmd):
 
 def PrintAndLog(msg, logger=None, prefix="\n"):
   if prefix:
-    print("%s%s" % (prefix, msg))
+    print("{0}{1}".format(prefix, msg))
   else:
     print(msg)
 
