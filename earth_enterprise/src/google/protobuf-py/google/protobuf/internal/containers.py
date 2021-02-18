@@ -77,7 +77,7 @@ class BaseContainer(object):
   def __repr__(self):
     return repr(self._values)
 
-  def sort(self, sort_function=cmp):
+  def sort(self, sort_function=lambda x,y: (x > y) - (x < y)):
     self._values.sort(sort_function)
 
 
