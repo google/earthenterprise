@@ -74,9 +74,10 @@ env.install('httpdconfvs', ['conf.d/virtual_servers/.vhpasswd',
 
 env.install('httpdconfvsrt', ['conf.d/virtual_servers/runtime/fdb_runtime'])
 
-# mod_fdb is an Apache module, not a normal library, so the simplest way to
-# create unit tests for it is to rebuild it from source.
 env.test('portableservice_unittest',
-         ['portableservice_unittest.cpp'] + mod_fdb_files,
-         LIBS = ['apr-1', 'rt', 'crypt', 'pthread', 'dl', 'geprotobuf', 'gecommon'] + mod_fdb_libs + ['gtest'],
+         'portableservice_unittest.cpp',
+         # The ':' tells gcc that mod_fdb.so doesn't start with "lib". The
+         # extra ".so" on the end is because Scons strips one of them off. It's
+         # messy but it works.
+         LIBS = [':mod_fdb.so.so', 'apr-1', 'rt', 'crypt', 'pthread', 'dl', 'geprotobuf', 'gecommon'] + mod_fdb_libs + ['gtest'],
          LIBPATH = env['LIBPATH'] + [os.path.join(env.exportdirs['root'], 'gehttpd/lib')])
