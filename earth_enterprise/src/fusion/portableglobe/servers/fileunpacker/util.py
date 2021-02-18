@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
 #
@@ -37,14 +37,14 @@ class OsCommandError(Exception):
 def PipePexpectStreamNonBlocking(source_stream, destination_stream):
   while source_stream.isalive():
     try:
-      chunk = source_stream.read_nonblocking(timeout=0)
+      chunk = source_stream.read_nonblocking(timeout=0).decode('utf-8', 'ignore')
       destination_stream.write(chunk)
     except (pexpect.TIMEOUT, pexpect.EOF):
       return
 
 def ExecuteCmd(os_cmd, use_shell=False):
   """Execute os command and log results."""
-  print "Executing: {0}".format(os_cmd if use_shell else ' '.join(os_cmd))
+  print("Executing: {0}".format(os_cmd if use_shell else ' '.join(os_cmd)))
   process = None
   try:
     process = subprocess.Popen(os_cmd, stdin=None, stdout=subprocess.PIPE,
@@ -62,8 +62,8 @@ def ExecuteCmd(os_cmd, use_shell=False):
     if process.returncode: # Assume a non-zero exit code means error:
       return "Unable to execute %s" % os_cmd
     return process.returncode
-  except Exception, e:
-    print "FAILED: %s" % e.__str__()
+  except Exception as e:
+    print("FAILED: %s" % e.__str__())
     raise OsCommandError()
   finally:
     # Terminate sub-process on keyboard interrupt or other exception:

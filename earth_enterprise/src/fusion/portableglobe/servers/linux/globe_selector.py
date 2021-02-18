@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
 #
@@ -47,9 +47,9 @@ def StopServer(port):
     fp.close()
 
   except:
-    print "Unable to stop server on port %s." % port
+    print("Unable to stop server on port %s." % port)
 
-  print "Server stopped."
+  print("Server stopped.")
 
 
 # Depends on sys.argv[1] being the globe name to start (if any)
@@ -70,17 +70,17 @@ def main(argv):
       StopServer(port)
       StartServer()
   else:
-    print "Server was not running."
+    print("Server was not running.")
     StartServer()
 
   # Give the server a chance to get started.
   time.sleep(1)
 
   cmd = "start local/home.url"
-  print "Running %s" % cmd
+  print("Running %s" % cmd)
   os.system(cmd)
   time.sleep(5)
-  print "Done."
+  print("Done.")
 
 if __name__ == "__main__":
   main(sys.argv)

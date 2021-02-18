@@ -266,7 +266,6 @@ class Globe(object):
         "0", glc_unpacker.kDbRootPacket, 0, layer_id, self.file_loc_):
       return self._GetData()
     else:
-
       print("Did not find dbRoot for: {0}".format(layer_id))
       raise portable_exceptions.UnableToFindException("Unable to find dbroot.")
 

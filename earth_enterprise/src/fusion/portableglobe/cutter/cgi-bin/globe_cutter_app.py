@@ -165,7 +165,7 @@ class GlobeBuilder(object):
         point = row[-1]
         lonlat = point[6:-1].split(" ")
         out_row.extend(lonlat)
-        print("\t".join(out_row
+        print("\t".join(out_row))
       else:
         print("\t".join(row))
 

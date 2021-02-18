@@ -157,7 +157,7 @@ class RepeatedScalarContainer(object):
   def __hash__(self):
     raise TypeError('unhashable object')
 
-  def sort(self, sort_function=cmp):
+  def sort(self, sort_function=lambda x,y: (x > y) - (x < y)):
     values = self[slice(None, None, None)]
     values.sort(sort_function)
     self._cmsg.AssignRepeatedScalar(self._cfield_descriptor, values)
@@ -237,7 +237,7 @@ class RepeatedCompositeContainer(object):
   def __hash__(self):
     raise TypeError('unhashable object')
 
-  def sort(self, sort_function=cmp):
+  def sort(self, sort_function=lambda x,y: (x > y) - (x < y)):
     messages = []
     for index in range(len(self)):
       # messages[i][0] is where the i-th element of the new array has to come

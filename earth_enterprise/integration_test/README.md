@@ -14,7 +14,7 @@ To run these tests, do the following:
     3. Install packages used by the tests:
 
         ```bash
-        sudo pip3 install getgauge colorama requests
+        sudo pip3.8 install getgauge colorama requests
         ```
 
 2. Build and install GEE Fusion and Server

@@ -72,7 +72,7 @@ class TestVersion(unittest.TestCase):
     self.assertEqual(fusion_version, gee_server_version, msg=error_msg)
 
     print('Fusion and GEE Server versions match. Current version is %s.' % (
-        fusion_version)
+        fusion_version))
 
 
 if __name__ == '__main__':

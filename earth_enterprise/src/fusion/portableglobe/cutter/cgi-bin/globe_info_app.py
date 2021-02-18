@@ -196,11 +196,11 @@ def main():
     else:
       common.utils.WriteHeader("text/plain")
       logger.Log("Unknown command: %s" % cmd)
-      print("Unknown command: {0}".format(cmd))
+      print("Unknown command:", cmd)
 
   except Exception as e:
     common.utils.WriteHeader("text/html")
-    print("{0} {1}".format(type(e), e)
+    print('{0} {1}'.format(type(e), e))
 
 
 if __name__ == "__main__":
