@@ -303,7 +303,7 @@ def main():
     lat = float(form.getvalue("lat").strip())
   except ValueError:
     Fail("Bad latitude.")
-    r1eturn
+    return
   except AttributeError:
     Fail("No latitude parameter.")
     return
