@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
 #
@@ -49,14 +49,14 @@ class LoaderChecker(object):
 
   def Log(self, msg):
     """Log message."""
-    print msg
+    print(msg)
 
   def ExecuteCmd(self, os_cmd):
     """Execute os command and log results."""
     try:
-      print "Executing %s" % os_cmd
+      print("Executing %s" % os_cmd)
       os.system(os_cmd)
-    except Exception, e:
+    except Exception as e:
       self.Log("FAILED: %s" % e.__str__())
       raise IOError("Unable to execute: %s" % os_cmd)
 
@@ -67,7 +67,7 @@ class LoaderChecker(object):
                                            subject, body)
     smtp = smtplib.SMTP("localhost")
     smtp.sendmail(email_address, [email_address], msg)
-    print "Mail sent."
+    print("Mail sent.")
 
   def LastModified(self, file_name):
     """Get last-modified time of file."""
@@ -111,7 +111,7 @@ class LoaderChecker(object):
 def main(argv):
   num_args = len(argv) - 1
   if num_args > 2 or (num_args >= 1 and argv[1] == "help"):
-    print """
+    print("""
 Usage: update_loader.py [path_to_client] [email_addrss]
 
 If no path to client is given, the current directory
@@ -122,7 +122,7 @@ updates.
 Examples:
   ./fusion/portableglobe/tools/update_loader.py
   ./update_loader.py /usr/local/google/gee2/googleclient/geo/earth_enterprise/src username@email.com
-"""
+""")
     return
 
   email_address = ""
@@ -133,40 +133,40 @@ Examples:
     if num_args == 2:
       email_address = argv[2]
 
-  print "Using client path: %s" % client_address
+  print("Using client path: %s" % client_address)
 
-  print "Checking Earth plugin loader dates ..."
+  print("Checking Earth plugin loader dates ...")
   loader = LoaderChecker(client_address)
   msg = ""
 
   if loader.FileNeedsUpdate(linux_loader):
-    print "Updating %s ..." % linux_loader
+    print("Updating %s ..." % linux_loader)
     loader.Update(linux_loader)
     msg += "%s %s\n" % (linux_loader, loader.LastModified(linux_loader))
     msg += "Updated %s\n" % linux_loader
   else:
-    print "No need to update %s." % linux_loader
+    print("No need to update %s." % linux_loader)
 
   if loader.FileNeedsUpdate("%s/%s" % (client_address, client_linux_loader)):
-    print "Updating %s ..." % client_linux_loader
+    print("Updating %s ..." % client_linux_loader)
     loader.UpdateForCheckIn(client_linux_loader)
     msg += "%s %s\n" % (client_linux_loader,
                         loader.LastModified(client_linux_loader))
     msg += "Updated %s\n" % client_linux_loader
     msg += "Need to check in the new loader.\n"
   else:
-    print "No need to update %s." % client_linux_loader
+    print("No need to update %s." % client_linux_loader)
 
   if loader.FileNeedsUpdate("%s/%s" % (client_address,
                                        client_portable_loader)):
-    print "Updating %s ..." % client_portable_loader
+    print("Updating %s ..." % client_portable_loader)
     loader.UpdateForCheckIn(client_portable_loader)
     msg += "%s %s\n" % (client_portable_loader,
                         loader.LastModified(client_portable_loader))
     msg += "Updated %s\n" % client_portable_loader
     msg += "Need to check in the new loader.\n"
   else:
-    print "No need to update %s." % client_portable_loader
+    print("No need to update %s." % client_portable_loader)
 
   if msg and email_address:
     loader.SendMessage(msg, email_address)

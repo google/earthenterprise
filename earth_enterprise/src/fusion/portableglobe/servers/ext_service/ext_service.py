@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
 #
@@ -46,14 +46,15 @@ class ExtService(object):
     """Use the given base directory to find any associated files."""
     # Set the location of our geplaces data.
     self.working_directory_ = working_directory
-    print "Ext working directory is %s" % self.working_directory_
+    print("Ext working directory is %s" % self.working_directory_)
 
   def ExtGetHandler(self, handler, path):
     """Service a GET request to the /ext/... pathway."""
     handler.set_header("Content-Type", "text/html")
     handler.write("<p>Process GET request...")
     try:
-      handler.write("<p>Hello %s!" % handler.request.arguments["name"][0])
+      name = handler.decode_argument(handler.request.arguments["name"][0])
+      handler.write("<p>Hello %s!" % name)
     except KeyError:
       handler.write("<p>Hello unknown!")
     handler.write("<p>Path: %s" % path)
@@ -65,7 +66,8 @@ class ExtService(object):
     handler.set_header("Content-Type", "text/html")
     handler.write("<p>Process POST request...")
     try:
-      handler.write("<p>Hello %s!" % handler.request.arguments["name"][0])
+      name = handler.decode_argument(handler.request.arguments["name"][0])
+      handler.write("<p>Hello %s!" % name)
     except KeyError:
       handler.write("<p>Hello unknown!")
     handler.write("<p>Path: %s" % path)

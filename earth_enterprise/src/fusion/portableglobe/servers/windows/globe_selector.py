@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
 #
@@ -47,9 +47,9 @@ def StopServer(port):
     fp.close()
 
   except:
-    print "Unable to stop server on port %s." % port
+    print("Unable to stop server on port %s." % port)
 
-  print "Server stopped."
+  print("Server stopped.")
 
 
 # Depends on sys.argv[1] being the globe name to start (if any)

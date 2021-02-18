@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
 #
@@ -49,6 +49,7 @@ def build_swig(source_dir):
     opengee_build_dir = os.path.join(source_dir, 'NATIVE-REL-x86_64')
     swig_builder = subprocess.Popen('scons -j1 release=1 portable_3rd_libs=1 build', 
                                     shell=True, cwd=os.path.join(source_dir, "../"), env=os.environ.copy())
+
     if swig_builder.wait() != 0:
       raise ValueError('Swig build failed!')
     
@@ -94,7 +95,7 @@ def BuildLibrary(os_dir, ignore_results, source_dir):
     pythonCLib = "libpython{0}{1}.a".format(sys.version_info[0], sys.version_info[1])
     pathToLib = os.path.join(sys.exec_prefix, "libs", pythonCLib)
     if not os.path.isfile(pathToLib):
-      print "ERROR: {0} was not found.  It is needed for linking".format(pathToLib)
+      print("ERROR: {0} was not found.  It is needed for linking".format(pathToLib))
       return False
     archData = platform.architecture(pathToLib)
     if archData[0] == "64bit":
@@ -115,9 +116,9 @@ def BuildLibrary(os_dir, ignore_results, source_dir):
     result = util.ExecuteCmd(line.format(**build_vars), use_shell=True)
     if result:
       if ignore_results:
-        print result
+        print(result)
       else:
-        print "FAIL: %s" % result
+        print("FAIL: %s" % result)
         fp.close()
         return False
   fp.close()
@@ -126,7 +127,7 @@ def BuildLibrary(os_dir, ignore_results, source_dir):
 
 def RunTests():
   """Runs tests using the generated library."""
-  print "Running tests ..."
+  print("Running tests ...")
   shutil.copyfile("../util.py", "util.py")
   shutil.copyfile("../test.py", "test.py")
 
@@ -142,19 +143,18 @@ def main(argv):
   print(argv)
   if ((len(argv) < 2 or argv[1].lower() not in ["mac", "windows", "linux"]) or
       (len(argv) < 3 and arv[1].lower() == "linux")):
-    print "Usage: build_and_test.py <OS_target> <source_dir>"
-    print
-    print "<OS_target> can be Mac, Windows, or Linux"
-    print "<source_dir> is only needed for Linux"
+    print("Usage: build_and_test.py <OS_target> <source_dir>\n")
+    print("<OS_target> can be Mac, Windows, or Linux")
+    print("<source_dir> is only needed for Linux")
     return
 
   os.chdir(os.path.dirname(os.path.realpath(__file__)))
   os_dir = "%s%s" % (argv[1][0:1].upper(), argv[1][1:].lower())
 
-  print "Build and test file unpacker library for %s Portable Server." % os_dir
+  print("Build and test file unpacker library for %s Portable Server." % os_dir)
 
   if BuildLibrary(os_dir, argv[1].lower()=="windows", argv[2]):
-    print "Library built."
+    print("Library built.")
     RunTests()
   else:
     sys.exit(1)

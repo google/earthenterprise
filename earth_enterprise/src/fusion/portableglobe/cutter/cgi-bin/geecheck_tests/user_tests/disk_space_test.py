@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
 #
@@ -40,7 +40,7 @@ def getDiskFreeSpace():
   mount_point = getMountPoint(asset_root)
 
   available_space, size = getFsInfo(mount_point)
-  percentage_avail = 100 - ((size - available_space) * 100 / size)
+  percentage_avail = int(100 - ((size - available_space) * 100 / size))
 
   return percentage_avail
 
