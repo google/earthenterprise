@@ -29,7 +29,6 @@ cgi_env = env.Clone()
 
 root_dir = Dir(cgi_env.exportdirs['root']).abspath
 python_bin = cgi_env['python_bin']
-compiler_cmd = '%s -m py_compile' % python_bin
 cgi_src_path = Dir('#/fusion/portableglobe/cutter/cgi-bin').abspath
 
 # List of directories to be compiled for installer.
