@@ -22,14 +22,13 @@ import os
 env = env.Clone();
 env.Append(CPPPATH = ['#common/geindex'])
 
-mod_fdb_files = ['mod_fdb.c', 'mod_fdb_impl.cpp', 'apache_fdb_reader.cpp',
-    'unpackermanager.cpp', 'fdb_reader_manager.cpp',
-    'fdbservice.cpp', 'portableservice.cpp', 'fusiondbservice.cpp',
-    'tileservice.cpp', 'motf_generator.cpp']
 mod_fdb_libs = ['glb', 'qtutils', 'serverdb', 'serverdb_r', 'cutspec', 'gdal']
 
 module = env.sharedLib('mod_fdb',
-               mod_fdb_files,
+               ['mod_fdb.c', 'mod_fdb_impl.cpp', 'apache_fdb_reader.cpp',
+                'unpackermanager.cpp', 'fdb_reader_manager.cpp',
+                'fdbservice.cpp', 'portableservice.cpp', 'fusiondbservice.cpp',
+                'tileservice.cpp', 'motf_generator.cpp'],
                LIBS=mod_fdb_libs,
                LINK=['g++'])
 
