@@ -202,7 +202,7 @@ string StringifyDefaultValue(const FieldDescriptor& field) {
       return SimpleItoa(field.default_value_enum()->number());
     case FieldDescriptor::CPPTYPE_STRING:
       if (field.type() == FieldDescriptor::TYPE_STRING) {
-        return "unicode(\"" + CEscape(field.default_value_string()) +
+        return "str(\"" + CEscape(field.default_value_string()) +
             "\", \"utf-8\")";
       } else {
         return "\"" + CEscape(field.default_value_string()) + "\"";
