@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright 2020 The Open GEE Contributors
+# Copyright 2020 - 2021 The Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,7 +18,15 @@ umask 002
 
 main_postinstall()
 {
-    if [ -f "/etc/init.d/geserver" ]; then
+    # Check if opengee-fusion and opengee-server are the expected version. If
+    # not, we may be in the middle of an upgrade with incompatible libraries
+    # and binaries. In that case, we skip the steps below and let
+    # opengee-fusion and opengee-server take care of them.
+    EXTRA_VERSION="${CURRENT_VERSION}"
+    SERVER_VERSION=$(get_package_version opengee-server)
+    FUSION_VERSION=$(get_package_version opengee-fusion)
+
+    if [ "$SERVER_VERSION" == "$EXTRA_VERSION" ]; then
         install_searchexample_database
 
         # Set up the ExampleSearch plugin. The opengee-server-core RPM does
@@ -27,12 +35,16 @@ main_postinstall()
         run_as_user "$GEPGUSER" "$BASEINSTALLDIR_OPT/bin/psql -q -d gesearch geuser -f $SQLDIR/examplesearch.sql"
 
         service geserver restart
+    else
+        echo "Skipping example search set up. It will be set up when opengee-server-${EXTRA_VERSION} is installed."
     fi
 
-    if [ -f "/etc/init.d/gefusion" ]; then
+    if [ "$FUSION_VERSION" == "$EXTRA_VERSION" ]; then
         service gefusion stop
         add_fusion_tutorial_volume
         service gefusion start
+    else
+        echo "Skipping tutorial volume set up. It will be set up when opengee-fusion-${EXTRA_VERSION} is installed."
     fi
 }
 
