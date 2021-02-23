@@ -164,6 +164,16 @@ fix_postinstall_filepermissions()
 
     # Restrict permissions to uninstaller and installer logs
     chmod -R go-rwx "$BASEINSTALLDIR_OPT/install"
+
+    if [ ! -d "${GEINSTALLDIR_OPT}/.users/${GEPGUSER}" ]; then
+      mkdir -p "${GEINSTALLDIR_OPT}/.users/${GEPGUSER}"
+    fi
+    chown "${GEPGUSER}:${GEGROUP}" "${GEINSTALLDIR_OPT}/.users/${GEPGUSER}"
+
+    if [ ! -d "${GEINSTALLDIR_OPT}/.users/${GEAPACHEUSER}" ]; then
+      mkdir -p "${GEINSTALLDIR_OPT}/.users/${GEAPACHEUSER}"
+    fi
+    chown "${GEAPACHEUSER}:${GEGROUP}" "${GEINSTALLDIR_OPT}/.users/${GEAPACHEUSER}"
 }
 
 reset_pgdb()

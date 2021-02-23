@@ -160,6 +160,7 @@ main_install()
 		# user already exists -- update primary group
 		usermod -g $GROUPNAME $GEFUSIONUSER_NAME
 	fi
+        chown -R "GEFUSIONUSER_NAME:$GROUPNAME" "$BASEINSTALLDIR_OPT/.users/GEFUSIONUSER_NAME"
 
 	copy_files_to_target
 	create_links

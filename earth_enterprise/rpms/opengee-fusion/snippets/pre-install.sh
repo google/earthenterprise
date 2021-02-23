@@ -92,6 +92,12 @@ create_users_and_groups()
         usermod -g "$GEGROUP" "$GEFUSIONUSER"
         # Special case, upgrading from a non-rpm install
     fi
+
+    #pleeease
+    if [ ! -d "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER" ]; then
+        mkdir -p "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER"
+    fi
+    chown -R "$GEFUSIONUSER:$GEGROUP" "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER"
 }
 
 show_invalid_assetroot_name()

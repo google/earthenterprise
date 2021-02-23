@@ -24,6 +24,10 @@ check_group()
     if [ -z "$GROUP_EXISTS" ]; then
         groupadd -r "$GEGROUP" &> /dev/null
     fi
+
+    if [ ! -d  "$BASEINSTALLDIR_OPT/.users" ]; then
+        mkdir "$BASEINSTALLDIR_OPT/.users"
+    fi
 }
 
 is_directory_not_link()
