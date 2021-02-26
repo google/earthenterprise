@@ -127,12 +127,17 @@ fix_postinstall_filepermissions()
 
     # Publish Root
     chmod 775 $PUBLISHER_ROOT/stream_space
-    # TODO - Not Found
-    # chmod 644 $PUBLISHER_ROOT/stream_space/.config
     chmod 644 $PUBLISHER_ROOT/.config
     chmod 755 $PUBLISHER_ROOT
-    chown -R $GEAPACHEUSER:$GEGROUP $PUBLISHER_ROOT/stream_space
-    chown -R $GEAPACHEUSER:$GEGROUP $PUBLISHER_ROOT/search_space
+
+    if [ $(stat -c %U:%G $PUBLISHER_ROOT/stream_space ) != "$GEAPACHEUSER:$GEGROUP" ]; then
+        echo "chown stream_space"
+        chown -R $GEAPACHEUSER:$GEGROUP $PUBLISHER_ROOT/stream_space
+    fi
+    if [ $(stat -c %U:%G $PUBLISHER_ROOT/search_space ) != "$GEAPACHEUSER:$GEGROUP" ]; then
+        echo "chown search_space"
+        chown -R $GEAPACHEUSER:$GEGROUP $PUBLISHER_ROOT/search_space
+    fi
 
     # Run and logs ownership
     chown root:$GEGROUP $BASEINSTALLDIR_OPT/run
