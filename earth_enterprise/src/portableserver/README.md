@@ -31,10 +31,14 @@
     * defusedxml
     * pyyaml
 
+Python tornado has to be version 4.2, and is installed via:
+
+`pip3 install tornado==4.2`
+
 #### On CentOS/RHEL 6:
 
     sudo yum -y install python3-pip
-    sudo pip3 install tornado pillow
+    sudo pip3 install pillow
 
 # Portable Server on Linux
 
@@ -46,11 +50,11 @@ Make sure you have Python, the `pexpect` Pip package, as well as `tornado`, and 
 
 #### On Ubuntu:
 
-    sudo apt-get install g++ python python-pexpect python-tornado libpython-dev python-psycopg2
+    sudo apt-get install g++ python python-pexpect libpython-dev python-psycopg2
 
 #### On CentOS/RHEL 7:
 
-    sudo yum -y install gcc-c++ python python-pip python-tornado python-psycopg2
+    sudo yum -y install gcc-c++ python python-pip python-psycopg2
     sudo pip3 install pexpect
 
 #### On CentOS/RHEL 6:
@@ -122,10 +126,10 @@ Make sure `g++` is set in your `PATH`.
 
 Download and install [Python](https://www.python.org/downloads/) the latest Python 2.7 package.  Ensure the python architecture matches your desired build architecture.
 
-Once you have Python installed, make sure you have `pexpect` and `tornado` installed. E.g.:
+Once you have Python installed, make sure you have `pexpect` and `tornado` (method shown above) installed. E.g.:
 
     cd \Python27\Scripts
-    pip install pexpect tornado
+    pip install pexpect
 
 Add the directory you installed Python in to your `PATH`.
 
