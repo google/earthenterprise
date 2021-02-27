@@ -168,12 +168,12 @@ fix_postinstall_filepermissions()
     if [ ! -d "${GEINSTALLDIR_OPT}/.users/${GEPGUSER}" ]; then
       mkdir -p "${GEINSTALLDIR_OPT}/.users/${GEPGUSER}"
     fi
-    chown "${GEPGUSER}:${GEGROUP}" "${GEINSTALLDIR_OPT}/.users/${GEPGUSER}"
+    chown -R "${GEPGUSER}:${GEGROUP}" "${GEINSTALLDIR_OPT}/.users/${GEPGUSER}"
 
     if [ ! -d "${GEINSTALLDIR_OPT}/.users/${GEAPACHEUSER}" ]; then
       mkdir -p "${GEINSTALLDIR_OPT}/.users/${GEAPACHEUSER}"
     fi
-    chown "${GEAPACHEUSER}:${GEGROUP}" "${GEINSTALLDIR_OPT}/.users/${GEAPACHEUSER}"
+    chown -R "${GEAPACHEUSER}:${GEGROUP}" "${GEINSTALLDIR_OPT}/.users/${GEAPACHEUSER}"
 }
 
 reset_pgdb()
