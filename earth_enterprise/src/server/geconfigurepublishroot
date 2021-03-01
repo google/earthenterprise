@@ -15,6 +15,8 @@
 # limitations under the License.
 #
 
+use strict;
+use warnings;
 
 # make sure we're running as root
 die "You must run as root\n" unless $> == 0;
@@ -56,9 +58,11 @@ EOF
 my $allow_symlinks = 0;
 my $show_usage = 0;
 my $noprompt = 0;
+my $nochown = 0;
 
 my $ret = Getopt::Long::GetOptions("path=s" => \$default_path,
                                    "noprompt" => \$noprompt,
+                                   "nochown" => \$nochown,
                                    "allow_symlinks" => \$allow_symlinks,
                                    "help" => \$show_usage);
 if ($show_usage) {
@@ -90,30 +94,41 @@ if ($noprompt eq 0) {
 my $stream_dir = "$dest_path/stream_space";
 my $search_dir = "$dest_path/search_space";
 
-use File::Path;
+use File::Path qw(make_path);
 use File::Find;
 use POSIX qw(lchown);
-mkpath ([$stream_dir, $search_dir], 0, 0755);
+
+my ($username, $pwd, $uid, $gid) = getpwnam($GEAPACHEUSER);
+
+# Create stream and search directories if they don't exist
+make_path([$stream_dir, $search_dir],
+          {
+              verbose => 0,
+              mode => 0755,
+              uid => $uid,
+              group => $gid
+          });
+
 # Change the owner of the dirs to "geapache" coz that's the uid WebDAV uses to
 # write to these dirs.
-my ($username, $pwd, $uid, $gid) = getpwnam($GEAPACHEUSER);
-# Change owner and permissions recursively, in case the dirs are already
-# populated from a previous install.
-sub wanted {
-   # Just change the owner of symlinks (can't do this with builtin chown)
-   if (-l) {
-      lchown $uid, $gid, $_;
-      return;
-   }
-   chown $uid, $gid, $File::Find::name;
-   # root's umask could leave the dirs with less permissions than we want
-   # geapacheuser:gegroup will need to write to these dirs which is why 775.
-   chmod 0775, $File::Find::name if -d;
-   # Don't set execute bit on files
-   chmod 0664, $File::Find::name if -f;
+if ( $nochown == 0 ) {
+    # Change owner and permissions recursively, in case the dirs are already
+    # populated from a previous install.
+    sub wanted {
+        # Just change the owner of symlinks (can't do this with builtin chown)
+        if (-l) {
+            lchown $uid, $gid, $_;
+            return;
+        }
+        chown $uid, $gid, $File::Find::name;
+        # root's umask could leave the dirs with less permissions than we want
+        # geapacheuser:gegroup will need to write to these dirs which is why 775.
+        chmod 0775, $File::Find::name if -d;
+        # Don't set execute bit on files
+        chmod 0664, $File::Find::name if -f;
+    }
+    File::Find::find({wanted=>\&wanted, follow=>0}, ($stream_dir, $search_dir));
 }
-   
-File::Find::find({wanted=>\&wanted, follow=>0}, ($stream_dir, $search_dir));
 
 # only do this if fusion is installed
 if ($allow_symlinks_prompt eq 1) {

@@ -125,19 +125,11 @@ fix_postinstall_filepermissions()
     chown $GEAPACHEUSER:$GEGROUP $BASEINSTALLDIR_OPT/gehttpd/htdocs/.htaccess
     chown -R $GEAPACHEUSER:$GEGROUP $BASEINSTALLDIR_OPT/gehttpd/logs
 
-    # Publish Root
+    # Publish Root - note these are not recursive
+    # Ownership and permissions of publish root content is handled by geconfigurepublishroot
     chmod 775 $PUBLISHER_ROOT/stream_space
     chmod 644 $PUBLISHER_ROOT/.config
     chmod 755 $PUBLISHER_ROOT
-
-    if [ $(stat -c %U:%G $PUBLISHER_ROOT/stream_space ) != "$GEAPACHEUSER:$GEGROUP" ]; then
-        echo "chown stream_space"
-        chown -R $GEAPACHEUSER:$GEGROUP $PUBLISHER_ROOT/stream_space
-    fi
-    if [ $(stat -c %U:%G $PUBLISHER_ROOT/search_space ) != "$GEAPACHEUSER:$GEGROUP" ]; then
-        echo "chown search_space"
-        chown -R $GEAPACHEUSER:$GEGROUP $PUBLISHER_ROOT/search_space
-    fi
 
     # Run and logs ownership
     chown root:$GEGROUP $BASEINSTALLDIR_OPT/run
