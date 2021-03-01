@@ -67,7 +67,8 @@ if third_party_env['bundle_3rd_libs']:
       'swig',
       'python_2',
       'python_3',
-      'qt4'
+      'qt4',
+      'protobuf'
   ]
 elif third_party_env['portable_3rd_libs']:
   third_party_libs = [
@@ -97,7 +98,8 @@ else:
       'defusedxml',
       'swig',
       'python_2',
-      'python_3'
+      'python_3',
+      'protobuf'
   ]
   if qt4_native == 0:
     third_party_libs.append('qt4')
