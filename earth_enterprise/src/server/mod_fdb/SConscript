@@ -73,6 +73,10 @@ env.install('httpdconfvs', ['conf.d/virtual_servers/.vhpasswd',
 
 env.install('httpdconfvsrt', ['conf.d/virtual_servers/runtime/fdb_runtime'])
 
+# Scons doesn't recognize that portableservice_unittest depends on mod_fdb, so
+# we create the dependency explicitly.
+env.Requires('portableservice_unittest', 'mod_fdb.so')
+
 env.test('portableservice_unittest',
          'portableservice_unittest.cpp',
          # The ':' tells gcc that mod_fdb.so doesn't start with "lib". The
@@ -80,6 +84,3 @@ env.test('portableservice_unittest',
          # messy but it works.
          LIBS = [':mod_fdb.so.so', 'apr-1', 'rt', 'crypt', 'pthread', 'dl', 'geprotobuf', 'gecommon'] + mod_fdb_libs + ['gtest'],
          LIBPATH = env['LIBPATH'] + [os.path.join(env.exportdirs['root'], 'gehttpd/lib')])
-# Scons doesn't recognize that portableservice_unittest depends on mod_fdb, so
-# we create the dependency explicitly.
-env.Depends(target='portableservice_unittest', dependency='mod_fdb.so')
