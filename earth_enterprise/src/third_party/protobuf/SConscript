@@ -53,6 +53,7 @@ protobuf_target = '%s/.configure_protobuf' % current_dir
 
 configure_cmd = (
     'cd %s\n'
+    './autogen.sh\n'
     '%s./configure --prefix=%s --enable-shared\n'
     'touch %s' % (
         build_root, protobuf_env['ENV']['mod_env'], 
