@@ -18,27 +18,23 @@
 
 ## Build Prerequisites:
 
-    * Python 3
+    * Python 3.8
     * Python pexpect installed
     * Swig with support for Python (4.0.1 or later)
     * g++ (4.8 or later)
 
 ## Run-time prerequisites:
 
-    * Python 3 
+    * Python 3.8 
     * Python tornado installed
     * Python Imaging Library (PIL) installed
     * defusedxml
     * pyyaml
 
-Python tornado has to be version 4.2, and is installed via:
-
-`pip3 install tornado==4.2`
-
 #### On CentOS/RHEL 6:
 
     sudo yum -y install python3-pip
-    sudo pip3 install pillow
+    sudo pip3.8 install pillow tornado
 
 # Portable Server on Linux
 
@@ -124,12 +120,12 @@ Make sure `g++` is set in your `PATH`.
 
 ### Install Python
 
-Download and install [Python](https://www.python.org/downloads/) the latest Python 2.7 package.  Ensure the python architecture matches your desired build architecture.
+Download and install [Python](https://www.python.org/downloads/) the latest Python 3.8 package.  Ensure the python architecture matches your desired build architecture.
 
-Once you have Python installed, make sure you have `pexpect` and `tornado` (method shown above) installed. E.g.:
+Once you have Python installed, make sure you have `pexpect` and `tornado` installed. E.g.:
 
     cd \Python27\Scripts
-    pip install pexpect
+    pip install pexpect tornado
 
 Add the directory you installed Python in to your `PATH`.
 
@@ -141,7 +137,7 @@ Open a command prompt with `g++`, `swig` and `python` in your `PATH`.
 E.g., on Windows your `PATH` may look like:
 
 ```
-C:\swigwin-3.0.12;C:\Python27;C:\MinGW\bin;C:\Program Files\ . . .
+C:\swigwin-4.0.12;C:\Python38;C:\MinGW\bin;C:\Program Files\ . . .
 ```
 
 Run
