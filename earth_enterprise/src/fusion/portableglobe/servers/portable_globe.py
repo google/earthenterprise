@@ -176,7 +176,12 @@ class Globe(object):
     """
     
     if self.unpacker_.FindFile(relative_file_path, self.file_loc_):
-      return self.GetData().decode()
+      try:
+        contents = self.GetData().decode()
+      except UnicodeDecodeError as e:
+        print("{0}, ignoring...".format(e))
+        contents = self.GetData().decode(errors='ignore')
+      return contents 
     else:
 
       raise UnableToFindException("Unable to find file %s." % relative_file_path)
