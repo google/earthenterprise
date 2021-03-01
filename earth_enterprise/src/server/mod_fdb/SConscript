@@ -76,6 +76,7 @@ env.install('httpdconfvsrt', ['conf.d/virtual_servers/runtime/fdb_runtime'])
 # Scons doesn't recognize that portableservice_unittest depends on mod_fdb, so
 # we create the dependency explicitly.
 env.Requires('portableservice_unittest', 'mod_fdb.so')
+env.Depends('portableservice_unittest', 'mod_fdb.so')
 
 env.test('portableservice_unittest',
          'portableservice_unittest.cpp',
