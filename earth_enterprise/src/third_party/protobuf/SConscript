@@ -22,7 +22,7 @@ import subprocess
 
 protobuf_version = 'protobuf-3.6.1'
 make_cmd_cpu = 'make -j%d' % GetOption('num_jobs')
-ge_version = gdal_version.replace('protobuf', 'protobuf-ge')
+ge_version = protobuf_version.replace('protobuf', 'protobuf-ge')
 
 current_dir = Dir('.').abspath
 build_root = '%s/%s' % (current_dir, protobuf_version)
@@ -36,7 +36,7 @@ optdir = protobuf_env['optdir']
 root_dir = Dir(protobuf_env.exportdirs['root']).abspath
 
 if GetOption('clean'):
-  gdal_env.Execute('rm -rf %s' % current_dir)
+  protobuf_env.Execute('rm -rf %s' % current_dir)
 
 # [1] Extract protobuf
 protobuf_target = '%s/.extract' % current_dir
@@ -46,7 +46,7 @@ protobuf_extract = protobuf_env.Command(
         'mkdir -p %s\n'
         'cd %s\n'
         'tar xzf %s\n'
-        'touch %s'% (current_dir, current_dir, gdal_source, gdal_target))])
+        'touch %s'% (current_dir, current_dir, protobuf_source, protobuf_target))])
 
 # [7] Configure protobuf
 protobuf_target = '%s/.configure_protobuf' % current_dir
@@ -88,7 +88,7 @@ protobuf_install = protobuf_env.Command(
         'cd %s\n'
         '%s %s prefix=%s install \n'
         'touch %s' % (
-            build_root, gdal_env['ENV']['mod_env'], make_cmd, 
+            build_root, protobuf_env['ENV']['mod_env'], make_cmd, 
             install_root, protobuf_target))])
 
 # [11] Install these into various directories as required for build
@@ -110,7 +110,7 @@ Default(protobuf_install_build)
 if 'install' in COMMAND_LINE_TARGETS:
   # Copies protobuf python bindings from ../install/lib/python3.8/site-packages
   # to ../opt/google/gepython/../site-packages/ folder.
-  gdal_env.InstallFileOrDir(
+  protobuf_env.InstallFileOrDir(
       '%s/lib/python%s/site-packages/' % (install_root,
                                           protobuf_env['python_major_version']),
       '%s/opt/google/gepython/Python-%s/lib/python%s/site-packages' % (
@@ -126,4 +126,4 @@ if 'install' in COMMAND_LINE_TARGETS:
           '%s/lib/' % install_root,
           '%s/opt/google/lib' % protobuf_env.installdirs['common_root'])])
 
-Return('gdal_extract gdal_install_build')
+Return('protobuf_extract protobuf_install_build')
