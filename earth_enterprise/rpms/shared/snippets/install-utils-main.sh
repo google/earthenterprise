@@ -100,3 +100,18 @@ run_as_user()
         ( cd / ;sudo -u $1 $2 )
     fi
 }
+
+get_package_version()
+{
+    local PACKAGE_NAME="${1}"
+    # Declare variable first; otherwise $? will be the exit code of local,
+    # which is always 0
+    local FULL_VERSION
+    FULL_VERSION=`rpm -q "${PACKAGE_NAME}"`
+    if [ $? -eq 0 ]; then
+        # Strip off the package name and return just the version
+        echo ${FULL_VERSION#"$PACKAGE_NAME-"}
+    else
+        echo "None"
+    fi
+}

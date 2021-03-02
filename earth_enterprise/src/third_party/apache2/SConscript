@@ -1,6 +1,7 @@
 #-*- Python -*-
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 The Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -158,9 +159,6 @@ to_prune_http = ['man', 'error', 'bin/htdbm',
                  'htdocs/apache_pb.gif', 'htdocs/index.html'
                 ]
 
-# Note: used when compiling with crosstool
-# TODO: delete.
-#stdc = '/opt/google/lib64/libstdc++.so.6'
 apache_target = '%s/.install' % current_dir
 apache_install = apache_env.Command(
     apache_target, apache_configure,
