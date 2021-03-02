@@ -50,7 +50,6 @@ protobuf_extract = protobuf_env.Command(
 
 # [7] Configure protobuf
 protobuf_target = '%s/.configure_protobuf' % current_dir
-
 configure_cmd = (
     'cd %s\n'
     './autogen.sh\n'
@@ -81,28 +80,34 @@ protobuf_build = protobuf_env.Command(
 # [9] Create protobuf master installer
 make_cmd = 'make LD_SHARED="%s"' % (ld)
 install_root = '%s/install' % current_dir
+python_build_root = '%s/python' % build_root
+install_root_opt = '%s%s' % (install_root, optdir)
 protobuf_target = '%s/.install' % current_dir
 protobuf_install = protobuf_env.Command(
     protobuf_target, protobuf_build,
     [protobuf_env.MultiCommand(
         'cd %s\n'
-        '%s %s prefix=%s install \n'
+        '%s %s DESTDIR=%s install \n'
+        'cd %s\n'
+        '%s setup.py build\n'
+        '%s setup.py install --prefix=%s\n'
         'touch %s' % (
             build_root, protobuf_env['ENV']['mod_env'], make_cmd, 
-            install_root, protobuf_target))])
+            install_root, python_build_root, protobuf_env['python_bin'], 
+            protobuf_env['python_bin'], install_root, protobuf_target))])
 
 # [11] Install these into various directories as required for build
 protobuf_target = '%s/.install_for_build' % current_dir
 protobuf_install_build = protobuf_env.Command(
     protobuf_target, [protobuf_install],
     [protobuf_env.rsync_cmd % (
-        '%s/bin/' % install_root,
+        '%s/bin/' % install_root_opt,
         '%s/' % Dir(protobuf_env.exportdirs['bin']).abspath),
      protobuf_env.rsync_cmd % (
-         '%s/include/' % install_root,
+         '%s/include/' % install_root_opt,
          '%s/include/' % Dir(protobuf_env.exportdirs['root']).abspath),
      protobuf_env.rsync_cmd % (
-         '%s/lib/' % install_root,
+         '%s/lib/' % install_root_opt,
          '%s/' % Dir(protobuf_env.exportdirs['lib']).abspath),
      Touch('$TARGET')])
 Default(protobuf_install_build)

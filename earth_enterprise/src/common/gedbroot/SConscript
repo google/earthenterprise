@@ -33,7 +33,7 @@ gedbroot = env.sharedLib('gedbroot',
                           'strings/numbers.cc',
                           ],
                          LIBS=['gecommon',
-                               'geprotobuf',
+                               'protobuf',
                                'QtGui',
                                'QtCore'
                                ])
@@ -76,7 +76,7 @@ protobuf_walker = env.sharedLib('protobuf_walker',
                                  'typed-accessor-implementations.cpp'
                                  ],
                                 LIBS=['gecommon',
-                                      'geprotobuf',
+                                      'protobuf',
                                       env['png_ver']
                                       ])
 
@@ -89,7 +89,7 @@ dbroot_google_url_remover = env.sharedLib('dbroot_google_url_remover',
                                            ],
                                           LIBS=['protobuf_walker',
                                                 'gecommon',
-                                                'geprotobuf',
+                                                'protobuf',
                                                 env['png_ver']
                                                 ])
 
@@ -101,7 +101,7 @@ dbroot_google_url_remover_test = env.test(
     ['dbroot_google_url_remover_test.cpp'],
     LIBS=['dbroot_google_url_remover',
           'protobuf_walker',
-          'gtest', 'gedbroot', 'geprotobuf', 'gecommon', env['png_ver']])
+          'gtest', 'gedbroot', 'protobuf', 'gecommon', env['png_ver']])
 
 
 # The application
@@ -112,7 +112,7 @@ gedbrootgoogleurlremover = env.executable(
     LIBS=['dbroot_google_url_remover',
           'gedbroot',
           'gecommon',
-          'geprotobuf',
+          'protobuf',
           env['png_ver']
           ])
 

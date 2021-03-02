@@ -682,7 +682,7 @@ def ProtocolBufferGenerator(source, target, env, for_signature):
 
   # Must run the protocol buffer compiler from the source directory!
   command = ('cd ${SOURCES.dir}; '
-             '${TOOLS_BIN.abspath}/${PROTOBUF_COMPILER} '
+             '${PROTOBUF_COMPILER} '
              '--cpp_out $PROTOBUF_OUT_ROOT ${SOURCES.file}')
 
   return [command]
