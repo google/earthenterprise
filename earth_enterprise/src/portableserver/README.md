@@ -27,7 +27,7 @@
 
     * Python 3.8 
     * Python tornado installed
-    * Python Imaging Library (PIL) installed
+    * Python Imaging Library (PIL) installed (optional)
     * defusedxml
     * pyyaml
 

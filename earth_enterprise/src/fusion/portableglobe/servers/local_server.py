@@ -450,14 +450,14 @@ class LocalServer(object):
           # are not actively being viewed by a client, so handle
           # both possibilities in either case.
           try:
-            json = tornado.web.globe_.ReadFile("maps/map.json")
+            json = tornado.web.globe_.ReadFile("maps/map.json").decode()
           except:
-            json = tornado.web.globe_.ReadFile("earth/earth.json")
+            json = tornado.web.globe_.ReadFile("earth/earth.json").decode()
       else:
         try:
-          json = tornado.web.globe_.ReadFile("earth/earth.json")
+          json = tornado.web.globe_.ReadFile("earth/earth.json").decode()
         except:
-          json = tornado.web.globe_.ReadFile("maps/map.json")
+          json = tornado.web.globe_.ReadFile("maps/map.json").decode()
 
     except:
       handler.write("var geeServerDefs = {};")
