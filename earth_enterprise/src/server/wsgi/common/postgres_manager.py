@@ -48,14 +48,14 @@ class PostgresConnection(object):
 
   It encapsulates psycopg2.connection object.
   This class basically works as follows:
-  stream_db_con = PostgresConnection(dbname, username, host, port)
+  stream_db_con = PostgresConnection(dbname, username, host, port, pass, logger)
   stream_db_con.Query(query, params)
   stream_db_con.Modify(query, params)
   stream_db_con.Close()
 
   But also it has API Cursor(), Commit() that can be used to get
   psycopg2.cursor object to work with.
-  stream_db_con = PostgresConnection(dbname, username, host, port)
+  stream_db_con = PostgresConnection(dbname, username, host, port, pass, logger)
   cursor = stream_db_conn.Cursor()
   cursor.execute(query, params)
   stream_db_con.Rollback()/stream_db_con.Commit()
@@ -65,7 +65,7 @@ class PostgresConnection(object):
   MIN_THREADS = 2
   MAX_THREADS = 4
 
-  def __init__(self, dbname, username, host, port, logger):
+  def __init__(self, dbname, username, host, port, password, logger):
     """Inits PostgresConnection.
 
     Args:
@@ -73,12 +73,14 @@ class PostgresConnection(object):
       username: User name.
       host: Hostname of the machine on which server is running.
       port: Port on which server is listenning for connection.
+      password: Password for remote geuser role
       logger: logger instance
     """
     self._database = dbname
     self._username = username
     self._host = host
     self._port = port
+    self._pass = password
     self._logger = logger
     self._connection = None
     self._connection_pool = None
@@ -125,7 +127,17 @@ class PostgresConnection(object):
 
     with self._Cursor() as cursor:
       self._logger.debug(cursor.mogrify(query, parameters))
-      cursor.execute(query, parameters)
+      try:
+        cursor.execute(query, parameters)
+      except psycopg2.ProgrammingError as exc:
+        print exc.message
+        self._logger.error(exc.message)
+        # conn.rollback()
+      except psycopg2.InterfaceError as exc:
+        print exc.message
+        # conn = psycopg2.connect(...)
+        # cursor = conn.cursor()
+
       self._logger.debug("ok: number of rows: %s", cursor.rowcount)
       for row in cursor:
         if len(row) == 1:
@@ -274,9 +286,10 @@ class PostgresConnection(object):
       psycopg2.Error/Warning in case of error.
     """
     if not self._connection:
-      self._connection = psycopg2.connect(database=self._database,
+      self._connection = psycopg2.connect(dbname=self._database,
                                           user=self._username,
                                           host=self._host,
+                                          password=self._pass,
                                           port=self._port)
 
   @contextmanager

@@ -275,6 +275,38 @@ def GetPostgresPortNumber():
   return None
 
 
+def GetPostgresHost():
+  """Get postgres host for remote connections
+
+  Returns:
+    Host name of remote database to connect to or None.
+  """
+  pattern = r"^\s*host\s*=\s*(\d{4,})\s*"
+
+  match = MatchPattern(POSTGRES_PROPERTIES_PATH, pattern)
+  if match:
+    host = match[0]
+    return host
+
+  return None
+
+
+def GetPostgresPassword():
+  """Get geuser role password for remote connections
+
+  Returns:
+    Password for remote geuser role or None.
+  """
+  pattern = r"^\s*pass\s*=\s*(\d{4,})\s*"
+
+  match = MatchPattern(POSTGRES_PROPERTIES_PATH, pattern)
+  if match:
+    password = match[0]
+    return password
+
+  return None
+
+
 def HtmlEscape(text):
   """Escapes a string for HTML.
 

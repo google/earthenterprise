@@ -30,8 +30,9 @@ class Constants(object):
     self.defaults = {
         # database settings default values.
         "port": postgres_properties.PostgresProperties().GetPortNumber(),
-        "host": "127.0.0.1",
+        "host": postgres_properties.PostgresProperties().GetHost(),
         "user": "geuser",
+        "pass": postgres_properties.PostgresProperties().GetPassword(),
         "minimumconnectionpoolsize": 1,
         "maximumconnectionpoolsize": 20,
         "places.database": "geplaces",
