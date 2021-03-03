@@ -24,7 +24,7 @@ env.Append(CPPPATH = ['#common/geindex'])
 
 mod_fdb_libs = ['glb', 'qtutils', 'serverdb', 'serverdb_r', 'cutspec', 'gdal']
 
-module = env.sharedLib('mod_fdb',
+fdb_module = env.sharedLib('mod_fdb',
                ['mod_fdb.c', 'mod_fdb_impl.cpp', 'apache_fdb_reader.cpp',
                 'unpackermanager.cpp', 'fdb_reader_manager.cpp',
                 'fdbservice.cpp', 'portableservice.cpp', 'fusiondbservice.cpp',
@@ -34,15 +34,15 @@ module = env.sharedLib('mod_fdb',
 
 # Scons doesn't recognize that portableservice_unittest depends on mod_fdb, so
 # we create the dependency explicitly.
-env.Requires('portableservice_unittest', 'mod_fdb.so')
-env.Depends(target='portableservice_unittest', dependency='mod_fdb.so')
+env.Requires('portableservice_unittest', fdb_module)
+env.Depends(target='portableservice_unittest', dependency=fdb_module)
 
 # Install /opt/google/gehttpd/auth directory only
 auth_dir = env.installdirs['httpd'].entry_abspath('auth')
 if (not os.path.exists(auth_dir)):
     os.makedirs(auth_dir)
 
-env.install('httpdmodules', [module])
+env.install('httpdmodules', [fdb_module])
 
 env.install('httpdconf', ['conf.d/gemodules.conf',
                           'conf.d/security.conf',
@@ -84,5 +84,5 @@ env.test('portableservice_unittest',
          # The ':' tells gcc that mod_fdb.so doesn't start with "lib". The
          # extra ".so" on the end is because Scons strips one of them off. It's
          # messy but it works.
-         LIBS = [':mod_fdb.so.so', 'apr-1', 'rt', 'crypt', 'pthread', 'dl', 'geprotobuf', 'gecommon'] + mod_fdb_libs + ['gtest'],
+         LIBS = fdb_module + ['apr-1', 'rt', 'crypt', 'pthread', 'dl', 'geprotobuf', 'gecommon'] + mod_fdb_libs + ['gtest'],
          LIBPATH = env['LIBPATH'] + [os.path.join(env.exportdirs['root'], 'gehttpd/lib')])
