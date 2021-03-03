@@ -32,6 +32,11 @@ module = env.sharedLib('mod_fdb',
                LIBS=mod_fdb_libs,
                LINK=['g++'])
 
+# Scons doesn't recognize that portableservice_unittest depends on mod_fdb, so
+# we create the dependency explicitly.
+env.Requires('portableservice_unittest', 'mod_fdb.so')
+env.Depends(target='portableservice_unittest', dependency='mod_fdb.so')
+
 # Install /opt/google/gehttpd/auth directory only
 auth_dir = env.installdirs['httpd'].entry_abspath('auth')
 if (not os.path.exists(auth_dir)):
@@ -73,10 +78,6 @@ env.install('httpdconfvs', ['conf.d/virtual_servers/.vhpasswd',
 
 env.install('httpdconfvsrt', ['conf.d/virtual_servers/runtime/fdb_runtime'])
 
-# Scons doesn't recognize that portableservice_unittest depends on mod_fdb, so
-# we create the dependency explicitly.
-env.Requires('portableservice_unittest', 'mod_fdb.so')
-env.Depends(target='portableservice_unittest', dependency='mod_fdb.so')
 
 env.test('portableservice_unittest',
          'portableservice_unittest.cpp',
