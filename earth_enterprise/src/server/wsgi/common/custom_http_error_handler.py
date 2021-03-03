@@ -48,10 +48,10 @@ class ErrorHandler(object):
 
     output.write(b"<html>")
     output.write(b"<head>")
-    output.write(b"<title>%s error found</title>" % status)
+    output.write(b"<title>%s error found</title>" % status.encode('ascii'))
     output.write(b"</head>")
     output.write(b"<body>")
-    output.write(b"<h2>Status: %s Condition Intercepted\n</h2>" % status)
+    output.write(b"<h2>Status: %s Condition Intercepted\n</h2>" % status.encode('ascii'))
     output.write(b"</body>")
     output.write(b"</html>")
 
