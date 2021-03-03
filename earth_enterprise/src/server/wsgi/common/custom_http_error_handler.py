@@ -46,14 +46,14 @@ class ErrorHandler(object):
     status = environ.get("REDIRECT_STATUS")
     output = io.BytesIO()
 
-    output.write("<html>")
-    output.write("<head>")
-    output.write("<title>%s error found</title>" % status)
-    output.write("</head>")
-    output.write("<body>")
-    output.write("<h2>Status: %s Condition Intercepted\n</h2>" % status)
-    output.write("</body>")
-    output.write("</html>")
+    output.write(b"<html>")
+    output.write(b"<head>")
+    output.write(b"<title>%s error found</title>" % status)
+    output.write(b"</head>")
+    output.write(b"<body>")
+    output.write(b"<h2>Status: %s Condition Intercepted\n</h2>" % status)
+    output.write(b"</body>")
+    output.write(b"</html>")
 
     response_headers = [('Content-type', 'text/html'),
                         ('Content-Length', str(len(output.getvalue())))]
