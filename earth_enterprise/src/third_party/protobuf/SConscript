@@ -108,7 +108,7 @@ protobuf_install_build = protobuf_env.Command(
          '%s/include/' % Dir(protobuf_env.exportdirs['root']).abspath),
      protobuf_env.rsync_cmd % (
          '%s/src/google/protobuf/stubs/stl_util.h' % build_root,
-         '%s/include/' % Dir(protobuf_env.exportdirs['root']).abspath),
+         '%s/include/google/protobuf/stubs' % Dir(protobuf_env.exportdirs['root']).abspath),
      protobuf_env.rsync_cmd % (
          '%s/lib/' % install_root_opt,
          '%s/' % Dir(protobuf_env.exportdirs['lib']).abspath),
@@ -131,7 +131,7 @@ if 'install' in COMMAND_LINE_TARGETS:
       'install', [protobuf_install_build],
       [protobuf_env.rsync_excl_cmd %(
           'python%s' % protobuf_env['python_major_version'],
-          '%s/lib/' % install_root,
+          '%s/lib/' % install_root_opt,
           '%s/opt/google/lib' % protobuf_env.installdirs['common_root'])])
 
 Return('protobuf_extract protobuf_install_build')

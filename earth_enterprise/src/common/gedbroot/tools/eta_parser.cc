@@ -17,7 +17,7 @@
 
 #include <google/protobuf/stubs/strutil.h>  // For UnescapeCEscapeString.
 // #include <google/protobuf/stubs/stl_util-inl.h>
-#include <google/protobuf/stubs/stl_utl.h>
+#include <google/protobuf/stubs/stl_util.h>
 
 #include <utility>
 #include <algorithm>
