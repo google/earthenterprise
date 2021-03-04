@@ -43,9 +43,9 @@ class StreamPushApp(object):
 
   Implements WSGI application interface.
   """
-  STATUS_OK = "200 OK"
-  STATUS_ERROR = "500 Internal Server Error"
-  RESPONSE_HEADERS = [("Content-type", "text/html")]
+  STATUS_OK = b"200 OK"
+  STATUS_ERROR = b"500 Internal Server Error"
+  RESPONSE_HEADERS = [(b"Content-type", b"text/html")]
 
   def __init__(self):
     """Initialises stream push application."""

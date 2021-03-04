@@ -57,7 +57,8 @@ class WMS(object):
       response_headers.append(content_type)
 
     response_body = output
-    start_response(status, response_headers)
+    response_headers = [(x.encode('ascii'), y.encode('ascii') for (x,y) in response_headers]
+    start_response(status.encode('ascii'), response_headers)
 
     return [response_body]
 

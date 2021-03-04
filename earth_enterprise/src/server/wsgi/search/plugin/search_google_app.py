@@ -71,7 +71,8 @@ class SearchGoogleApp(object):
       response_body = "%s" % e
 
     response_headers.append(tuple(content_type.split(",")))
-    start_response(status, response_headers)
+    response_headers = [(x.encode('ascii'), y.encode('ascii') for (x,y) in response_headers]
+    start_response(status.encode('ascii'), response_headers)
     return [response_body]
 
 
