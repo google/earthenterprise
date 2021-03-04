@@ -25,6 +25,9 @@ import logging.config
 from io import StringIO
 import sys
 
+#DEBUG
+import traceback
+
 
 from serve import constants
 from serve import http_io
@@ -63,32 +66,37 @@ class StreamPushApp(object):
     Returns:
       response body.
     """
-    form = cgi.FieldStorage(fp=environ["wsgi.input"],
-                            environ=environ)
-
-    # Get parameters from HTTP request.
-    request = http_io.Request()
-    for key in list(form.keys()):
-      request.SetParameter(key, form.getvalue(key, ""))
-
-    response = http_io.Response()
-    if request.parameters:
-      self._stream_pusher.DoGet(request, response)
-    else:
-      logger.error("Internal Error - Request has no parameters.")
-      http_io.ResponseWriter.AddBodyElement(
-          response,
-          constants.HDR_STATUS_MESSAGE,
-          "Internal Error - Request has no parameters")
-      http_io.AddBodyElement(response, constants.HDR_STATUS_CODE,
-                             constants.STATUS_FAILURE)
+    #DEBUG
     try:
-      start_response(StreamPushApp.STATUS_OK, StreamPushApp.RESPONSE_HEADERS)
-      return response.body
-    except Exception:
-      exc_info = sys.exc_info()
-      start_response(StreamPushApp.STATUS_ERROR,
-                     StreamPushApp.RESPONSE_HEADERS, exc_info)
+	    form = cgi.FieldStorage(fp=environ["wsgi.input"],
+				    environ=environ)
+
+	    # Get parameters from HTTP request.
+	    request = http_io.Request()
+	    for key in list(form.keys()):
+	      request.SetParameter(key, form.getvalue(key, ""))
+
+	    response = http_io.Response()
+	    if request.parameters:
+	      self._stream_pusher.DoGet(request, response)
+	    else:
+	      logger.error("Internal Error - Request has no parameters.")
+	      http_io.ResponseWriter.AddBodyElement(
+		  response,
+		  constants.HDR_STATUS_MESSAGE,
+		  "Internal Error - Request has no parameters")
+	      http_io.AddBodyElement(response, constants.HDR_STATUS_CODE,
+				     constants.STATUS_FAILURE)
+	    try:
+	      start_response(StreamPushApp.STATUS_OK, StreamPushApp.RESPONSE_HEADERS)
+	      return response.body
+	    except Exception:
+	      exc_info = sys.exc_info()
+	      start_response(StreamPushApp.STATUS_ERROR,
+			     StreamPushApp.RESPONSE_HEADERS, exc_info)
+      #DEBUG
+      except:
+          logger.error(traceback.format_list(traceback.extract_stack()))
       return self._FormatException(exc_info)
 
   def _FormatException(self, exc_info):
