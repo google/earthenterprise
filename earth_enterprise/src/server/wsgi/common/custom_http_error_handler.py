@@ -56,7 +56,7 @@ class ErrorHandler(object):
     output.write(b"</html>")
 
     response_headers = [(b'Content-type', b'text/html'),
-                        (b'Content-Length', str(len(output.getvalue()), encoding='ascii'))]
+                        (b'Content-Length', str(len(output.getvalue())).encode('ascii'))]
     status = (status + ' ').encode('ascii')
 
     start_response(status, response_headers)
