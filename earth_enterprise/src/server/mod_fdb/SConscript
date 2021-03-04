@@ -32,6 +32,7 @@ fdb_module = env.sharedLib('mod_fdb',
                LIBS=mod_fdb_libs,
                LINK=['g++'])
 
+
 # Scons doesn't recognize that portableservice_unittest depends on mod_fdb, so
 # we create the dependency explicitly.
 env.Requires('portableservice_unittest', fdb_module)
@@ -42,6 +43,7 @@ auth_dir = env.installdirs['httpd'].entry_abspath('auth')
 if (not os.path.exists(auth_dir)):
     os.makedirs(auth_dir)
 
+env.install('server_lib', [fdb_module])
 env.install('httpdmodules', [fdb_module])
 
 env.install('httpdconf', ['conf.d/gemodules.conf',
@@ -85,6 +87,6 @@ env.test('portableservice_unittest',
          # extra ".so" on the end is because Scons strips one of them off. It's
          # messy but it works.
          # build passed with this, but unit test is failing
-         # LIBS = fdb_module + ['apr-1', 'rt', 'crypt', 'pthread', 'dl', 'geprotobuf', 'gecommon'] + mod_fdb_libs + ['gtest'],
-         LIBS = [':mod_fdb.so.so', 'apr-1', 'rt', 'crypt', 'pthread', 'dl', 'geprotobuf', 'gecommon'] + mod_fdb_libs + ['gtest'],
+         LIBS = fdb_module + ['apr-1', 'rt', 'crypt', 'pthread', 'dl', 'geprotobuf', 'gecommon'] + mod_fdb_libs + ['gtest'],
+         # LIBS = [':mod_fdb.so.so', 'apr-1', 'rt', 'crypt', 'pthread', 'dl', 'geprotobuf', 'gecommon'] + mod_fdb_libs + ['gtest'],
          LIBPATH = env['LIBPATH'] + [os.path.join(env.exportdirs['root'], 'gehttpd/lib')])
