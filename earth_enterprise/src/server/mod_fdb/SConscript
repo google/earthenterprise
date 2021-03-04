@@ -87,6 +87,6 @@ env.test('portableservice_unittest',
          # extra ".so" on the end is because Scons strips one of them off. It's
          # messy but it works.
          # build passed with this, but unit test is failing
-         LIBS = fdb_module + ['apr-1', 'rt', 'crypt', 'pthread', 'dl', 'geprotobuf', 'gecommon'] + mod_fdb_libs + ['gtest'],
-         # LIBS = [':mod_fdb.so.so', 'apr-1', 'rt', 'crypt', 'pthread', 'dl', 'geprotobuf', 'gecommon'] + mod_fdb_libs + ['gtest'],
+         #LIBS = fdb_module + ['apr-1', 'rt', 'crypt', 'pthread', 'dl', 'geprotobuf', 'gecommon'] + mod_fdb_libs + ['gtest'],
+         LIBS = [':mod_fdb.so.so', 'apr-1', 'rt', 'crypt', 'pthread', 'dl', 'geprotobuf', 'gecommon'] + mod_fdb_libs + ['gtest'],
          LIBPATH = env['LIBPATH'] + [os.path.join(env.exportdirs['root'], 'gehttpd/lib')])
