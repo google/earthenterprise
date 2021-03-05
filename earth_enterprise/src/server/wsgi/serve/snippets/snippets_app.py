@@ -44,9 +44,9 @@ class SnippetsApp(object):
 
   Implements WSGI application interface.
   """
-  STATUS_OK = b"200 OK"
-  STATUS_ERROR = b"500 Internal Server Error"
-  RESPONSE_HEADERS = [(b"Content-type", b"application/json")]
+  STATUS_OK = "200 OK"
+  STATUS_ERROR = "500 Internal Server Error"
+  RESPONSE_HEADERS = [("Content-type", "application/json")]
 
   def __init__(self):
     """Initialises snippets managing application."""

@@ -1,4 +1,4 @@
-!/usr/bin/env python3.8
+#!/usr/bin/env python3.8
 #
 # Copyright 2020-2021 the Open GEE Contributors
 #
@@ -55,11 +55,10 @@ class ErrorHandler(object):
     output.write(b"</body>")
     output.write(b"</html>")
 
-    response_headers = [(b'Content-type', b'text/html'),
-                        (b'Content-Length', str(len(output.getvalue()), encoding='ascii'))]
-    status = (status + ' ').encode('ascii')
+    response_headers = [('Content-type', 'text/html'),
+                        ('Content-Length', str(len(output.getvalue())))]
 
-    start_response(status, response_headers)
+    start_response(status + ' ', response_headers)
     return [output.getvalue()]
 
 
