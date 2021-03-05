@@ -30,6 +30,7 @@ fdb_module = env.sharedLib('mod_fdb',
                 'fdbservice.cpp', 'portableservice.cpp', 'fusiondbservice.cpp',
                 'tileservice.cpp', 'motf_generator.cpp'],
                LIBS=mod_fdb_libs,
+               SONAME='mod_fdb.so',
                LINK=['g++'])
 
 
@@ -88,5 +89,5 @@ env.test('portableservice_unittest',
          # messy but it works.
          # build passed with this, but unit test is failing
          #LIBS = fdb_module + ['apr-1', 'rt', 'crypt', 'pthread', 'dl', 'geprotobuf', 'gecommon'] + mod_fdb_libs + ['gtest'],
-         LIBS = [':mod_fdb.so.so', 'apr-1', 'rt', 'crypt', 'pthread', 'dl', 'geprotobuf', 'gecommon'] + mod_fdb_libs + ['gtest'],
+         LIBS = ['mod_fdb', 'apr-1', 'rt', 'crypt', 'pthread', 'dl', 'geprotobuf', 'gecommon'] + mod_fdb_libs + ['gtest'],
          LIBPATH = env['LIBPATH'] + [os.path.join(env.exportdirs['root'], 'gehttpd/lib')])
