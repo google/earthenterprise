@@ -76,7 +76,7 @@ class Application(object):
           "Internal Error - Request has no parameters")
       http_io.AddBodyElement(response, constants.HDR_STATUS_CODE,
                              constants.STATUS_FAILURE)
-    response_headers = [(x.encode('ascii'), y.encode('ascii')) for (x,y) in response_headers]
+    response_headers = [(x.encode('ascii'), y.encode('ascii') for (x,y) in response_headers]
     start_response(status.encode('ascii'), response_headers)
     return response.body
 
