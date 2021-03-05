@@ -84,7 +84,7 @@ class StreamPushApp(object):
                              constants.STATUS_FAILURE)
     try:
       start_response(StreamPushApp.STATUS_OK, StreamPushApp.RESPONSE_HEADERS)
-      return response.body
+      return response.body.encode('ascii')
     except Exception:
       exc_info = sys.exc_info()
       start_response(StreamPushApp.STATUS_ERROR,
