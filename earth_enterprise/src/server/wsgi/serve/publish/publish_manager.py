@@ -376,7 +376,7 @@ class PublishManager(object):
             server_url, target_path, db_type, target_gedb_path)
       except exceptions.PublishServeException as e:
         # Unpublish the target path if registering for serving has failed.
-        logger.error(e)
+        logger.error(e, exc_info=True, stack_info=True)
         self._publish_helper.DoUnpublish(target_path)
 
     # Update .htaccess file.

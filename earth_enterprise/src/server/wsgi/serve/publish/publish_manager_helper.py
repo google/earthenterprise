@@ -1096,16 +1096,16 @@ class PublishManagerHelper(stream_manager.StreamManager):
       http_io.ResponseWriter.AddJsonBody(
           response, constants.STATUS_SUCCESS, database_list)
     except exceptions.PublishServeException as e:
-      logger.error(e)
+      logger.error(e, exc_info=True, stack_info=True)
       http_io.ResponseWriter.AddJsonFailureBody(response, str(e))
     except psycopg2.Warning as w:
       logger.error(w)
       http_io.ResponseWriter.AddJsonFailureBody(response, str(w))
     except psycopg2.Error as e:
-      logger.error(e)
+      logger.error(e, exc_info=True, stack_info=True)
       http_io.ResponseWriter.AddJsonFailureBody(response, str(e))
     except Exception as e:
-      logger.error(e)
+      logger.error(e, exc_info=True, stack_info=True)
       http_io.ResponseWriter.AddJsonFailureBody(
           response, "Server-side Internal Error: {0}".format(e))
 
@@ -1125,16 +1125,16 @@ class PublishManagerHelper(stream_manager.StreamManager):
       http_io.ResponseWriter.AddJsonBody(
           response, constants.STATUS_SUCCESS, results)
     except exceptions.PublishServeException as e:
-      logger.error(e)
+      logger.error(e, exc_info=True, stack_info=True)
       http_io.ResponseWriter.AddJsonFailureBody(response, str(e))
     except psycopg2.Warning as w:
       logger.error(w)
       http_io.ResponseWriter.AddJsonFailureBody(response, str(w))
     except psycopg2.Error as e:
-      logger.error(e)
+      logger.error(e, exc_info=True, stack_info=True)
       http_io.ResponseWriter.AddJsonFailureBody(response, str(e))
     except Exception as e:
-      logger.error(e)
+      logger.error(e, exc_info=True, stack_info=True)
       http_io.ResponseWriter.AddJsonFailureBody(
           response, "Server-side Internal Error: {0}".format(e))
 

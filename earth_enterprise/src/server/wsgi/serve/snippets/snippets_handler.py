@@ -41,7 +41,7 @@ class SnippetsHandler(object):
       self._manager = snippets_manager.SnippetsManager()
     except exceptions.Error as e:
       self._manager = None
-      logger.error(e)
+      logger.error(e, exc_info=True, stack_info=True)
 
   def DoRequest(self, request, response):
     """Handles request by delegating it to manager."""
@@ -75,14 +75,14 @@ class SnippetsHandler(object):
         raise exceptions.SnippetsServeException(
             "Invalid Request Command: {0}.".format(cmd))
     except exceptions.SnippetsServeException as e:
-      logger.error(e)
+      logger.error(e, exc_info=True, stack_info=True)
       http_io.ResponseWriter.AddJsonFailureBody(response, str(e))
     except (psycopg2.Warning, psycopg2.Error) as e:
-      logger.error(e)
+      logger.error(e, exc_info=True, stack_info=True)
       http_io.ResponseWriter.AddJsonFailureBody(
           response,
           "Database error: {0}".format(e))
     except Exception as e:
-      logger.error(e)
+      logger.error(e, exc_info=True, stack_info=True)
       http_io.ResponseWriter.AddJsonFailureBody(
           response, "Server-side Internal Error: {0}".format(e))

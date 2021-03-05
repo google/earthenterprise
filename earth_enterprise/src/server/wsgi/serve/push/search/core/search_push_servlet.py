@@ -40,7 +40,7 @@ class SearchPushServlet(object):
       self._search_push_manager = search_push_manager.SearchPushManager()
     except exceptions.Error as e:
       self._search_push_manager = None
-      logger.error(e)
+      logger.error(e, exc_info=True, stack_info=True)
 
   def DoGet(self, request, response):
     """Handles request by delegating it to search push manager."""
@@ -96,15 +96,15 @@ class SearchPushServlet(object):
             "Internal Error - Invalid Request Command: %s." % cmd)
       return
     except exceptions.SearchPushServeException as e:
-      logger.error(e)
+      logger.error(e, exc_info=True, stack_info=True)
       http_io.ResponseWriter.AddBodyElement(
           response, constants.HDR_STATUS_MESSAGE, e)
     except (psycopg2.Warning, psycopg2.Error) as e:
-      logger.error(e)
+      logger.error(e, exc_info=True, stack_info=True)
       http_io.ResponseWriter.AddBodyElement(
           response, constants.HDR_STATUS_MESSAGE, e)
     except Exception as e:
-      logger.error(e)
+      logger.error(e, exc_info=True, stack_info=True)
       http_io.ResponseWriter.AddBodyElement(
           response, constants.HDR_STATUS_MESSAGE, "Server-side Internal Error")
 
