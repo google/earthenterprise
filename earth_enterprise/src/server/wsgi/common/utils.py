@@ -298,7 +298,12 @@ def GetPostgresPassword():
     Password for remote geuser role or None.
   """
   pattern = r"^\s*pass\s*=\s*(\d{4,})\s*"
+  match = MatchPattern(POSTGRES_PROPERTIES_PATH, pattern)
+  if match:
+    password = match[0]
+    return password
 
+  pattern = r"^\s*password\s*=\s*(\d{4,})\s*"
   match = MatchPattern(POSTGRES_PROPERTIES_PATH, pattern)
   if match:
     password = match[0]
