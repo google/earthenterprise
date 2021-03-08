@@ -34,6 +34,10 @@ import traceback
 from serve.snippets.util import path_utils
 
 
+def cmp(a, b):
+
+    return (a > b) - (a < b) 
+
 def _AsInt(x):
   """Converts text to int.
 
