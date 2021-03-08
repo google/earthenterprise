@@ -142,7 +142,7 @@ def _NavigateToField(protobuf, field_path, log=None):
       repeated = getattr(protobuf, field_elt.name)
       # TODO: This is a bit rough and will get us
       # into trouble someday.
-      if field_elt.index < 0:
+      if field_elt.index is None or field_elt.index < 0:
         field_elt.index = 0
       # no more than 1 above the len
       if field_elt.index == len(getattr(protobuf, field_elt.name)):
