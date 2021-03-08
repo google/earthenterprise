@@ -30,6 +30,7 @@ Look for anything missing from here, in python_model_of_js_paths_store.py.
 # -use integer value as key in dictionary-store for indexing repeated elements.
 
 import traceback
+import functools
 
 from serve.snippets.util import path_utils
 
@@ -89,7 +90,7 @@ def SortedFlattenedSparseTree(path_so_far, tree):
   sorted_keys = []
   for key in tree:
     sorted_keys.append(key)
-  sorted_keys.sort(key=_CmpNumericIfApplicable)
+  sorted_keys.sort(key=functools.cmp_to_key(_CmpNumericIfApplicable))
 
   for key in sorted_keys:
     sub_or_val = tree[key]
