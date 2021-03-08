@@ -96,7 +96,7 @@ class SnippetsApp(object):
     try:
       start_response(SnippetsApp.STATUS_OK,
                      SnippetsApp.RESPONSE_HEADERS)
-      return response.body
+      return [x.encode('ascii') for x in response.body]
     except Exception:
       exc_info = sys.exc_info()
       start_response(SnippetsApp.STATUS_ERROR,

@@ -84,7 +84,7 @@ class SearchPushApp(object):
                              constants.STATUS_FAILURE)
     try:
       start_response(SearchPushApp.STATUS_OK, SearchPushApp.RESPONSE_HEADERS)
-      return response.body
+      return [x.encode('ascii') for x in response.body]
     except Exception:
       exc_info = sys.exc_info()
       start_response(SearchPushApp.STATUS_ERROR,

@@ -78,7 +78,7 @@ class GeCustomPOISearchApp(object):
     response_headers.append(tuple(content_type.split(",")))
 
     start_response(status, response_headers)
-    return [response_body]
+    return [response_body.encode('ascii')]
 
 application = GeCustomPOISearchApp()
 

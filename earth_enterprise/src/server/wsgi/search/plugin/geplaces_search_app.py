@@ -81,7 +81,7 @@ class GePlacesSearchApp(object):
 
     start_response(status, response_headers)
 
-    return [response_body]
+    return [response_body.encode('ascii')]
 
 
 application = GePlacesSearchApp()

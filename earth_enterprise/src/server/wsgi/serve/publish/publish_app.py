@@ -78,7 +78,7 @@ class Application(object):
                              constants.STATUS_FAILURE)
 
     start_response(status, response_headers)
-    return response.body
+    return [x.encode('ascii') for x in response.body]
 
 
 application = Application()

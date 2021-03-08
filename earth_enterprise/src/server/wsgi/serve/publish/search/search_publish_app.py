@@ -98,7 +98,7 @@ class SearchPublishApp(object):
     try:
       start_response(SearchPublishApp.STATUS_OK,
                      SearchPublishApp.RESPONSE_HEADERS)
-      return response.body
+      return [x.encode('ascii') for x in response.body]
     except Exception:
       exc_info = sys.exc_info()
       start_response(SearchPublishApp.STATUS_ERROR,
