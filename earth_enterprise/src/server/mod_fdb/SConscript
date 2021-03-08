@@ -30,8 +30,10 @@ fdb_module = env.sharedLib('mod_fdb',
                 'fdbservice.cpp', 'portableservice.cpp', 'fusiondbservice.cpp',
                 'tileservice.cpp', 'motf_generator.cpp'],
                LIBS=mod_fdb_libs,
-               SONAME='mod_fdb.so',
-               LINK=['g++'])
+               LINK=['g++'],
+               # Make sure scons gets the soname right since it isn't named
+               # like a normal library.
+               LINKFLAGS=env['LINKFLAGS'] + ['-Wl,-soname,mod_fdb.so'])
 
 
 # Scons doesn't recognize that portableservice_unittest depends on mod_fdb, so
@@ -84,12 +86,5 @@ env.install('httpdconfvsrt', ['conf.d/virtual_servers/runtime/fdb_runtime'])
 
 env.test('portableservice_unittest',
          'portableservice_unittest.cpp',
-         # The ':' tells gcc that mod_fdb.so doesn't start with "lib". The
-         # extra ".so" on the end is because Scons strips one of them off. It's
-         # messy but it works.
-         # build passed with this, but unit test is failing
-         #LIBS = fdb_module + ['apr-1', 'rt', 'crypt', 'pthread', 'dl', 'geprotobuf', 'gecommon'] + mod_fdb_libs + ['gtest'],
-         #LIBS = ['-l:mod_fdb.so.so', 'apr-1', 'rt', 'crypt', 'pthread', 'dl', 'geprotobuf', 'gecommon'] + mod_fdb_libs + ['gtest'],
-         LINKFLAGS = ['-l:mod_fdb.so'],
-         LIBS = ['apr-1', 'rt', 'crypt', 'pthread', 'dl', 'gedbroot', 'geindex_r', 'geprotobuf', 'gecommon'] + mod_fdb_libs + ['gtest'],
+         LIBS = fdb_module + ['apr-1', 'rt', 'crypt', 'pthread', 'dl', 'gedbroot', 'geindex_r', 'geprotobuf', 'gecommon'] + mod_fdb_libs + ['gtest'],
          LIBPATH = env['LIBPATH'] + [os.path.join(env.exportdirs['root'], 'gehttpd/lib')])
