@@ -141,7 +141,7 @@ def _GitTagRealCommitIdLinux(tagName):
 
 def _GitTagRealCommitId(tagName):
     """use shell command to retrieve commit id of where the tag points to"""
-    if os.name is 'nt':
+    if os.name == 'nt':
         return _GitTagRealCommitIdWindows(tagName)
     else:
         return _GitTagRealCommitIdLinux(tagName)

@@ -92,7 +92,7 @@ def BuildLibrary(os_dir, ignore_results, source_dir):
   if os_dir == "Windows":
     # The logic below fixes a method used by the swig c++ wrapper. Mingw python headers
     # should detect and fix this but for some reason they aren't working with mingw64
-    pythonCLib = "libpython{0}{1}.a".format(sys.version_info[0], sys.version_info[1])
+    pythonCLib = "python{0}{1}.lib".format(sys.version_info[0], sys.version_info[1])
     pathToLib = os.path.join(sys.exec_prefix, "libs", pythonCLib)
     if not os.path.isfile(pathToLib):
       print("ERROR: {0} was not found.  It is needed for linking".format(pathToLib))
