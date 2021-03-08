@@ -89,7 +89,7 @@ def SortedFlattenedSparseTree(path_so_far, tree):
   sorted_keys = []
   for key in tree:
     sorted_keys.append(key)
-  sorted_keys.sort(cmp=_CmpNumericIfApplicable)
+  sorted_keys.sort(key=_CmpNumericIfApplicable)
 
   for key in sorted_keys:
     sub_or_val = tree[key]
