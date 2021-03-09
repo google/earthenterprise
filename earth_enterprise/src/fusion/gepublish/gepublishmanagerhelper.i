@@ -2,13 +2,12 @@
 
 %module libgepublishmanagerhelper
 
+%include <std_string.i>
+%include <std_vector.i>
+
 %{
 #include "fusion/gepublish/gepublishmanagerhelper.h"
 %}
-
-
-%include <std_string.i>
-%include <std_vector.i>
 
 // Instantiate templates used by gepublishmanagerhelper.
 namespace std {
