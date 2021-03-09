@@ -41,7 +41,6 @@ auth_dir = env.installdirs['httpd'].entry_abspath('auth')
 if (not os.path.exists(auth_dir)):
     os.makedirs(auth_dir)
 
-#env.install('server_lib', [fdb_module])
 env.install('httpdmodules', [fdb_module])
 
 env.install('httpdconf', ['conf.d/gemodules.conf',
