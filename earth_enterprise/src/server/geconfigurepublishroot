@@ -101,7 +101,7 @@ use POSIX qw(lchown);
 my ($username, $pwd, $uid, $gid) = getpwnam($GEAPACHEUSER);
 
 # Create stream and search directories if they don't exist
-make_path([$stream_dir, $search_dir],
+make_path(($stream_dir, $search_dir),
           {
               verbose => 0,
               mode => 0755,
