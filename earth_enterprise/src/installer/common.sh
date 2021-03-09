@@ -270,6 +270,11 @@ check_username() {
         # user already exists -- update primary group
         usermod -g $GROUPNAME $1
     fi
+    # if the user already existed but the directory had been removed at some point
+    if [ ! -d "$BASEINSTALLDIR_OPT/.users/$1" ]; then
+        mkdir -p $BASEINSTALLDIR_OPT/.users/$1
+    fi
+    chown -R $1:$GROUPNAME $BASEINSTALLDIR_OPT/.users/$1
 }
 
 create_links()

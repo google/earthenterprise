@@ -1,4 +1,4 @@
-// Copyright 2017 - 2020 the Open GEE Contributors
+// Copyright 2017 - 2021 the Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -258,7 +258,16 @@ task openGeePostGisRpm(type: GeeRpm) {
     autoFindProvides = true
     autoFindRequires = true
 
+    // "requires" is for runtime dependencies. "requiresPre" is for pre-install
+    // script dependencies. We need both because pre- and post-install scripts
+    // call Open GEE binaries, and they may fail if a different version of
+    // common libraries is installed.
+    // In this case, opengee-postgis doesn't have a pre- or post-install script
+    // to worry about, but we do need to make sure that opengee-common's
+    // pre-install script runs first.
     requires('opengee-common', ospackage.version, GREATER | EQUAL)
+    requiresPre('opengee-common', ospackage.version, GREATER | EQUAL)
+
     // The code in GeeRpm decides that this RPM should depend on proj, but
     // it actually depends on proj-devel.
     requires('proj-devel')
@@ -463,7 +472,6 @@ task openGeeCommonDeb (type: GeeDeb, dependsOn: openGeeCommonInitScripts) {
     requires('libstdc++6')
     requires('libtool')
     requires('libxml2-utils')
-    requires('openssl')
     requires('python-imaging')
     requires('python-lxml')
     requires('python-psycopg2')
@@ -536,9 +544,14 @@ task openGeeServerRpm(type: GeeRpm, dependsOn: openGeeServerInitScripts) {
     autoFindProvides = true
     autoFindRequires = true
 
+    // "requires" is for runtime dependencies. "requiresPre" is for pre-install
+    // script dependencies. We need both because pre- and post-install scripts
+    // call Open GEE binaries, and they may fail if a different version of
+    // common libraries is installed.
     requires('opengee-common', ospackage.version, GREATER | EQUAL)
     requiresPre('opengee-common', ospackage.version, GREATER | EQUAL)
     requires('opengee-postgis', '2.3.9', GREATER | EQUAL)
+    requiresPre('opengee-postgis', '2.3.9', GREATER | EQUAL)
     conflicts('opengee-postgis', '2.0', LESS )
     conflicts('opengee-postgis', '2.4', GREATER | EQUAL)
     requires('python-unittest2')
@@ -770,7 +783,12 @@ built from raster, vector, and location properties data.
     autoFindProvides = true
     autoFindRequires = true
 
+    // "requires" is for runtime dependencies. "requiresPre" is for pre-install
+    // script dependencies. We need both because pre- and post-install scripts
+    // call Open GEE binaries, and they may fail if a different version of
+    // common libraries is installed.
     requires('opengee-common', ospackage.version, GREATER | EQUAL)
+    requiresPre('opengee-common', ospackage.version, GREATER | EQUAL)
     requires('proj-devel') /* This dependency is not being picked up automatically by GeeRpm task */
     requires('/etc/rc.d/init.d/functions')
     requiresCommands(
@@ -914,6 +932,7 @@ task openGeeExtraInitScripts(type: Copy, dependsOn: openGeeSharedFiles) {
 
     CopySpecTemplates.expand(delegate, [
             'openGeeVersion': ospackage.version,
+            'openGeeRelease': ospackage.release,
             'project': project
         ])
 }

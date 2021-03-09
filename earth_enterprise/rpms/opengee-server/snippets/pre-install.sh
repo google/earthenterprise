@@ -73,6 +73,10 @@ check_username()
         # user already exists -- update primary group
         usermod -g "$GEGROUP" "$1"
     fi
+    if [ ! -d "$BASEINSTALLDIR_OPT/.users/$1" ]; then
+        mkdir -p "$BASEINSTALLDIR_OPT/.users/$1"
+    fi
+    chown -R "$1:$GEGROUP" "$BASEINSTALLDIR_OPT/.users/$1"
 
 }
 

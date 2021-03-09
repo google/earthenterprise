@@ -202,6 +202,11 @@ fix_file_permissions()
     chown "root:$GEGROUP" "$BASEINSTALLDIR_VAR/log"
     chmod -R 555 "$BASEINSTALLDIR_OPT/bin"
 
+    if [ ! -d "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER" ]; then
+      mkdir -p "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER"
+    fi
+    chown -R "GEFUSIONUSER:$GEGROUP" "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER"
+
     # TODO: Disabled for now...
     #sgid enabled
     #chown "root:$GEGROUP" "$BASEINSTALLDIR_OPT/bin/fusion"
