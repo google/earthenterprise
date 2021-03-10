@@ -250,7 +250,7 @@ main(int argc, char *argv[]) {
     // validate inputs files
     {
       CmdLine cmdline;
-      cmdline << "gevectorimport" << "--validate"
+      cmdline << "/opt/google/bin/gevectorimport" << "--validate"
               << "--layer" << req.config.layer
               << "-o" << "foo.kvp";
       if ( req.config.encoding.size() ) {

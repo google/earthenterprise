@@ -290,7 +290,7 @@ main(int argc, char *argv[]) {
 
       // validate mosaic inputs
       CmdLine cmdline;
-      cmdline << "gevirtualraster" << "--validate" << "-o" << "foo.khvr";
+      cmdline << "/opt/google/bin/gevirtualraster" << "--validate" << "-o" << "foo.khvr";
       if (req.config.fill.size()) {
         cmdline << "--fill" << req.config.fill;
       }
