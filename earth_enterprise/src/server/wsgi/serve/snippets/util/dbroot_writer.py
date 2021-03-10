@@ -106,7 +106,7 @@ def CreateEndSnippetProto(snippets_json,
   #  if __debug__:
   #    log.debug("CreateEndSnippetProto - PROTO DBROOT: %s", dbroot)
 
-  content = str(dbroot.SerializeToString())
+  content = dbroot.SerializeToString()
 
   # Note: useful for debugging.
   #  dbroot_restored = dbroot_utils.MakeEmptyDbroot()
