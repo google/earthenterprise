@@ -337,7 +337,7 @@ main(int argc, char *argv[])
 
     if (needKHVR) {
       CmdLine cmd;
-      cmd << "gevirtualraster"
+      cmd << "/opt/google/bin/gevirtualraster"
           << "-o" << base + ".khvr";
       if (fillstr.size()) {
         cmd << "--fill" << fillstr;
