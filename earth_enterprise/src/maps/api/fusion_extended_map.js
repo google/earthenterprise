@@ -181,9 +181,14 @@ function geeMapImageryFunc(
  */
 function geeMapEmptyTileFunc() {
   return function(coord, zoom) {
+
+    // If the map isn't hosted on a GE server, use base Url
+    // to point to the GE server.
+    var baseURL = GEE_BASE_URL || "";
+
     // This path should work on both Enterprise and Portable servers.
     // To use a plain medium gray tile instead, simply return null.
-    return "/shared_assets/images/empty4.png";
+    return baseURL + "/shared_assets/images/empty4.png";
   };
 }
 

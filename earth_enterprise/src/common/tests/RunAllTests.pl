@@ -122,7 +122,7 @@ foreach my $test (@tests) {
     my @testcases;
     my $prev = "";
 
-    if (open(OUTPUT, "LD_LIBRARY_PATH=\"../../lib\" $test 2>&1 |")) {
+    if (open(OUTPUT, "LD_LIBRARY_PATH=\"../../lib:../../gehttpd/lib\" $test 2>&1 |")) {
         while (<OUTPUT>) {
             my $line = $_;
 

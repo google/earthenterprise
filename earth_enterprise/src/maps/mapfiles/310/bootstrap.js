@@ -22,12 +22,16 @@ google.maps = google.maps || {};
     document.write('<script src="' + src +
                    '" type="text/javascript"></script>');
   }
-  
+
   GEE_API_PATH='/maps/mapfiles/310/v3';
   FUSION_API_PATH='/maps/api';
 
   google.maps.Load = function(apiLoad) {
-    /* http://mt0.google.com/vt */    apiLoad([,[,,,],['en-US',,,,,,GEE_BASE_URL + '/maps/api/icons/',],[GEE_BASE_URL + GEE_API_PATH,'internal'],[0],0.0,,,,,], loadScriptTime);
+    /* http://mt0.google.com/vt */    apiLoad([,[,,,],['en-US',,,,,,GEE_BASE_URL + '/maps/api/icons/',
+                                                        GEE_BASE_URL /* GE metrics */,
+                                                        ,
+                                                        GEE_BASE_URL /* GE metrics */],
+                                                        [GEE_BASE_URL + GEE_API_PATH,'internal'],[0],0.0,,,,,], loadScriptTime);
   };
 
   var loadScriptTime = (new Date).getTime();
@@ -38,4 +42,3 @@ google.maps = google.maps || {};
   getScript(GEE_BASE_URL + FUSION_API_PATH + '/fusion_extended_map.js');
   getScript(GEE_BASE_URL + FUSION_API_PATH + '/fusion_utils.js');
 })();
-

@@ -1,5 +1,5 @@
 // Copyright 2017 Google Inc.
-// Copyright 2020 The Open GEE Contributors
+// Copyright 2020-2021 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -79,7 +79,7 @@ class MiscConfigStorage {
     if (!filename.empty()) {
       return Save(Filename());
     } else {
-      notify(NFY_WARN, "Unable to save MiscConfig to emtpty filename");
+      notify(NFY_WARN, "Unable to save MiscConfig to empty filename");
       return false;
     }
   }
