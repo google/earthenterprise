@@ -43,7 +43,7 @@ void QueryRules::init(const FilterConfig& config) {
   const QObjectList c = viewport()->children();
   if (c.size()) {
     auto it = c.begin();
-    QObject *obj;
+    QObject* obj;
     while ((obj = *it) != 0) {
       ++it;
       Q3GroupBox* box = reinterpret_cast<Q3GroupBox*>(obj);
