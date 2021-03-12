@@ -25,6 +25,8 @@ import wms.ogc.common.tiles as tiles
 import wms.ogc.common.utils as utils
 from pprint import pformat
 
+import os
+
 OPERATIONS = set(["GetMap", "GetCapabilities"])
 
 # These are all of the 1.3.0 official codes. 1.1.1's are the same
@@ -85,16 +87,24 @@ class WmsGetMapRequest(object):
     # used as the background (non-data) pixels of the map.
     # The format is 0xRRGGBB.The default value is 0xFFFFFF
     bgcolor = utils.GetValue(self.parameters, "bgcolor")
+    os.system("logger bgcolor is: " + str(bgcolor))
     if bgcolor:
       # Convert HEX string to python tuple.
       # Ignore the 0x at the beginning of the hex string.
       # Otherwise str.decode("hex") will throw
       # "TypeError: Non-hexadecimal digit found" error.
-      if bgcolor[:2] == "0x":
-        bgcolor = bgcolor[2:]
-      bgcolor = tuple(ord(c) for c in bgcolor.decode("hex"))
+      try:
+        if bgcolor[:2] == "0x":
+          bgcolor = bgcolor[2:]
+          os.system("logger bgcolor 2 is " + str(bgcolor))
+        bgcolor = tuple(ord(c) for c in bgcolor.decode("hex"))
+        os.system("logger bgcolor 3 is " + str(bgcolor))
+      except:
+        bgcolor = tiles.ALL_WHITE_PIXELS
+        os.system("logger setting bgcolor to " + str(tiles.ALL_WHITE_PIXELS))
     else:
       bgcolor = tiles.ALL_WHITE_PIXELS
+      os.system("logger setting bgcolor to " + str(tiles.ALL_WHITE_PIXELS))
     layer_names = self._ExtractLayerNames(
         utils.GetValue(self.parameters, 'layers'))
     logger.info("Loop through layers: %s ", (str(layer_names)))
@@ -107,6 +117,7 @@ class WmsGetMapRequest(object):
         layer_obj.image_format = image_format 
         layer_obj.is_transparent = is_transparent
         layer_obj.bgcolor = bgcolor
+        os.system("logger bgcolor line 120: " + str(bgcolor))
         # We'll assume that all WMS layers will have the same image_spec and projection 
         # for
         im_user = tiles.ProduceImage(
