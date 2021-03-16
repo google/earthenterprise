@@ -20,14 +20,14 @@ Import('third_party_env')
 import os
 import subprocess
 
-protobuf_version = 'protobuf-2.7.0'
+protobuf_version = 'protobuf-3.6.1'
 make_cmd_cpu = 'make -j%d' % GetOption('num_jobs')
 ge_version = protobuf_version.replace('protobuf', 'protobuf-ge')
 
 current_dir = Dir('.').abspath
 build_root = '%s/%s' % (current_dir, protobuf_version)
 protobuf_source = File('#/../../earth_enterprise/third_party/protobuf/%s.tar.gz'
-                   % protobuf_version).abspath
+                   % 'v3.6.1').abspath
 
 
 protobuf_env = third_party_env.DeepCopy()
