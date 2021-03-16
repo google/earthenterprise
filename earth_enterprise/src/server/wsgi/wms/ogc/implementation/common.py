@@ -90,11 +90,13 @@ class WmsGetMapRequest(object):
       # Ignore the 0x at the beginning of the hex string.
       # Otherwise str.decode("hex") will throw
       # "TypeError: Non-hexadecimal digit found" error.
+      # Also catching ValueError which will be more correct
+      # after we have switched to Python3.
       try:
         if bgcolor[:2] == "0x":
           bgcolor = bgcolor[2:]
         bgcolor = tuple(ord(c) for c in bgcolor.decode("hex"))
-      except:
+      except (TypeError, ValueError):
         bgcolor = tiles.ALL_WHITE_PIXELS
     else:
       bgcolor = tiles.ALL_WHITE_PIXELS

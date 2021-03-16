@@ -77,7 +77,6 @@ def StitchTiles(tiles_array, layer_properties, tilepixel_rect,
   alpha = _TRANSPARENT_ALPHA
 
   if set_pixel_to_bgcolor:
-      #bgcolor = layer_properties.bgcolor
       alpha = _OPAQUE_ALPHA
 
   # Alpha channel is not required for jpeg formats.
