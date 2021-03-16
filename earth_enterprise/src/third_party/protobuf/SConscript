@@ -107,7 +107,7 @@ protobuf_install_build = protobuf_env.Command(
          '%s/include/' % install_root_opt,
          '%s/include/' % Dir(protobuf_env.exportdirs['root']).abspath),
      protobuf_env.rsync_cmd % (
-         '%s/src/google/protobuf/stubs/stl_util.h' % build_root,
+         '%s/src/google/protobuf/stubs/strutil.h' % build_root,
          '%s/include/google/protobuf/stubs' % Dir(protobuf_env.exportdirs['root']).abspath),
      protobuf_env.rsync_cmd % (
          '%s/lib/' % install_root_opt,
