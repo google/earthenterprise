@@ -121,9 +121,9 @@ if 'install' in COMMAND_LINE_TARGETS:
   protobuf_env.InstallFileOrDir(
       '%s/lib/python%s/site-packages/' % (install_root,
                                           protobuf_env['python_major_version']),
-      '%s/opt/google/gepython/Python-%s/lib/python%s/site-packages' % (
+      '%s/opt/google/gepython/Python-%s/lib/python%s/site-packages/%s-py%s.egg/google/' % (
           protobuf_env.installdirs['common_root'], protobuf_env['python_version'],
-          protobuf_env['python_major_version']),
+          protobuf_env['python_major_version'], protobuf_version, protobuf_env['python_major_version']),
       protobuf_install_build, 'install')
 
   # Copies protobuf libraries from ../install/lib/ folder to /opt/google/lib.
