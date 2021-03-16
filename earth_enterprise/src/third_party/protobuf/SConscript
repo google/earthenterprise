@@ -119,7 +119,7 @@ if 'install' in COMMAND_LINE_TARGETS:
   # Copies protobuf python bindings from ../install/lib/python3.8/site-packages
   # to ../opt/google/gepython/../site-packages/ folder.
   protobuf_env.InstallFileOrDir(
-      '%s/lib/python%s/site-packages/%s-py%s.egg/google/' % (install_root,
+      '%s/lib/python%s/site-packages/%s-py%s.egg' % (install_root,
                                           protobuf_env['python_major_version'], protobuf_version,
                                           protobuf_env['python_major_version']),
       '%s/opt/google/gepython/Python-%s/lib/python%s/site-packages/' % (
