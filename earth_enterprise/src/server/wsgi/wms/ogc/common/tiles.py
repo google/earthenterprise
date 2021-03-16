@@ -75,7 +75,6 @@ def StitchTiles(tiles_array, layer_properties, tilepixel_rect,
       bgcolor = layer_properties.bgcolor
 
   alpha = _TRANSPARENT_ALPHA
-
   if set_pixel_to_bgcolor:
       alpha = _OPAQUE_ALPHA
 
