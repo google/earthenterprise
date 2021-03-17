@@ -35,10 +35,10 @@ You may need to repair the relocated asset root, fixing various
 inconsistencies in the asset root (such as permissions, ownership,
 missing ID files, etc.). When you run this command, the tool auto-
 detects the problems that need to be repaired and fixes them.  sudo
-/opt/google/bin/geconfigureassetroot --repair new_path  You may
-relocate/change other volume settings by editing volumes. You can add
-a volume to the selected asset root, modify the localpath definition
-for an existing volume, or add a volume definition: sudo
+/opt/google/bin/geconfigureassetroot --repair --chown new_path  You
+may relocate/change other volume settings by editing volumes. You can
+add a volume to the selected asset root, modify the localpath
+definition for an existing volume, or add a volume definition: sudo
 /opt/google/bin/geconfigureassetroot --editvolume  Make sure that the
 update to the asset root is successful before attempting further
 changes to volume settings.
@@ -85,7 +85,7 @@ You may need to repair the relocated asset root, fixing various
 inconsistencies in the asset root (such as permissions, ownership,
 missing ID files, etc.). When you run this command, the tool auto-
 detects the problems that need to be repaired and fixes them.  sudo
-/opt/google/bin/geconfigureassetroot --repair new_path
+/opt/google/bin/geconfigureassetroot --repair --chown new_path
 
 Run Fusion and verify that you see all of the databases.
 

@@ -48,7 +48,7 @@ Relocate your asset root
          command, the tool auto-detects the problems that need to be
          repaired and fixes them.
 
-         ``sudo /opt/google/bin/geconfigureassetroot --repair new_path``
+         ``sudo /opt/google/bin/geconfigureassetroot --repair --chown new_path``
 
          .. tip::
 
@@ -121,7 +121,7 @@ Relocate your asset root
          command, the tool auto-detects the problems that need to be
          repaired and fixes them.
 
-         ``sudo /opt/google/bin/geconfigureassetroot --repair new_path``
+         ``sudo /opt/google/bin/geconfigureassetroot --repair --chown new_path``
 
       #. Run Fusion and verify that you see all of the databases.
       #. Once you have configured the new publish root, you must

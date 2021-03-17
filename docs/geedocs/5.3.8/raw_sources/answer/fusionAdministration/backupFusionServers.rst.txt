@@ -104,7 +104,7 @@ Back up Fusion servers
 
          .. code-block:: bash
 
-            geconfigureassetroot --new --assetroot /gevol/assets
+            geconfigureassetroot --new --chown --assetroot /gevol/assets
             geselectassetroot --assetroot /gevol/assets
 
       #. Restore the backed-up XML and configuration files to their

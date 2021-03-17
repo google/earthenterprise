@@ -172,7 +172,7 @@ inclusive.</p>
 overlay terrain. resource_min_level is any integer between 4 and
 24 inclusive.</p>
 <p class="rubric" id="geconfigassetroot">geconfigureassetroot</p>
-<p><strong>geconfigureassetroot</strong> {--<strong>new</strong> --<strong>assetroot path</strong>  [--<strong>srcvol</strong> <em>path</em>] | --<strong>repair</strong> | --<strong>editvolumes</strong> | --<strong>listvolumes</strong> | --<strong>addvolume</strong> | --<strong>fixmasterhost</strong> | --<strong>noprompt</strong>}  [--<em>nochown</em>]</p>
+<p><strong>geconfigureassetroot</strong> {--<strong>new</strong> --<strong>assetroot path</strong>  [--<strong>srcvol</strong> <em>path</em>] | --<strong>repair</strong> | --<strong>editvolumes</strong> | --<strong>listvolumes</strong> | --<strong>addvolume</strong> | --<strong>fixmasterhost</strong> | --<strong>noprompt</strong>}  [--<em>chown</em>]</p>
 <p class="rubric">Purpose</p>
 <p>To add volume definitions or edit existing volume definitions.</p>
 <div class="admonition tip">
@@ -199,10 +199,9 @@ asset root is used if it is not specified.</p>
 input. This option requires that some commands have arguments
 specified on the command line.</p>
 <p>--<strong>chown</strong></p>
-<p><em>Optional</em>. Prevents attempts by this command to fix
-file/directory privileges. You may consider setting this option
-when you do not want any prvilege settings to change as a result
-of reconfiguring your asset root.</p>
+<p><em>Optional</em>. Attempt to change file owner and permissions.  This is
+only needed when the asset root has been created or modified by users
+other than the defualt fusion user.</p>
 <p class="rubric">Commands</p>
 <p>--<strong>new</strong> --<strong>assetroot</strong> <em>path</em></p>
 <p><em>Optional</em>. Creates a new asset root. Specify the path to the new
@@ -242,7 +241,7 @@ host name. (This command corrects cases where a host name is
 changed after installing and configuring Google Earth Enterprise
 Fusion.)</p>
 <p class="rubric" id="geconfigurepublishroot"><span id="configure-publish-root-different"></span>geconfigurepublishroot</p>
-<p>geconfigurepublishroot [--path=*path*] [--allow_symlinks] [--noprompt]</p>
+<p>geconfigurepublishroot [--path=*path*] [--allow_symlinks] [--noprompt] [--chown]</p>
 <p class="rubric">Purpose</p>
 <p>To specify the path where you want to push databases for
 publishing and serving with the current Google Earth Enterprise
@@ -267,6 +266,16 @@ input. This option requires that some commands have arguments
 specified on the command line. If the arguments are insufficient
 or the configuration fails, the program will return -1 (0 is
 returned on success).</p>
+<p>--chown</p>
+<p><em>Optional</em>. Correct permissions and ownership of the publish root.
+This is needed when the publish root was created or modified by a user
+other than the default fusion user, such as when re-using a publish root
+from a previously uninstalled version of GEE.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">For large publish roots the --chown option can significantly increase
+the running time of geconfigurepublishroot.</p>
+</div>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">Do not create more than one publish root for a single asset
