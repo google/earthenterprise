@@ -66,7 +66,7 @@ void usage(const char *prog, const char *msg = 0, ...) {
      "                              returns -1 to indicate an error if\n"
      "                              command fails or has insufficient\n"
      "                              arguments.\n"
-     "  --nochown                   Do not attempt to fix privileges.\n"
+     "  --chown                     Attempt to fix privileges.\n"
      "  --secure                    Removes world read and write permissions.\n"
      "When creating a new asset root, additional options are available:\n"
      "  --srcvol <dir>              Path to source volume.\n"
@@ -96,7 +96,7 @@ void usage(const char *prog, const char *msg = 0, ...) {
 
 void ValidateAssetRootForConfigure(const AssetRootStatus &status,
                                    bool iscreate, bool isfixmaster,
-                                   bool noprompt, bool nochown);
+                                   bool noprompt, bool chown);
 void MakeNewAssetRoot(const AssetRootStatus &status,
                       const std::string &srcvol,
                       const std::string &username,
@@ -134,7 +134,7 @@ int main(int argc, char *argv[]) {
     std::string addvolume;
     std::string removevolume;
     bool noprompt = false;
-    bool nochown = false;
+    bool chown = false;
 
     khGetopt options;
     options.helpOpt(help);
@@ -148,7 +148,7 @@ int main(int argc, char *argv[]) {
     options.opt("removevolume", removevolume);
     options.opt("listvolumes", listvolumes);
     options.opt("noprompt", noprompt);
-    options.opt("nochown", nochown);
+    options.opt("chown", chown);
     options.opt("secure", secure);
     options.setExclusiveRequired(makeset(std::string("new"),
                                          std::string("repair"),
@@ -183,7 +183,7 @@ int main(int argc, char *argv[]) {
     AssetRootStatus status(assetroot, thishost, username, groupname);
     printf("Validating assetroot\n");
     ValidateAssetRootForConfigure(status, create, fixmasterhost, noprompt,
-                                  nochown);
+                                  chown);
 
     // tell the other libraries what assetroot we're going to be using
     AssetDefs::OverrideAssetRoot(status.assetroot_);
@@ -251,7 +251,7 @@ namespace {
 
 void ValidateAssetRootForConfigure(const AssetRootStatus &status,
                                    bool iscreate, bool isfixmaster,
-                                   bool noprompt, bool nochown) {
+                                   bool noprompt, bool chown) {
   QString UseNewMsg = kh::tr(
       "%1 isn't an existing assetroot.\n"
       "You must use --new to make a new one.")
@@ -312,7 +312,7 @@ void ValidateAssetRootForConfigure(const AssetRootStatus &status,
   // we don't check AssetRootNeedsUpgrade() on existing asset roots. That's not
   // our job. it's the update tool's job.
 
-  if (!status.owner_ok_ && !nochown) {
+  if (!status.owner_ok_ && chown) {
     // will throw if user doesn't confirm
     PromptUserAndFixOwnership(status.assetroot_, noprompt);
   }

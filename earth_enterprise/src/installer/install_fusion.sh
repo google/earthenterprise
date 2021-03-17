@@ -822,10 +822,10 @@ install_or_upgrade_asset_root()
         if [ $IS_SLAVE == false ]; then
             # TODO: Verify this logic -- this is what is defined in the installer documentation, but need confirmation
             if [ $NEW_GEGROUP == true ] || [ $NEW_GEFUSIONUSER == true ]; then
-                NOCHOWN=""
+                DOCHOWN="--chown"
                 UPGRADE_MESSAGE="\nThe upgrade will fix permissions for the asset root and source volume. This may take a while.\n"
             else
-                NOCHOWN="--nochown"
+                DOCHOWN=""
                 UPGRADE_MESSAGE=""
             fi
 
@@ -839,8 +839,8 @@ install_or_upgrade_asset_root()
                 install_or_upgrade_asset_root_retval=1
 			else
 				# Note: we don't want to do the recursive chown on the asset root unless absolutely necessary
-            	$BASEINSTALLDIR_OPT/bin/geconfigureassetroot --fixmasterhost --noprompt  $NOCHOWN --assetroot $ASSET_ROOT
-            	$BASEINSTALLDIR_OPT/bin/geupgradeassetroot --noprompt $NOCHOWN --assetroot $ASSET_ROOT
+            	$BASEINSTALLDIR_OPT/bin/geconfigureassetroot --fixmasterhost --noprompt $DOCHOWN --assetroot $ASSET_ROOT
+            	$BASEINSTALLDIR_OPT/bin/geupgradeassetroot --noprompt $DOCHOWN --assetroot $ASSET_ROOT
 
 				chown -R $GEFUSIONUSER_NAME:$GROUPNAME $ASSET_ROOT
             fi
@@ -905,7 +905,7 @@ final_assetroot_configuration()
         $BASEINSTALLDIR_OPT/bin/geselectassetroot --assetroot $ASSET_ROOT
 
 	mkdir -p $BASEINSTALLDIR_OPT/share/tutorials
-	$BASEINSTALLDIR_OPT/bin/geconfigureassetroot --addvolume opt:$BASEINSTALLDIR_OPT/share/tutorials --noprompt --nochown
+	$BASEINSTALLDIR_OPT/bin/geconfigureassetroot --addvolume opt:$BASEINSTALLDIR_OPT/share/tutorials --noprompt
 	if [ $? -eq 255 ]; then
             echo -e "The geconfigureassetroot utility has failed on attempting"
             echo -e "to add the volume 'opt:$BASEINSTALLDIR_OPT/share/tutorials'."

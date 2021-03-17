@@ -44,7 +44,7 @@ main_postinstall()
     setup_geserver_daemon
 
     # 5) Register publish root
-    "$BASEINSTALLDIR_OPT/bin/geconfigurepublishroot" --noprompt --nochown "--path=$PUBLISHER_ROOT"
+    "$BASEINSTALLDIR_OPT/bin/geconfigurepublishroot" --noprompt "--path=$PUBLISHER_ROOT"
 
     # 6) Install the GEPlaces and SearchExample Databases
     install_search_databases

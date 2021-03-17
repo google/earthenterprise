@@ -32,7 +32,7 @@ main_preuninstall()
     if [ -f "/etc/init.d/gefusion" ]; then
         sudo service gefusion stop
         echo "Removing Tutorial Source Volume"
-        "$BASEINSTALLDIR_OPT/bin/geconfigureassetroot" --noprompt --nochown \
+        "$BASEINSTALLDIR_OPT/bin/geconfigureassetroot" --noprompt \
             --assetroot "$ASSET_ROOT" --removevolume opt
         sudo service gefusion start
     fi

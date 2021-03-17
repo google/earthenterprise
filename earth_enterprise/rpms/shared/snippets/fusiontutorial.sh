@@ -24,7 +24,7 @@ add_fusion_tutorial_volume()
     if [[ -d "${FUSION_TUTORIAL_DIR}" && -f "${CONFIG_ASSET_ROOT}" ]]; then
         RET_VAL=0
         "${CONFIG_ASSET_ROOT}" --addvolume \
-            "opt:${FUSION_TUTORIAL_DIR}" --noprompt --nochown || RET_VAL=$?
+            "opt:${FUSION_TUTORIAL_DIR}" --noprompt || RET_VAL=$?
         if [ "$RET_VAL" -eq "255" ]; then
             cat <<END
 The geconfigureassetroot utility has failed while attempting

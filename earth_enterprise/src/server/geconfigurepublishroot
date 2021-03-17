@@ -58,11 +58,11 @@ EOF
 my $allow_symlinks = 0;
 my $show_usage = 0;
 my $noprompt = 0;
-my $nochown = 0;
+my $chown = 0;
 
 my $ret = Getopt::Long::GetOptions("path=s" => \$default_path,
                                    "noprompt" => \$noprompt,
-                                   "nochown" => \$nochown,
+                                   "chown" => \$chown,
                                    "allow_symlinks" => \$allow_symlinks,
                                    "help" => \$show_usage);
 if ($show_usage) {
@@ -111,7 +111,7 @@ make_path(($stream_dir, $search_dir),
 
 # Change the owner of the dirs to "geapache" coz that's the uid WebDAV uses to
 # write to these dirs.
-if ( $nochown == 0 ) {
+if ( $chown == 1 ) {
     # Change owner and permissions recursively, in case the dirs are already
     # populated from a previous install.
     sub wanted {
