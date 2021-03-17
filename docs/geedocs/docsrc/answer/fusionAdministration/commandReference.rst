@@ -141,7 +141,7 @@ Command reference
       .. _geconfigassetroot:
       .. rubric:: geconfigureassetroot
 
-      **geconfigureassetroot** {-\\-**new** -\\-**assetroot path**  [-\\-**srcvol** *path*] | -\\-**repair** | -\\-**editvolumes** | -\\-**listvolumes** | -\\-**addvolume** | -\\-**fixmasterhost** | -\\-**noprompt**}  [-\\-*nochown*]
+      **geconfigureassetroot** {-\\-**new** -\\-**assetroot path**  [-\\-**srcvol** *path*] | -\\-**repair** | -\\-**editvolumes** | -\\-**listvolumes** | -\\-**addvolume** | -\\-**fixmasterhost** | -\\-**noprompt**}  [-\\-*chown*]
 
       .. rubric:: Purpose
 
@@ -179,10 +179,9 @@ Command reference
 
       -\\-**chown**
 
-      *Optional*. Prevents attempts by this command to fix
-      file/directory privileges. You may consider setting this option
-      when you do not want any prvilege settings to change as a result
-      of reconfiguring your asset root.
+      *Optional*. Attempt to change file owner and permissions.  This is
+      only needed when the asset root has been created or modified by users
+      other than the defualt fusion user.
 
       .. rubric:: Commands
 
@@ -241,7 +240,7 @@ Command reference
       .. rubric:: geconfigurepublishroot
          :name: geconfigurepublishroot
 
-      geconfigurepublishroot [-\\-path=*path*] [-\\-allow_symlinks] [-\\-noprompt]
+      geconfigurepublishroot [-\\-path=*path*] [-\\-allow_symlinks] [-\\-noprompt] [-\\-chown]
 
       .. rubric:: Purpose
 
@@ -278,6 +277,18 @@ Command reference
       or the configuration fails, the program will return -1 (0 is
       returned on success).
 
+      -\\-chown
+
+      *Optional*. Correct permissions and ownership of the publish root.
+      This is needed when the publish root was created or modified by a user
+      other than the default fusion user, such as when re-using a publish root
+      from a previously uninstalled version of GEE.
+
+      .. warning::
+
+         For large publish roots the -\\-chown option can significantly increase
+         the running time of geconfigurepublishroot.
+         
       .. warning::
 
          Do not create more than one publish root for a single asset
