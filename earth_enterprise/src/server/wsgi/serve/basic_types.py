@@ -317,8 +317,6 @@ def JsonToObj(json_str):
     elif isinstance(x, list):
       return [HToO(v) for v in x]
     elif isinstance(x, str):
-      return string_utils.SanitizeText(x.encode("ascii"))
-    elif isinstance(x, str):
       return string_utils.SanitizeText(x)
     else:
       return x
