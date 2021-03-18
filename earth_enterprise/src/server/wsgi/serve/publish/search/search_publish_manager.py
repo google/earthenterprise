@@ -70,7 +70,7 @@ class SearchPublishManager(search_manager.SearchManager):
 
       search_def_list = [
           self.__BuildSearchDefObj(
-              name, basic_types.SearchDefContent.Deserialize(content))
+              name, basic_types.SearchDefContent.Deserialize(content.decode()))
           for name, content in results]
 
       http_io.ResponseWriter.AddJsonBody(
@@ -91,7 +91,7 @@ class SearchPublishManager(search_manager.SearchManager):
       # properties that may not be present in postgres.
       search_def_obj = self.__BuildSearchDefObj(
           search_def_name,
-          basic_types.SearchDefContent.Deserialize(search_def_content))
+          basic_types.SearchDefContent.Deserialize(search_def_content.decode()))
 
       logger.debug("SearchDef name: %s", search_def_name)
       logger.debug("SearchDef content: %s",
@@ -129,7 +129,7 @@ class SearchPublishManager(search_manager.SearchManager):
     try:
       # The content of SearchDef will be sanitized when de-serializing.
       search_def_content_obj = basic_types.SearchDefContent.Deserialize(
-          search_def_content)
+          search_def_content.decode())
     except Exception as e:
       raise exceptions.SearchPublishServeException(
           "HandleAddSearchDefRequest:"
