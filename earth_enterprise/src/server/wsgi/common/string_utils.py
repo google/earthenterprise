@@ -36,7 +36,10 @@ def SanitizeText(text):
   Returns:
     sanitized string.
   """
-  return text.strip(" \t\n\r")
+  if isinstance(text, bytes):
+      return text.strip(b" \t\n\r")
+  else:
+      return text.strip(" \t\n\r")
 
 
 def main():
