@@ -150,10 +150,10 @@ install_or_upgrade_asset_root()
         if [ "$IS_SLAVE" = "false" ]; then
             OWNERSHIP=`find "$ASSET_ROOT" -maxdepth 0 -printf "%g:%u"`
             if [ "$OWNERSHIP" != "$GEGROUP:$GEFUSIONUSER" ] ; then
-                DOCHOWN="--chown"
-                UPGRADE_MESSAGE="The upgrade will fix permissions for the asset root and source volume. This may take a while."
+                UPGRADE_MESSAGE="WARNING: The installer detected the asset root may have \
+                    incorrect permissions! After installation you may need to run \n\
+                    'geconfigureassetroot --noprompt --chown --assetroot $ASSET_ROOT'"
             else
-                DOCHOWN=""
                 UPGRADE_MESSAGE=""
             fi
 
@@ -170,7 +170,7 @@ END
             # Note: we don't want to do the recursive chown on the asset root
             # unless absolutely necessary
             "$BASEINSTALLDIR_OPT/bin/geconfigureassetroot" --fixmasterhost \
-                --noprompt  $DOCHOWN --assetroot $ASSET_ROOT
+                --noprompt --assetroot $ASSET_ROOT
             # If `geconfigureassetroot` already updated ownership, don't do it again:
             "$BASEINSTALLDIR_OPT/bin/geupgradeassetroot" --noprompt \
                 --assetroot "$ASSET_ROOT"

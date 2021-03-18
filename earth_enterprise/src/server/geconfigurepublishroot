@@ -49,9 +49,11 @@ Usage: $prog_name [--help] [--path=PATH] [--allow_symlinks] [--noprompt]
     --noprompt : specifies that no prompting of the user will be attempted
                 if the arguments are insufficient or the configuration fails, the
                 program will return -1 (0 is returned on success).
+    --chown    : Correct privileges of files already in the publish root.  This may
+                take a long time on large publish roots.
 
 Example usage:
-  $prog_name -noprompt -path=$default_path -allow_symlinks
+  $prog_name --noprompt --path=$default_path --allow_symlinks
 EOF
 
 # Parse the command line arguments.
