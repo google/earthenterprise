@@ -599,7 +599,7 @@ class PublishManager(object):
       publish_config.db_path = publish_def.db_name
       publish_config.stream_url = stream_url
       publish_config.end_snippet_proto = (
-          str(end_snippet_proto) if end_snippet_proto else "")
+          end_snippet_proto if end_snippet_proto else "")
       publish_config.server_prefix = self._publish_helper.server_prefix
 
       publish_helper.GetPublishManifest(publish_config, publish_manifest)
