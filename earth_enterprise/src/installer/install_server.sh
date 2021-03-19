@@ -650,11 +650,11 @@ fix_postinstall_filepermissions()
   chmod 644 "$PUBLISHER_ROOT/.config"
   chmod 755 "$PUBLISHER_ROOT"
 
-  if [ ( $(stat -c %U:%G $PUBLISHER_ROOT/stream_space ) != "$GEAPACHEUSER:$GEGROUP" ) -o \
-       ( $(stat -c %U:%G $PUBLISHER_ROOT/search_space ) != "$GEAPACHEUSER:$GEGROUP" )]; then
-      echo "WARNING: The installer detected the asset root may have incorrect permissions! \
-            After installation you may need to run \n\
-            'sudo /opt/google/bin/geconfigurepublishroot --noprompt --chown --path=$PUBLISHER_ROOT '"
+  SEARCH_OWNER=`find "$PUBLISHER_ROOT/search_space" -maxdepth 0 -printf "%g:%u"`
+  STREAM_OWNER=`find "$PUBLISHER_ROOT/stream_space" -maxdepth 0 -printf "%g:%u"`
+  if [ "$SEARCH_OWNER" != "$GEGROUP:$GEAPACHEUSER" -o "$STREAM_OWNER" != "$GEGROUP:$GEAPACHEUSER" ] ; then
+        printf "WARNING: The installer detected the publish root may have incorrect permissions! After installation you may need to run \n\
+sudo /opt/google/bin/geconfigurepublishroot --noprompt --chown --path=$PUBLISHER_ROOT"
   fi
 
   # Etc
