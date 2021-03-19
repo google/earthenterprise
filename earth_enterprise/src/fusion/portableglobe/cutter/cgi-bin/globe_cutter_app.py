@@ -973,11 +973,11 @@ if __name__ == "__main__":
       is_2d = FORM.getvalue("is_2d")
       if is_2d == "t":
         print("<hr>Your map is available at <a href=\"{0}/{1}.glm\">{2}</a>.".
-             format(WEB_URL_BASE, globe_name, globe_name)))
+             format(WEB_URL_BASE, globe_name, globe_name))
         globe_size = common.utils.FileSizeAsString(globe_builder.map_file)
       else:
         print("<hr>Your globe is available at <a href=\"{0}/{1}.glb\">{2}</a>.".
-              format(WEB_URL_BASE, globe_name, globe_name)))
+              format(WEB_URL_BASE, globe_name, globe_name))
         globe_size = common.utils.FileSizeAsString(globe_builder.globe_file)
       print("<br> Size: %s" % globe_size)
       globe_builder.AppendInfoFile(globe_size)
