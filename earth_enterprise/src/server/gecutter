@@ -1,6 +1,7 @@
 #!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,11 +23,11 @@ enabled/disabled, but that the mod_fdb Apache module is updated to match
 the Cutter state.
 """
 
-import httplib
+import http.client
 import os
 import stat
 import sys
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 
 bin_path = os.path.dirname(__file__)
 opt_google_path = os.path.dirname(bin_path)
@@ -53,13 +54,13 @@ def DisableCutter(server_url):
     try:
       url_opener = utils.UrlOpener()
       results = url_opener.Open("{0}/fdb/disable_cut".format(server_url))
-    except urllib2.URLError as e:
+    except urllib.error.URLError as e:
       if hasattr(e, "code"):  # HTTPError
         print("Failed to block server from cutting.")
-        print("Error: {0}".format(httplib.responses[e.code]))
+        print(("Error: {0}".format(http.client.responses[e.code])))
       elif hasattr(e, "reason"):  # URLError
         print("Failed to reach server blocking from cutting.")
-        print("Reason: {0}".format(e.reason))
+        print(("Reason: {0}".format(e.reason)))
     else:
       if "cutting disabled" in results:
         print("Server blocked from cutting.")
@@ -79,13 +80,13 @@ def EnableCutter(server_url):
     try:
       url_opener = utils.UrlOpener()
       results = url_opener.Open("{0}/fdb/enable_cut".format(server_url))
-    except urllib2.URLError as e:
+    except urllib.error.URLError as e:
       if hasattr(e, "code"):  # HTTPError
         print("Failed to update server for cutting.")
-        print("Error: {0}".format(httplib.responses[e.code]))
+        print(("Error: {0}".format(http.client.responses[e.code])))
       elif hasattr(e, "reason"):  # URLError
         print("Failed to reach server updating for cutting.")
-        print("Reason: {0}".format(e.reason))
+        print(("Reason: {0}".format(e.reason)))
     else:
       if "cutting enabled" in results:
         print("Server updated for cutting.")
@@ -100,7 +101,7 @@ def EnableCutter(server_url):
 
 def Usage(cmd):
   """Show proper usage for this command."""
-  print("usage: %s enable/disable" % cmd)
+  print(("usage: %s enable/disable" % cmd))
   exit(1)
 
 
