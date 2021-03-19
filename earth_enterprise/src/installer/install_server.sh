@@ -1,6 +1,7 @@
 #!/bin/bash
 #
-# Copyright 2017 Google Inc., 2018-2019 Open GEE Contributors
+# Copyright 2017 Google Inc.
+# Copyright 2018-2021 Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -652,9 +653,10 @@ fix_postinstall_filepermissions()
 
   SEARCH_OWNER=`find "$PUBLISHER_ROOT/search_space" -maxdepth 0 -printf "%g:%u"`
   STREAM_OWNER=`find "$PUBLISHER_ROOT/stream_space" -maxdepth 0 -printf "%g:%u"`
-  if [ "$SEARCH_OWNER" != "$GEGROUP:$GEAPACHEUSER" -o "$STREAM_OWNER" != "$GEGROUP:$GEAPACHEUSER" ] ; then
-        printf "WARNING: The installer detected the publish root may have incorrect permissions! After installation you may need to run \n\
-sudo /opt/google/bin/geconfigurepublishroot --noprompt --chown --path=$PUBLISHER_ROOT\n"
+  if [ "$SEARCH_OWNER" != "$GRPNAME:$GEAPACHEUSER_NAME" -o "$STREAM_OWNER" != "$GRPNAME:$GEAPACHEUSER_NAME" ]; then
+      printf "WARNING: The installer detected the publish root may have incorrect permissions! \
+After installation you may need to run \n\n\
+sudo /opt/google/bin/geconfigurepublishroot --noprompt --chown --path=$PUBLISHER_ROOT\n\n"
   fi
 
   # Etc

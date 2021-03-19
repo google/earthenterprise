@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Copyright 2017 Google Inc.
-# Copyright 2018-2020 Open GEE Contributors
+# Copyright 2018-2021 Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -812,10 +812,10 @@ install_or_upgrade_asset_root()
         # master to keep proper confguration and file permissions.
         if [ "$IS_SLAVE" = "false" ]; then
             OWNERSHIP=`find "$ASSET_ROOT" -maxdepth 0 -printf "%g:%u"`
-            if [ "$OWNERSHIP" != "$GEGROUP:$GEFUSIONUSER" ] ; then
-                UPGRADE_MESSAGE="WARNING: The installer detected the asset root may have \
-                    incorrect permissions! After installation you may need to run \n\
-                    '$BASEINSTALLDIR_OPT/bin/geconfigureassetroot --noprompt --chown --assetroot $ASSET_ROOT'\n"
+            if [ "$OWNERSHIP" != "$GROUPNAME:$GEFUSIONUSER_NAME" ] ; then
+                UPGRADE_MESSAGE="WARNING: The installer detected the asset root may have incorrect permissions! \
+After installation you may need to run \n\n\
+$BASEINSTALLDIR_OPT/bin/geconfigureassetroot --noprompt --chown --assetroot $ASSET_ROOT\n\n"
             else
                 UPGRADE_MESSAGE=""
             fi
@@ -827,8 +827,10 @@ You cannot use an upgraded asset root with older versions of $GEEF.
 Consider backing up your asset root. $GEEF will warn you when
 attempting to run with a non-upgraded asset root.
 
-$UPGRADE_MESSAGE
 END
+            if [ ! -z "$UPGRADE_MESSAGE" ]; then 
+                printf "$UPGRADE_MESSAGE"
+            fi
 
             if ! prompt_to_quit "X (Exit) the installer and backup your asset root - C (Continue) to upgrade the asset root."; then
                 install_or_upgrade_asset_root_retval=1
