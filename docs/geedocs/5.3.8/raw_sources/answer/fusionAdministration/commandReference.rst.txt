@@ -181,7 +181,7 @@ Command reference
 
       *Optional*. Attempt to change file owner and permissions.  This is
       only needed when the asset root has been created or modified by users
-      other than the defualt fusion user.
+      other than the default Fusion user.
 
       .. rubric:: Commands
 
@@ -281,7 +281,7 @@ Command reference
 
       *Optional*. Correct permissions and ownership of the publish root.
       This is needed when the publish root was created or modified by a user
-      other than the default fusion user, such as when re-using a publish root
+      other than the default Apache user, such as when re-using a publish root
       from a previously uninstalled version of GEE.
 
       .. warning::
