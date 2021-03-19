@@ -62,7 +62,7 @@ def DisableCutter(server_url):
         print("Failed to reach server blocking from cutting.")
         print(("Reason: {0}".format(e.reason)))
     else:
-      if "cutting disabled" in results:
+      if "cutting disabled" in results.decode():
         print("Server blocked from cutting.")
       else:
         print("** WARNING ** Unable to block server from cutting.")
@@ -88,7 +88,7 @@ def EnableCutter(server_url):
         print("Failed to reach server updating for cutting.")
         print(("Reason: {0}".format(e.reason)))
     else:
-      if "cutting enabled" in results:
+      if "cutting enabled" in results.decode():
         print("Server updated for cutting.")
       else:
         print("** WARNING ** Unable to update server for cutting.")
