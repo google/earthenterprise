@@ -166,9 +166,6 @@ attempting to run with a non-upgraded asset root.
 
 $UPGRADE_MESSAGE
 END
-
-            # Note: we don't want to do the recursive chown on the asset root
-            # unless absolutely necessary
             "$BASEINSTALLDIR_OPT/bin/geconfigureassetroot" --fixmasterhost \
                 --noprompt --assetroot $ASSET_ROOT
             # If `geconfigureassetroot` already updated ownership, don't do it again:
