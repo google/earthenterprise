@@ -39,7 +39,7 @@ except:
 class FlatFileHandler(portable_server_base.BaseHandler):
   """Class for handling flatfile requests."""
 
-  @tornado.web.asynchronous
+  @tornado.gen.coroutine
   def get(self):
     """Handle GET request for packets."""
     argument_str = self.request.uri.split("?")[1]
@@ -61,7 +61,7 @@ class FlatFileHandler(portable_server_base.BaseHandler):
 class CompositeFlatFileHandler(portable_server_base.BaseHandler):
   """Class for handling flatfile requests to glc layers."""
 
-  @tornado.web.asynchronous
+  @tornado.gen.coroutine
   def get(self, layer_id):
     """Handle GET request for packets."""
     argument_str = self.request.uri.split("?")[1]
@@ -78,7 +78,7 @@ class CompositeFlatFileHandler(portable_server_base.BaseHandler):
 class DbRootHandler(portable_server_base.BaseHandler):
   """Class for returning the dbRoot."""
 
-  @tornado.web.asynchronous
+  @tornado.gen.coroutine
   def get(self):
     """Handle GET request for the dbroot."""
     self.set_header("Content-Type", "application/octet-stream")
@@ -98,7 +98,7 @@ class DbRootHandler(portable_server_base.BaseHandler):
 class CompositeDbRootHandler(portable_server_base.BaseHandler):
   """Class for returning the meta dbRoot of a glc or dbRoots of its layers."""
 
-  @tornado.web.asynchronous
+  @tornado.gen.coroutine
   def get(self, layer_id):
     """Handle GET request for the dbroot."""
     self.set_header("Content-Type", "application/octet-stream")
@@ -114,7 +114,7 @@ class CompositeDbRootHandler(portable_server_base.BaseHandler):
 class CompositeVectorLayerHandler(portable_server_base.BaseHandler):
   """Class for returning vector layer data."""
 
-  @tornado.web.asynchronous
+  @tornado.gen.coroutine
   def get(self, layer_id, path):
     """Handle GET request for vector layer data."""
     #path = path.encode("ascii", "ignore")
@@ -130,7 +130,7 @@ class CompositeVectorLayerHandler(portable_server_base.BaseHandler):
 class DocsHandler(portable_server_base.BaseHandler):
   """Class for returning the content of files directly from disk."""
 
-  @tornado.web.asynchronous
+  @tornado.gen.coroutine
   def get(self, path):
     """Handle GET request for some document.
 
@@ -155,7 +155,7 @@ class DocsHandler(portable_server_base.BaseHandler):
 class CompositeDocsHandler(portable_server_base.BaseHandler):
   """Class for returning the content of files directly from disk."""
 
-  @tornado.web.asynchronous
+  @tornado.gen.coroutine
   def get(self, layer_id, path):
     """Handle GET request for some document.
 
@@ -182,7 +182,7 @@ class CompositeDocsHandler(portable_server_base.BaseHandler):
 class BalloonHandler(portable_server_base.BaseHandler):
   """Class for returning the content for a balloon."""
 
-  @tornado.web.asynchronous
+  @tornado.gen.coroutine
   def get(self):
     """Handle GET request for FT balloon data."""
     self.set_header("Content-Type", "text/html")
@@ -195,7 +195,7 @@ class BalloonHandler(portable_server_base.BaseHandler):
 class IconHandler(FlatFileHandler):
   """Class for returning icons."""
 
-  @tornado.web.asynchronous
+  @tornado.gen.coroutine
   def get(self, icon):
     """Handle GET request for icon."""
     #icon = icon.encode("ascii", "ignore")
@@ -212,7 +212,7 @@ class IconHandler(FlatFileHandler):
 class CompositeIconHandler(FlatFileHandler):
   """Class for returning icons."""
 
-  @tornado.web.asynchronous
+  @tornado.gen.coroutine
   def get(self, icon, layer_id):
     """Handle GET request for icon."""
     #icon = icon.encode("ascii", "ignore")
@@ -224,7 +224,7 @@ class CompositeIconHandler(FlatFileHandler):
 class KmlSearchHandler(portable_server_base.BaseHandler):
   """Class for returning search results as kml."""
 
-  @tornado.web.asynchronous
+  @tornado.gen.coroutine
   def get(self):
     """Handle GET request for kml search results."""
     self.set_header("Content-Type", "text/plain")
@@ -235,7 +235,7 @@ class KmlSearchHandler(portable_server_base.BaseHandler):
 class JsonSearchHandler(portable_server_base.BaseHandler):
   """Class for returning search results as json."""
 
-  @tornado.web.asynchronous
+  @tornado.gen.coroutine
   def get(self):
     """Handle GET request for json search results."""
     self.set_header("Content-Type", "text/plain")
@@ -246,7 +246,7 @@ class JsonSearchHandler(portable_server_base.BaseHandler):
 class CompositeQueryHandler(portable_server_base.BaseHandler):
   """Class for handling "query" requests."""
 
-  @tornado.web.asynchronous
+  @tornado.gen.coroutine
   def get(self, layer_id):
     """Handle GET request for JSON file for plugin."""
     request = self.decode_argument(self.request.arguments["request"][0])
@@ -295,7 +295,7 @@ class CompositeQueryHandler(portable_server_base.BaseHandler):
 class QueryHandler(portable_server_base.BaseHandler):
   """Class for handling "query" requests."""
 
-  @tornado.web.asynchronous
+  @tornado.gen.coroutine
   def get(self):
     """Handle GET request for JSON file for plugin."""
     request = self.decode_argument(self.request.arguments["request"][0])

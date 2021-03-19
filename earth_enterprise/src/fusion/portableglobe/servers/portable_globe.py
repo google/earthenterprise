@@ -173,10 +173,13 @@ class Globe(object):
   def ReadFile(self, relative_file_path):
     """Returns content of file stored in globe package file.
     If file is not found, returns an empty string.
+    Anywhere that the codebase deals with JSON or tables,
+    be sure to decode to string
     """
     
     if self.unpacker_.FindFile(relative_file_path, self.file_loc_):
-      return self.GetData().decode()
+      contents = self.GetData()
+      return contents 
     else:
 
       raise UnableToFindException("Unable to find file %s." % relative_file_path)
@@ -422,7 +425,8 @@ class Globe(object):
       print("Unknown file type: {0}".format(globe_name))
 
     if self.is_2d_:
-      self.ParseJson(self.ReadFile("maps/map.json"))
+      jsonfile = self.ReadFile("maps/map.json").decode()
+      self.ParseJson(jsonfile)
 
   def ParseJson(self, json_text):
     """Extract needed information from json."""
@@ -499,7 +503,7 @@ class Globe(object):
     """Create new table in Postgres and load it with content from file."""
     table_name = table_file[10:]  # Strip off "search_db/"
     print("   Loading search table from %s ..." % table_file)
-    content = self.ReadFile(table_file)
+    content = self.ReadFile(table_file).decode()
     if not content:
       print("{0} not loaded.".format(table_name))
       return

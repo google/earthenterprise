@@ -128,7 +128,7 @@ class SetUpHandler(portable_server_base.BaseHandler):
       data["description"] = "mbtiles database"
     else:
       try:
-        info = globe.ReadFile("earth/info.txt")
+        info = globe.ReadFile("earth/info.txt").decode()
         match = re.search(GMT_TIMESTAMP_REGEX, info)
         if not match:
           # This probably won't be GMT, but better than nothing.
@@ -160,7 +160,7 @@ class SetUpHandler(portable_server_base.BaseHandler):
     """Retrieves whether the globe (map) is Mercator."""
     # TODO: Use regex test.
     if globe.Is2d():
-      json = globe.ReadFile("maps/map.json")
+      json = globe.ReadFile("maps/map.json").decode()
       index = json.find("projection")
       if "mercator" in json[index + 11: index + 24]:
         return True
@@ -295,7 +295,7 @@ now serving</div>
 
   def WriteMapJson(self):
     """Writes json containing info about current globe being served."""
-    json = tornado.web.globe_.ReadFile("maps/map.json")
+    json = tornado.web.globe_.ReadFile("maps/map.json").decode()
     # TODO: Use regex
     # index = json.find("=") + 2;
     # end_index = json.rfind(";");
