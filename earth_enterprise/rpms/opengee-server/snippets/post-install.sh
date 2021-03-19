@@ -135,7 +135,7 @@ fix_postinstall_filepermissions()
     STREAM_OWNER=`find "$PUBLISHER_ROOT/stream_space" -maxdepth 0 -printf "%g:%u"`
     if [ "$SEARCH_OWNER" != "$GEGROUP:$GEAPACHEUSER" -o "$STREAM_OWNER" != "$GEGROUP:$GEAPACHEUSER" ] ; then
         printf "WARNING: The installer detected the publish root may have incorrect permissions! After installation you may need to run \n\
-sudo /opt/google/bin/geconfigurepublishroot --noprompt --chown --path=$PUBLISHER_ROOT"
+sudo /opt/google/bin/geconfigurepublishroot --noprompt --chown --path=$PUBLISHER_ROOT\n"
     fi
     # Run and logs ownership
     chown root:$GEGROUP $BASEINSTALLDIR_OPT/run
