@@ -150,9 +150,9 @@ install_or_upgrade_asset_root()
         if [ "$IS_SLAVE" = "false" ]; then
             OWNERSHIP=`find "$ASSET_ROOT" -maxdepth 0 -printf "%g:%u"`
             if [ "$OWNERSHIP" != "$GEGROUP:$GEFUSIONUSER" ] ; then
-                UPGRADE_MESSAGE="WARNING: The installer detected the asset root may have  incorrect permissions! \
+                UPGRADE_MESSAGE="WARNING: The installer detected the asset root may have incorrect permissions! \
 After installation you may need to run \n\n\
-$BASEINSTALLDIR_OPT/bin/geconfigureassetroot --noprompt --chown --assetroot $ASSET_ROOT\n\n"
+sudo $BASEINSTALLDIR_OPT/bin/geconfigureassetroot --noprompt --chown --repair --assetroot $ASSET_ROOT\n\n"
             else
                 UPGRADE_MESSAGE=""
             fi

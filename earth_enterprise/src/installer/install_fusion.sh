@@ -815,7 +815,7 @@ install_or_upgrade_asset_root()
             if [ "$OWNERSHIP" != "$GROUPNAME:$GEFUSIONUSER_NAME" ] ; then
                 UPGRADE_MESSAGE="WARNING: The installer detected the asset root may have incorrect permissions! \
 After installation you may need to run \n\n\
-$BASEINSTALLDIR_OPT/bin/geconfigureassetroot --noprompt --chown --assetroot $ASSET_ROOT\n\n"
+sudo $BASEINSTALLDIR_OPT/bin/geconfigureassetroot --noprompt --chown --repair --assetroot $ASSET_ROOT\n\n"
             else
                 UPGRADE_MESSAGE=""
             fi
