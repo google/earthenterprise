@@ -81,7 +81,7 @@ class SnippetsApp(object):
         request_body_size = int(environ.get("CONTENT_LENGTH", 0))
       except ValueError:
         request_body_size = 0
-      post_input = environ["wsgi.input"].read(request_body_size)
+      post_input = environ["wsgi.input"].read(request_body_size).decode()
       logger.debug("POST request body: %s", post_input)
       self.__ParsePostInput(post_input, request)
 
