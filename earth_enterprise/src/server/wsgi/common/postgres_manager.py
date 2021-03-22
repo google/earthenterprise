@@ -36,7 +36,7 @@ def _ModifyThreaded(semaphore, connection_pool, sql, logger):
     try:
       logger.info("Thread executing: %s", sql)
       cursor.execute(sql)
-    except psycopg2.ProgrammingError, err:
+    except psycopg2.ProgrammingError as err:
       logger.error("Execute Error: %s", err)
     connection.commit()
     connection_pool.putconn(connection)
@@ -130,11 +130,11 @@ class PostgresConnection(object):
       try:
         cursor.execute(query, parameters)
       except psycopg2.ProgrammingError as exc:
-        print exc.message
+        print (exc.message)
         self._logger.error(exc.message)
         # conn.rollback()
       except psycopg2.InterfaceError as exc:
-        print exc.message
+        print (exc.message)
         # conn = psycopg2.connect(...)
         # cursor = conn.cursor()
 
