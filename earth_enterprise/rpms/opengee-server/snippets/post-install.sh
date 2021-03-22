@@ -125,15 +125,19 @@ fix_postinstall_filepermissions()
     chown $GEAPACHEUSER:$GEGROUP $BASEINSTALLDIR_OPT/gehttpd/htdocs/.htaccess
     chown -R $GEAPACHEUSER:$GEGROUP $BASEINSTALLDIR_OPT/gehttpd/logs
 
-    # Publish Root
+    # Publish Root - note these are not recursive
+    # Ownership and permissions of publish root content is handled by geconfigurepublishroot
     chmod 775 $PUBLISHER_ROOT/stream_space
-    # TODO - Not Found
-    # chmod 644 $PUBLISHER_ROOT/stream_space/.config
     chmod 644 $PUBLISHER_ROOT/.config
     chmod 755 $PUBLISHER_ROOT
-    chown -R $GEAPACHEUSER:$GEGROUP $PUBLISHER_ROOT/stream_space
-    chown -R $GEAPACHEUSER:$GEGROUP $PUBLISHER_ROOT/search_space
 
+    SEARCH_OWNER=`find "$PUBLISHER_ROOT/search_space" -maxdepth 0 -printf "%g:%u"`
+    STREAM_OWNER=`find "$PUBLISHER_ROOT/stream_space" -maxdepth 0 -printf "%g:%u"`
+    if [ "$SEARCH_OWNER" != "$GEGROUP:$GEAPACHEUSER" -o "$STREAM_OWNER" != "$GEGROUP:$GEAPACHEUSER" ] ; then
+        printf "WARNING: The installer detected the publish root may have incorrect permissions! \
+After installation you may need to run \n\n\
+sudo /opt/google/bin/geconfigurepublishroot --noprompt --chown --path=$PUBLISHER_ROOT\n\n"
+    fi
     # Run and logs ownership
     chown root:$GEGROUP $BASEINSTALLDIR_OPT/run
     chown root:$GEGROUP $BASEINSTALLDIR_VAR/run

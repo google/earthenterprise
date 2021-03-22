@@ -150,10 +150,10 @@ install_or_upgrade_asset_root()
         if [ "$IS_SLAVE" = "false" ]; then
             OWNERSHIP=`find "$ASSET_ROOT" -maxdepth 0 -printf "%g:%u"`
             if [ "$OWNERSHIP" != "$GEGROUP:$GEFUSIONUSER" ] ; then
-                NOCHOWN=""
-                UPGRADE_MESSAGE="The upgrade will fix permissions for the asset root and source volume. This may take a while."
+                UPGRADE_MESSAGE="WARNING: The installer detected the asset root may have incorrect permissions! \
+After installation you may need to run \n\n\
+sudo $BASEINSTALLDIR_OPT/bin/geconfigureassetroot --noprompt --chown --repair --assetroot $ASSET_ROOT\n\n"
             else
-                NOCHOWN="--nochown"
                 UPGRADE_MESSAGE=""
             fi
 
@@ -164,15 +164,15 @@ You cannot use an upgraded asset root with older versions of $GEEF.
 Consider backing up your asset root. $GEEF will warn you when
 attempting to run with a non-upgraded asset root.
 
-$UPGRADE_MESSAGE
 END
+            if [ ! -z "$UPGRADE_MESSAGE" ]; then 
+                printf "$UPGRADE_MESSAGE"
+            fi
 
-            # Note: we don't want to do the recursive chown on the asset root
-            # unless absolutely necessary
             "$BASEINSTALLDIR_OPT/bin/geconfigureassetroot" --fixmasterhost \
-                --noprompt  $NOCHOWN --assetroot $ASSET_ROOT
+                --noprompt --assetroot $ASSET_ROOT
             # If `geconfigureassetroot` already updated ownership, don't do it again:
-            "$BASEINSTALLDIR_OPT/bin/geupgradeassetroot" --noprompt --nochown \
+            "$BASEINSTALLDIR_OPT/bin/geupgradeassetroot" --noprompt \
                 --assetroot "$ASSET_ROOT"
         fi
     fi

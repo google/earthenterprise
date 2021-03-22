@@ -34,7 +34,7 @@
 
 // local function declarations
 void ValidateAssetRootForUpgrade(const AssetRootStatus &status, bool noprompt,
-                                 bool nochown);
+                                 bool chown);
 void WarnAboutPendingTasks(void);
 void UpgradeAssetRoot(const DottedVersion &version, bool secure);
 void UpgradeFrom2_4_X(void);
@@ -61,7 +61,7 @@ usage(const char* prog, const char* msg = 0, ...) {
      "  --assetroot <dir>:   Path to asset root [default: %s]\n"
      "  --username <name>:   Fusion username (default gefusionuser)\n"
      "  --groupname <name>:  Group membership of Fusion user (default gegroup)\n"
-     "  --nochown :          do not attempt to fix privileges\n"
+     "  --chown :            Fix file privileges\n"
      "  --noprompt:          do not prompt for more information, returns -1\n"
      "                       to indicate an error if command fails or has insufficient arguments\n"
      "  --secure             Removes world read and write permissions.\n",
@@ -79,7 +79,7 @@ main(int argc, char *argv[]) {
     std::string username = Systemrc::FusionUsername();
     std::string groupname = Systemrc::UserGroupname();
     bool noprompt = false;
-    bool nochown = false;
+    bool chown = false;
     bool secure = false;
 
     khGetopt options;
@@ -88,7 +88,7 @@ main(int argc, char *argv[]) {
     options.opt("username", username);
     options.opt("groupname", groupname);
     options.opt("noprompt", noprompt);
-    options.opt("nochown", nochown);
+    options.opt("chown", chown);
     options.opt("secure", secure);
 
     if (!options.processAll(argc, argv, argn) || help) {
@@ -102,7 +102,7 @@ main(int argc, char *argv[]) {
 
     // validate the asset root
     AssetRootStatus status(assetroot, thishost, username, groupname);
-    ValidateAssetRootForUpgrade(status, noprompt, nochown);
+    ValidateAssetRootForUpgrade(status, noprompt, chown);
 
     // short circuit
     if (!status.AssetRootNeedsUpgrade()) {
@@ -126,7 +126,7 @@ main(int argc, char *argv[]) {
 }
 
 void ValidateAssetRootForUpgrade(const AssetRootStatus &status, bool noprompt,
-                                 bool nochown) {
+                                 bool chown) {
   if (status.assetroot_.empty()) {
     throw khException(kh::tr("No asset root has been specified."));
   }
@@ -175,7 +175,7 @@ void ValidateAssetRootForUpgrade(const AssetRootStatus &status, bool noprompt,
     status.ThrowSoftwareNeedsUpgrade();
   }
 
-  if (!status.owner_ok_ && !nochown) {
+  if (!status.owner_ok_ && chown) {
     // will throw if user doesn't confirm
     PromptUserAndFixOwnership(status.assetroot_, noprompt);
   }

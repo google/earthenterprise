@@ -79,8 +79,8 @@ running.
 
 Configure your asset root to be consistent with your old asset root.
 If you are not sure about this, manually run commands like:
-geconfigureassetroot --new --assetroot /gevol/assets geselectassetroot
---assetroot /gevol/assets
+geconfigureassetroot --new --chown --assetroot /gevol/assets
+geselectassetroot --assetroot /gevol/assets
 
 Restore the backed-up XML and configuration files to their original
 location in the asset root.

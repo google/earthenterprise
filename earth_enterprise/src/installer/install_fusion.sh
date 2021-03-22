@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Copyright 2017 Google Inc.
-# Copyright 2018-2020 Open GEE Contributors
+# Copyright 2018-2021 Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -804,46 +804,40 @@ install_or_upgrade_asset_root()
     chmod 644 $SYSTEMRC
     chown $GEFUSIONUSER_NAME:$GROUPNAME $SYSTEMRC
 
-    if [ $IS_NEWINSTALL == true ]; then
-        # new install -- make sure that this does not exist
-        if [ -d "$ASSET_ROOT/.config/volumes.xml" ]; then
-            # error -- should never get here
-            echo -e "\nThis appears to be a new install, but upon further investigation, it appears"
-            echo -e "that some components have been installed before. This may indicate that a previous"
-            echo -e "install process did not complete successfully.  Please uninstall fusion and"
-            echo -e "re-run this script."
-
-            install_or_upgrade_asset_root_retval=1
-        else
-            $BASEINSTALLDIR_OPT/bin/geconfigureassetroot --new --noprompt --assetroot $ASSET_ROOT --srcvol $SOURCE_VOLUME
-            chown -R $GEFUSIONUSER_NAME:$GROUPNAME $ASSET_ROOT
-        fi
+    if [ ! -d "$ASSET_ROOT/.config" ]; then
+        "$BASEINSTALLDIR_OPT/bin/geconfigureassetroot" --new --noprompt \
+            --assetroot "$ASSET_ROOT" --srcvol "$SOURCE_VOLUME"
     else
-        # upgrade asset root -- if this is a master
-        if [ $IS_SLAVE == false ]; then
-            # TODO: Verify this logic -- this is what is defined in the installer documentation, but need confirmation
-            if [ $NEW_GEGROUP == true ] || [ $NEW_GEFUSIONUSER == true ]; then
-                NOCHOWN=""
-                UPGRADE_MESSAGE="\nThe upgrade will fix permissions for the asset root and source volume. This may take a while.\n"
+        # Upgrade the asset root, if this is a Fusion master host.
+        #   Fusion slaves access the same files over NFS, and they rely on the
+        # master to keep proper confguration and file permissions.
+        if [ "$IS_SLAVE" = "false" ]; then
+            OWNERSHIP=`find "$ASSET_ROOT" -maxdepth 0 -printf "%g:%u"`
+            if [ "$OWNERSHIP" != "$GROUPNAME:$GEFUSIONUSER_NAME" ] ; then
+                UPGRADE_MESSAGE="WARNING: The installer detected the asset root may have incorrect permissions! \
+After installation you may need to run \n\n\
+sudo $BASEINSTALLDIR_OPT/bin/geconfigureassetroot --noprompt --chown --repair --assetroot $ASSET_ROOT\n\n"
             else
-                NOCHOWN="--nochown"
                 UPGRADE_MESSAGE=""
             fi
 
-            echo -e "\nThe asset root must be upgraded to work with the current version of $GEEF $LONG_VERSION."
-            echo -e "You cannot use an upgraded asset root with older versions of $GEEF. "
-			echo -e "Consider backing up your asset root. $GEEF will warn you when"
-            echo -e "attempting to run with a non-upgraded asset root."
-            echo -e "$UPGRADE_MESSAGE"
+            cat <<END
+
+The asset root must be upgraded to work with the current version of $GEEF $GEE_VERSION.
+You cannot use an upgraded asset root with older versions of $GEEF.
+Consider backing up your asset root. $GEEF will warn you when
+attempting to run with a non-upgraded asset root.
+
+END
+            if [ ! -z "$UPGRADE_MESSAGE" ]; then 
+                printf "$UPGRADE_MESSAGE"
+            fi
 
             if ! prompt_to_quit "X (Exit) the installer and backup your asset root - C (Continue) to upgrade the asset root."; then
                 install_or_upgrade_asset_root_retval=1
 			else
-				# Note: we don't want to do the recursive chown on the asset root unless absolutely necessary
-            	$BASEINSTALLDIR_OPT/bin/geconfigureassetroot --fixmasterhost --noprompt  $NOCHOWN --assetroot $ASSET_ROOT
-            	$BASEINSTALLDIR_OPT/bin/geupgradeassetroot --noprompt $NOCHOWN --assetroot $ASSET_ROOT
-
-				chown -R $GEFUSIONUSER_NAME:$GROUPNAME $ASSET_ROOT
+            	$BASEINSTALLDIR_OPT/bin/geconfigureassetroot --fixmasterhost --noprompt --assetroot $ASSET_ROOT
+            	$BASEINSTALLDIR_OPT/bin/geupgradeassetroot --noprompt --assetroot $ASSET_ROOT
             fi
         fi
     fi
@@ -906,7 +900,7 @@ final_assetroot_configuration()
         $BASEINSTALLDIR_OPT/bin/geselectassetroot --assetroot $ASSET_ROOT
 
 	mkdir -p $BASEINSTALLDIR_OPT/share/tutorials
-	$BASEINSTALLDIR_OPT/bin/geconfigureassetroot --addvolume opt:$BASEINSTALLDIR_OPT/share/tutorials --noprompt --nochown
+	$BASEINSTALLDIR_OPT/bin/geconfigureassetroot --addvolume opt:$BASEINSTALLDIR_OPT/share/tutorials --noprompt
 	if [ $? -eq 255 ]; then
             echo -e "The geconfigureassetroot utility has failed on attempting"
             echo -e "to add the volume 'opt:$BASEINSTALLDIR_OPT/share/tutorials'."

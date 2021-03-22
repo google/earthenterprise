@@ -76,18 +76,19 @@ On the command line, log in as root.
 
 Stop the system manager by entering:  /etc/init.d/gefusion stop
 
-Enter:  geconfigureassetroot --new --assetroot /username/assets  where
-username is the name of the user.  The username does not have to be
-the user’s official account name. It can be anything that
-distinguishes that user from other users on that particular
-workstation, such as edaniels or just Emily.  Google recommends that
-you place the tutorial asset root on the same partition as the publish
-root, so the publisher uses hard links instead of making copies of the
-tutorial databases.  If you place the tutorial asset root on the root
-partition, ensure that there is enough disk space for the data created
-by each user working through the tutorial. If a user completes all
-lessons in the tutorial, allow 1.5 GB of disk space.  The tool asks if
-you want to create a new source volume.
+Enter:  geconfigureassetroot --new --assetroot --chown
+/username/assets  where username is the name of the user.  The
+username does not have to be the user’s official account name. It can
+be anything that distinguishes that user from other users on that
+particular workstation, such as edaniels or just Emily.  Google
+recommends that you place the tutorial asset root on the same
+partition as the publish root, so the publisher uses hard links
+instead of making copies of the tutorial databases.  If you place the
+tutorial asset root on the root partition, ensure that there is enough
+disk space for the data created by each user working through the
+tutorial. If a user completes all lessons in the tutorial, allow 1.5
+GB of disk space.  The tool asks if you want to create a new source
+volume.
 
 Enter Y, and press Enter.  You are prompted to enter a directory for
 the source volume.

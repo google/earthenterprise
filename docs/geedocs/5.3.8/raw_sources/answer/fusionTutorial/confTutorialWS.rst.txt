@@ -82,7 +82,7 @@ Configure Tutorial Workspace
 
       #. Enter:
 
-         ``geconfigureassetroot --new --assetroot /username/assets``
+         ``geconfigureassetroot --new --assetroot --chown /username/assets``
 
          where *username* is the name of the user.
 
