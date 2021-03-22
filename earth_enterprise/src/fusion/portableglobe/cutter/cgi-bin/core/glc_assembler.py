@@ -26,7 +26,7 @@ import sys
 import subprocess
 import traceback
 import time
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import yaml
 from common import utils
 import common.configs
@@ -348,7 +348,7 @@ class GlcAssembler(object):
         if layer_info["grab_kml"]:
           try:
             # Grab kml content.
-            fp = urllib.urlopen(layer_info["url"])
+            fp = urllib.request.urlopen(layer_info["url"])
             content = fp.read()
             fp.close()
 
@@ -410,7 +410,7 @@ class GlcAssembler(object):
     dbroot_layer_info_content = ""
     layer_index = 1
     if (base_glb_info and
-        "base_glb_path" in base_glb_info.keys() and
+        "base_glb_path" in list(base_glb_info.keys()) and
         base_glb_info["base_glb_path"]):
       layer_info_content += "%s %s %s %d 0\n" % (
           "base_globe", base_glb_info["base_glb_path"], "IMAGE", layer_index)

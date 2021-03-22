@@ -132,7 +132,7 @@ def PrintTextSuiteResults(results,
         num_skipped += 1
         print("  %s" % (result["skip_reason"]))
       else:
-        print("Unknown status: {0}".format(result["status"])
+        print("Unknown status: {0}".format(result["status"]))
         break
     num_tests += 1
 

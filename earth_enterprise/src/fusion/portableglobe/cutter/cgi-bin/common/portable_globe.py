@@ -1,6 +1,7 @@
 #!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,7 +23,7 @@ Adapted from module of same name used in Portable Server.
 import os
 import re
 
-import portable_exceptions
+from . import portable_exceptions
 import glc_unpacker
 
 NON_COMPOSITE_LAYER = 0

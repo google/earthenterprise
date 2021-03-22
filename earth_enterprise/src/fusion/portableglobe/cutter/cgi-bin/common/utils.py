@@ -1,6 +1,7 @@
 #!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,12 +24,12 @@ import shlex
 import subprocess
 import sys
 import time
-import urlparse
+import urllib.parse
 import xml.sax.saxutils as saxutils
 import distutils.dir_util
 import distutils.errors
 
-import errors
+from . import errors
 
 BYTES_PER_MEGABYTE = 1024.0 * 1024.0
 NAME_TEMPLATE = "%s_%s"
@@ -143,17 +144,17 @@ def GlobesToText(globes, template, sort_item, reverse=False, is_text=False):
   result = []
   # If it is text, sort the lower case version of the text.
   if is_text:
-    items = sorted(globes.iteritems(),
+    items = sorted(iter(globes.items()),
                    key=lambda globe_pair: globe_pair[1][sort_item].lower(),
                    reverse=reverse)
   # If it is NOT text, use default less than comparison.
   else:
-    items = sorted(globes.iteritems(),
+    items = sorted(iter(globes.items()),
                    key=lambda globe_pair: globe_pair[1][sort_item],
                    reverse=reverse)
   for [unused_key, globe] in iter(items):
     next_entry = template
-    for [globe_term, globe_value] in globe.iteritems():
+    for [globe_term, globe_value] in globe.items():
       replace_item = "[$%s]" % globe_term.upper()
       if globe_term == "globe" or globe_term == "info_loaded":
         pass
@@ -172,7 +173,7 @@ def GlobeNameReplaceParams(globe_name):
 
 def ReplaceParams(text, replace_params):
   """Replace keys with values in the given text."""
-  for (key, value) in replace_params.iteritems():
+  for (key, value) in replace_params.items():
     text = text.replace(key, value)
   return text
 
@@ -411,7 +412,7 @@ def GetServerAndPathFromUrl(url):
   """
   server = ""
   path = ""
-  url_obj = urlparse.urlparse(url)
+  url_obj = urllib.parse.urlparse(url)
   if url_obj.scheme and url_obj.netloc and url_obj.path:
     server = "{0}://{1}".format(url_obj.scheme, url_obj.netloc)
     path = url_obj.path
