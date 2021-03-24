@@ -35,7 +35,9 @@ import postgres_properties
 
 class PostgresManagerWrap(object):
   DB_PORT = postgres_properties.PostgresProperties().GetPortNumber()
+  DB_HOST = postgres_properties.PostgresProperties().GetHost()
   DB_USER = "geuser"
+  DB_PASS = postgres_properties.PostgresProperties().GetPassword()
 
   @staticmethod
   def Query(db, query, parameters=None):
@@ -52,8 +54,9 @@ class PostgresManagerWrap(object):
     db_con = postgres_manager.PostgresConnection(
         db,
         PostgresManagerWrap.DB_USER,
-        '/tmp',
+        PostgresManagerWrap.DB_HOST,
         PostgresManagerWrap.DB_PORT,
+        PostgresManagerWrap.DB_PASS,
         logging.getLogger())
     results = db_con.Query(query, parameters)
     db_con.Close()

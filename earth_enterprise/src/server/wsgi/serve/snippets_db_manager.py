@@ -44,15 +44,16 @@ class SnippetsDbManager(object):
     super(SnippetsDbManager, self).__init__()
 
     # Init database connection.
-    self._host = '/tmp'
     self._snippets_db_name = "geendsnippet"
     self._db_user = "geuser"
     postgres_prop = postgres_properties.PostgresProperties()
     self._port = postgres_prop.GetPortNumber()
+    self._host = postgres_prop.GetHost()
+    self._pass = postgres_prop.GetPassword()
 
     # Create DB connection to gesnippets database.
     self._snippets_db_connection = postgres_manager.PostgresConnection(
-        self._snippets_db_name, self._db_user, self._host, self._port, logger)
+        self._snippets_db_name, self._db_user, self._host, self._port, self._pass, logger)
 
   def _DbQuery(self, query_string, parameters=None):
     """Handles DB query request to gesnippets database.
