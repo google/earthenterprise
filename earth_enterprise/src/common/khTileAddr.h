@@ -389,7 +389,7 @@ class khTilespaceFlat : public khTilespace {
   // the level.
   inline unsigned int LevelFromDegPixelSize(double degPixelSize) const {
     unsigned int level = 0;
-    for (; level < NumFusionLevels; ++level) {
+    for (; level < MaxFusionLevel; ++level) {
       if (degPixelSize >= DegPixelSize(level))
         break;
     }
@@ -434,7 +434,7 @@ class khTilespaceMercator : public khTilespace {
   // the level.
   inline unsigned int LevelFromPixelSizeInMeters(double pixelSizeInMeters) const {
     unsigned int level = 0;
-    for (; level < NumFusionLevels; ++level) {
+    for (; level < MaxFusionLevel; ++level) {
       if (pixelSizeInMeters >= AveragePixelSizeInMercatorMeters(level))
         break;
     }
