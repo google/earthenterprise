@@ -189,9 +189,22 @@ GDALDataset* GetSrcTile(request_rec* r, const MotfParams &motf_params,
   snprintf(txt, sizeof(txt), "%d", z_up);
   (*arg_map)["level"] = txt;
 
+  ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r,
+                      "GetSrcTile: upsampled_tile info: row=%s, col=%s, level=%s", 
+                      (*arg_map)["row"].c_str(), (*arg_map)["col"].c_str(), (*arg_map)["level"].c_str());
+
   std::string vsidatafile;
   ServerdbReader::ReadBuffer buf;
   reader->GetData(*arg_map, buf, is_cacheable);
+
+  ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r,
+                      "GetData read %d bytes", static_cast<int>(buf.size()));
+
+  if (buf.size() > 0) {
+    ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r,
+                      "GetData returned {%s}", buf.data());
+  }
+
   bool non_pb_jpeg = gecommon::IsJpegBuffer(buf.data());
   // Create GDAL dataset from raw jpeg if source data is non protobuf jpeg
   // format(e.g. GEE4.x 2D Flat imagery packets)
@@ -203,7 +216,6 @@ GDALDataset* GetSrcTile(request_rec* r, const MotfParams &motf_params,
     if (hdata_ds == NULL) {
         ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r,
                       "hdata_ds WAS NULL when reading %s from ReadBuffer buf.", vsidatafile.c_str());
-        ap_rflush(r);
         // return NULL;
     } else {
         ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r,
@@ -213,10 +225,14 @@ GDALDataset* GetSrcTile(request_rec* r, const MotfParams &motf_params,
   } else if (imagery_pb.ParseFromString(buf)) {
     const std::string& image_data = imagery_pb.image_data();
     hdata_ds =  geGdalVSI::VsiGdalOpenInternalWrap(&vsidatafile, image_data);
+    ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r,
+                      "image_data size is %d from imagery_pb.ParseFromString", static_cast<int>(image_data.size()));
+
     if (hdata_ds == NULL) {
         ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r,
                       "hdata_ds WAS NULL when reading %s from imagery_pb.ParseFromString", vsidatafile.c_str());
-        ap_rflush(r);
+        ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r,
+                      "JPEG data is {%s} from imagery_pb.ParseFromString", buf.data());
         // return NULL;
     } else {
         ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r,
@@ -375,10 +391,32 @@ void WarpData(const MotfParams &motf_params, int levelup,
   GDALDataset* hsrctile1_ds;
   hsrctile1_ds = GetSrcTile(r, motf_params, levelup, &has_alpha,
                            upsampled_tiles[0], reader, arg_map);
+
+      // Print info for each upsampled_tile
+    ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r,
+                        "UpsampledTile info:"
+                        " dataflag=%d"
+                        " y_up=%d"
+                        " x_up=%d"
+                        " xoff=%d"
+                        " yoff=%d"
+                        " xsize=%d"
+                        " ysize=%d"
+                        " lat_northup=%f"
+                        " lat_southup=%f",
+                        upsampled_tiles[0].dataflag,
+                        upsampled_tiles[0].y_up,
+                        upsampled_tiles[0].x_up,
+                        upsampled_tiles[0].xoff,
+                        upsampled_tiles[0].yoff,
+                        upsampled_tiles[0].xsize,
+                        upsampled_tiles[0].ysize,
+                        upsampled_tiles[0].lat_northup,
+                        upsampled_tiles[0].lat_southup);
   if (hsrctile1_ds == NULL) {
         ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r,
                       "hsrctile1_ds WAS NULL in WarpData first call to GetSrcTile");
-        ap_rflush(r);
+        //ap_rflush(r);
         // return;
   } else {
       ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r,
@@ -438,15 +476,37 @@ void WarpData(const MotfParams &motf_params, int levelup,
   GDALDataset* hsrctile_ds;
   // TODO: Move mosaic block to separate function for readability.
   for (int i = 1; i < num_tiles; i++) {
+
+    // Print info for each upsampled_tile
+    ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r,
+                        "UpsampledTile info:"
+                        " dataflag=%d"
+                        " y_up=%d"
+                        " x_up=%d"
+                        " xoff=%d"
+                        " yoff=%d"
+                        " xsize=%d"
+                        " ysize=%d"
+                        " lat_northup=%f"
+                        " lat_southup=%f",
+                        upsampled_tiles[i].dataflag,
+                        upsampled_tiles[i].y_up,
+                        upsampled_tiles[i].x_up,
+                        upsampled_tiles[i].xoff,
+                        upsampled_tiles[i].yoff,
+                        upsampled_tiles[i].xsize,
+                        upsampled_tiles[i].ysize,
+                        upsampled_tiles[i].lat_northup,
+                        upsampled_tiles[i].lat_southup);
+
     // Get each source pc tile which makes up the mercator mosaic
       ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r,
                         "Calling GetSrcTile for tile %d", i);
       hsrctile_ds = GetSrcTile(r, motf_params, levelup, &has_alpha,
-                           upsampled_tiles[0], reader, arg_map);
+                           upsampled_tiles[i], reader, arg_map);
       if (hsrctile_ds == NULL) {
           ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r,
                         "hsrctile_ds WAS NULL in WarpData second call to GetSrcTile for %d", i);
-          ap_rflush(r);
           //continue;
       }
     // Add the alpha band to the destination tile if any of the source tiles
@@ -553,7 +613,8 @@ int GetUpsampledTiles(const MotfParams &motf_params,
                       int levelup,
                       UpsampledTileVector* upsampled_tiles,
                       ServerdbReader* reader,
-                      ArgMap* arg_map) {
+                      ArgMap* arg_map,
+                      request_rec* r) {
   upsampled_tiles->clear();
   UpsampledTile nexttile;
   int num_tiles = 0;  // This routine is designed to loop until num_tiles > 0.
@@ -624,6 +685,27 @@ int GetUpsampledTiles(const MotfParams &motf_params,
         return 0;
       }
 
+      ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r,
+                        "UpsampledTile info:"
+                        " dataflag=%d"
+                        " y_up=%d"
+                        " x_up=%d"
+                        " xoff=%d"
+                        " yoff=%d"
+                        " xsize=%d"
+                        " ysize=%d"
+                        " lat_northup=%f"
+                        " lat_southup=%f",
+                        nexttile.dataflag,
+                        nexttile.y_up,
+                        nexttile.x_up,
+                        nexttile.xoff,
+                        nexttile.yoff,
+                        nexttile.xsize,
+                        nexttile.ysize,
+                        nexttile.lat_northup,
+                        nexttile.lat_southup);
+
       tnum++;
       upsampled_tiles->push_back(nexttile);
       for (int jj = 1; jj < ny - 1; ++jj) {
@@ -646,6 +728,28 @@ int GetUpsampledTiles(const MotfParams &motf_params,
         if (levelok == 2) {
           return 0;
         }
+
+              ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r,
+                        "UpsampledTile info:"
+                        " dataflag=%d"
+                        " y_up=%d"
+                        " x_up=%d"
+                        " xoff=%d"
+                        " yoff=%d"
+                        " xsize=%d"
+                        " ysize=%d"
+                        " lat_northup=%f"
+                        " lat_southup=%f",
+                        nexttile.dataflag,
+                        nexttile.y_up,
+                        nexttile.x_up,
+                        nexttile.xoff,
+                        nexttile.yoff,
+                        nexttile.xsize,
+                        nexttile.ysize,
+                        nexttile.lat_northup,
+                        nexttile.lat_southup);
+
 
         tnum++;
         upsampled_tiles->push_back(nexttile);
@@ -676,6 +780,28 @@ int GetUpsampledTiles(const MotfParams &motf_params,
           return 0;
         }
 
+              ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r,
+                        "UpsampledTile info:"
+                        " dataflag=%d"
+                        " y_up=%d"
+                        " x_up=%d"
+                        " xoff=%d"
+                        " yoff=%d"
+                        " xsize=%d"
+                        " ysize=%d"
+                        " lat_northup=%f"
+                        " lat_southup=%f",
+                        nexttile.dataflag,
+                        nexttile.y_up,
+                        nexttile.x_up,
+                        nexttile.xoff,
+                        nexttile.yoff,
+                        nexttile.xsize,
+                        nexttile.ysize,
+                        nexttile.lat_northup,
+                        nexttile.lat_southup);
+
+
         ++tnum;
         upsampled_tiles->push_back(nexttile);
       }
@@ -705,6 +831,26 @@ int GetUpsampledTiles(const MotfParams &motf_params,
       nexttile.xsize = kMotfTileSize;
       nexttile.yoff = kMotfTileSize - tile_north_pixup;
       nexttile.ysize = tile_north_pixup;
+      ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r,
+                        "UpsampledTile info:"
+                        " dataflag=%d"
+                        " y_up=%d"
+                        " x_up=%d"
+                        " xoff=%d"
+                        " yoff=%d"
+                        " xsize=%d"
+                        " ysize=%d"
+                        " lat_northup=%f"
+                        " lat_southup=%f",
+                        nexttile.dataflag,
+                        nexttile.y_up,
+                        nexttile.x_up,
+                        nexttile.xoff,
+                        nexttile.yoff,
+                        nexttile.xsize,
+                        nexttile.ysize,
+                        nexttile.lat_northup,
+                        nexttile.lat_southup);
       upsampled_tiles->push_back(nexttile);
       nexttile.y_up = nexttile.y_up + 1;
       nexttile.x_up = nexttile.x_up;
@@ -722,6 +868,27 @@ int GetUpsampledTiles(const MotfParams &motf_params,
       nexttile.yoff = 0;
       nexttile.ysize = kMotfTileSize - tile_south_pixup;
       tnum = 2;
+            ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r,
+                        "UpsampledTile info:"
+                        " dataflag=%d"
+                        " y_up=%d"
+                        " x_up=%d"
+                        " xoff=%d"
+                        " yoff=%d"
+                        " xsize=%d"
+                        " ysize=%d"
+                        " lat_northup=%f"
+                        " lat_southup=%f",
+                        nexttile.dataflag,
+                        nexttile.y_up,
+                        nexttile.x_up,
+                        nexttile.xoff,
+                        nexttile.yoff,
+                        nexttile.xsize,
+                        nexttile.ysize,
+                        nexttile.lat_northup,
+                        nexttile.lat_southup);
+
       upsampled_tiles->push_back(nexttile);
     } else {
       nexttile.lat_southup = lat_south;
@@ -730,6 +897,28 @@ int GetUpsampledTiles(const MotfParams &motf_params,
       nexttile.yoff = kMotfTileSize - tile_north_pixup;
       nexttile.ysize = tile_north_pixup - tile_south_pixup;
       tnum = 1;
+
+      ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r,
+                        "UpsampledTile info:"
+                        " dataflag=%d"
+                        " y_up=%d"
+                        " x_up=%d"
+                        " xoff=%d"
+                        " yoff=%d"
+                        " xsize=%d"
+                        " ysize=%d"
+                        " lat_northup=%f"
+                        " lat_southup=%f",
+                        nexttile.dataflag,
+                        nexttile.y_up,
+                        nexttile.x_up,
+                        nexttile.xoff,
+                        nexttile.yoff,
+                        nexttile.xsize,
+                        nexttile.ysize,
+                        nexttile.lat_northup,
+                        nexttile.lat_southup);
+
       upsampled_tiles->push_back(nexttile);
     }
   }
@@ -801,16 +990,16 @@ int MotfGenerator::GenerateMotfTile(ServerdbReader* reader,
   while ((num_tiles == 0) && (levelup >= 0)) {
     levelup--;  // Reduce Sample up level until tiles are found.
     num_tiles = GetUpsampledTiles(motf_params, levelup,
-                                  &upsampled_tiles, reader, arg_map);
+                                  &upsampled_tiles, reader, arg_map, r);
   }
   if (num_tiles > 0) {
     // Check if all the PC tile data used to create the full MotF mosaic exists.
     // If there are non-existant tiles, remove them and also add a transparent
     // alpha band to the MotF mosaic. Abort if all tiles are missing.
     bool has_alpha = FALSE;
-    upsampled_tiles.erase(
-        std::remove_if(upsampled_tiles.begin(), upsampled_tiles.end(),
-                       IsNoDataTile), upsampled_tiles.end());
+    
+    std::remove_if(upsampled_tiles.begin(), upsampled_tiles.end(),
+                       IsNoDataTile);
     if (upsampled_tiles.size() == 0) return HTTP_NOT_FOUND;
     if (num_tiles != static_cast<int>(upsampled_tiles.size()))
       has_alpha = TRUE;
