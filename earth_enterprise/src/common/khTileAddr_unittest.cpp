@@ -48,6 +48,7 @@ TEST(TileAddrTest, FlatHighRes) {
   ASSERT_EQ(31, level);
 }
 
+// Make sure the level tops out at 31
 TEST(TileAddrTest, FlatTooHighRes) {
   double degrees = MetersToDegrees(0.00000001);
   unsigned int level = RasterProductTilespaceFlat.LevelFromDegPixelSize(degrees);
@@ -71,6 +72,7 @@ TEST(TileAddrTest, MercHighRes) {
   ASSERT_EQ(31, level);
 }
 
+// Make sure the level tops out at 31
 TEST(TileAddrTest, MercTooHighRes) {
   unsigned int level = RasterProductTilespaceMercator.LevelFromPixelSizeInMeters(0.00000001);
   ASSERT_EQ(31, level);
