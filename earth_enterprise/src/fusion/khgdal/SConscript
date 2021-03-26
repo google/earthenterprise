@@ -66,3 +66,7 @@ env.install('fusion_bin', [geinfo, gevirtualraster, gesplitkhvr,
                            getranslate, gereproject])
 env.install('tools_bin', [geupdatelut, khprepvirtrast])
 env.install('fusion_lib', [gegdal, gegdalutil])
+
+env.test('khGDALDataset_unittest',
+          'khGDALDataset_unittest.cpp',
+          LIBS=['gegdal', 'gecommon', 'gtest'])
