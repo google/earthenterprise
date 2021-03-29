@@ -264,6 +264,42 @@ TEST(GDALDatasetTest, NativeMerc) {
   EXPECT_FALSE(ds.normIsCropped());
 }
 
+// This tests a case that doesn't require reprojection or snapup. The image is
+// a small section of the i3SF15-meter.tif tutorial image.
+TEST(GDALDatasetTest, FlatMedRes) {
+  khGDALDataset ds("fusion/testdata/flatnoproj.tiff");
+  EXPECT_PRED3(geoExtentsEqual,
+      khExtents<double>(NSEWOrder, 37.873761032714846, 37.87290272583008, -122.52983138159179, -122.53068968847656),
+      khSize<std::uint32_t>(10, 10),
+      ds.geoExtents());
+  EXPECT_EQ(khSize<std::uint32_t>(10, 10), ds.rasterSize());
+  EXPECT_EQ(
+      khExtents<std::int64_t>(NSEWOrder, 2538413, 2538403, 669576, 669566),
+      ds.alignedPixelExtents());
+  EXPECT_EQ(
+      khExtents<std::int64_t>(NSEWOrder, 2538413, 2538403, 669576, 669566),
+      ds.croppedPixelExtents());
+  EXPECT_EQ(khSize<std::uint32_t>(10, 10), ds.alignedRasterSize());
+  EXPECT_EQ(khSize<std::uint32_t>(10, 10), ds.croppedRasterSize());
+  EXPECT_PRED3(geoExtentsEqual,
+      khExtents<double>(NSEWOrder, 37.873735427856445, 37.87287712097168, -122.52983093261719, -122.53068923950195),
+      khSize<std::uint32_t>(10, 10),
+      ds.alignedGeoExtents());
+  EXPECT_PRED3(geoExtentsEqual,
+      khExtents<double>(NSEWOrder, 37.873735427856445, 37.87287712097168, -122.52983093261719, -122.53068923950195),
+      khSize<std::uint32_t>(10, 10),
+      ds.croppedGeoExtents());
+  EXPECT_EQ(22, ds.normalizedTopLevel());
+  EXPECT_EQ(khSize<std::uint32_t>(10, 10), ds.normalizedRasterSize());
+  EXPECT_PRED3(geoExtentsEqual,
+      khExtents<double>(NSEWOrder, 37.873735427856445, 37.87287712097168, -122.52983093261719, -122.53068923950195),
+      khSize<std::uint32_t>(10, 10),
+      ds.normalizedGeoExtents());
+  EXPECT_FALSE(ds.needReproject());
+  EXPECT_FALSE(ds.needSnapUp());
+  EXPECT_FALSE(ds.normIsCropped());
+}
+
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
