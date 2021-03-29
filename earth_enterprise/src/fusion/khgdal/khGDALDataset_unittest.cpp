@@ -68,6 +68,16 @@ TEST(GDALDatasetTest, FlatVsMerc) {
   ASSERT_EQ(3, merc.normalizedTopLevel());
 }
 
+// Test a case using a mercator image that doesn't need reprojection as an
+// input. This also tests images that need snap-up.
+TEST(GDALDatasetTest, NativeMerc) {
+  khGDALDataset ds("fusion/testdata/medresmerc.tiff",
+      std::string(),
+      khExtents<double>(),
+      khTilespace::MERCATOR_PROJECTION);
+  ASSERT_EQ(14, ds.normalizedTopLevel());
+}
+
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
