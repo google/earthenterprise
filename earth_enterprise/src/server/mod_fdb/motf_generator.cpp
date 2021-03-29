@@ -82,10 +82,6 @@ struct UpsampledTile {
  */
 typedef std::vector<UpsampledTile> UpsampledTileVector;
 
-inline bool IsNoDataTile(const UpsampledTile& x) {
-  return (x.dataflag == 0);
-}
-
 const int kMotfTileSize = ImageryQuadnodeResolution;
 
 void CreateDstTransform(const MotfParams &motf_params,
@@ -392,36 +388,13 @@ void WarpData(const MotfParams &motf_params, int levelup,
   hsrctile1_ds = GetSrcTile(r, motf_params, levelup, &has_alpha,
                            upsampled_tiles[0], reader, arg_map);
 
-      // Print info for each upsampled_tile
-    ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r,
-                        "UpsampledTile info:"
-                        " dataflag=%d"
-                        " y_up=%d"
-                        " x_up=%d"
-                        " xoff=%d"
-                        " yoff=%d"
-                        " xsize=%d"
-                        " ysize=%d"
-                        " lat_northup=%f"
-                        " lat_southup=%f",
-                        upsampled_tiles[0].dataflag,
-                        upsampled_tiles[0].y_up,
-                        upsampled_tiles[0].x_up,
-                        upsampled_tiles[0].xoff,
-                        upsampled_tiles[0].yoff,
-                        upsampled_tiles[0].xsize,
-                        upsampled_tiles[0].ysize,
-                        upsampled_tiles[0].lat_northup,
-                        upsampled_tiles[0].lat_southup);
   if (hsrctile1_ds == NULL) {
-        ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r,
+        ap_log_rerror(APLOG_MARK, APLOG_INFO, 0, r,
                       "hsrctile1_ds WAS NULL in WarpData first call to GetSrcTile");
-        //ap_rflush(r);
         // return;
   } else {
       ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r,
                     "hsrctile1_ds WAS NOT NULL in first call to GetSrcTile.");
-
   }
 
   // Make destination data type same as source data's first band.
@@ -705,7 +678,6 @@ int GetUpsampledTiles(const MotfParams &motf_params,
                         nexttile.ysize,
                         nexttile.lat_northup,
                         nexttile.lat_southup);
-
       tnum++;
       upsampled_tiles->push_back(nexttile);
       for (int jj = 1; jj < ny - 1; ++jj) {
@@ -998,8 +970,39 @@ int MotfGenerator::GenerateMotfTile(ServerdbReader* reader,
     // alpha band to the MotF mosaic. Abort if all tiles are missing.
     bool has_alpha = FALSE;
     
-    std::remove_if(upsampled_tiles.begin(), upsampled_tiles.end(),
-                       IsNoDataTile);
+    upsampled_tiles.erase(std::remove_if(upsampled_tiles.begin(), upsampled_tiles.end(),
+                      [&](const UpsampledTile& upsampled_tile) {
+                        if (upsampled_tile.dataflag != 0) {
+                          // Check to make sure that the tile actually contains
+                          // data, because blank tiles may not
+                          ServerdbReader::ReadBuffer buf;
+                          bool is_cacheable;
+                          char txt[16];
+                          int z_up = motf_params.zmotf + levelup;
+
+                          snprintf(txt, sizeof(txt), "%d", upsampled_tile.y_up);
+                          (*arg_map)["row"] = txt;
+                          snprintf(txt, sizeof(txt), "%d", upsampled_tile.x_up);
+                          (*arg_map)["col"] = txt;
+                          snprintf(txt, sizeof(txt), "%d", z_up);
+                          (*arg_map)["level"] = txt;
+
+                          reader->GetData(*arg_map, buf, is_cacheable);
+
+                          ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r,
+                            "GenerateMotFile:tile data length is %d", static_cast<int>(buf.length()));
+
+                          if (buf.length() > 0) {
+                            ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r,
+                            "GenerateMotFile:return false");
+                            // false, in this case, means don't remove
+                            return false;
+                          }
+                        }
+                        return true;
+                      }), upsampled_tiles.end());
+    ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r,
+                            "GenerateMotFile:number of upsampled_tiles is %d", static_cast<int>(upsampled_tiles.size()));
     if (upsampled_tiles.size() == 0) return HTTP_NOT_FOUND;
     if (num_tiles != static_cast<int>(upsampled_tiles.size()))
       has_alpha = TRUE;
