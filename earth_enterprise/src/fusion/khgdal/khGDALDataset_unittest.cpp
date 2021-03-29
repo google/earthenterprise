@@ -16,28 +16,28 @@
 
 #include "khgdal/khGDALDataset.h"
 
-using namespace std;
-
+// The ostream functions make any failure messages more informative and easier
+// to read.
 template <typename T>
-ostream& operator<<(ostream& os, const khExtents<T>& e) {
+std::ostream& operator<<(std::ostream& os, const khExtents<T>& e) {
   os << e.north() << ", " << e.south() << ", " << e.east() << ", " << e.west();
   return os;
 }
 
 template <typename T>
-ostream& operator<<(ostream& os, const khSize<T>& s)
+std::ostream& operator<<(std::ostream& os, const khSize<T>& s)
 {
-    os << s.width << ", " << s.height;
-    return os;
+  os << s.width << ", " << s.height;
+  return os;
 }
 
-ostream& operator<<(ostream& os, const khGeoExtents& ge)
+std::ostream& operator<<(std::ostream& os, const khGeoExtents& ge)
 {
-    khSize<std::uint32_t> raster_size(
-        (ge.extents().width() / ge.absPixelWidth() + 0.5),
-        (ge.extents().height() / ge.absPixelHeight() + 0.5));
-    os << ge.extents() << endl << raster_size;
-    return os;
+  khSize<std::uint32_t> raster_size(
+      (ge.extents().width() / ge.absPixelWidth() + 0.5),
+      (ge.extents().height() / ge.absPixelHeight() + 0.5));
+  os << ge.extents() << std::endl << raster_size;
+  return os;
 }
 
 bool geoExtentsEqual(const khExtents<double> & extents, const khSize<std::uint32_t> & size, const khGeoExtents & ge) {
