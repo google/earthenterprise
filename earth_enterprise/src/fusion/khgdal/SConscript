@@ -69,4 +69,4 @@ env.install('fusion_lib', [gegdal, gegdalutil])
 
 env.test('khGDALDataset_unittest',
           'khGDALDataset_unittest.cpp',
-          LIBS=['gegdal', 'gecommon', 'gtest'])
+          LIBS=['gegdal', 'gdal', 'gecommon', 'gtest'])

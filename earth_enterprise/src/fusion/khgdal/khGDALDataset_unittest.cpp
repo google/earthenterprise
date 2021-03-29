@@ -16,20 +16,118 @@
 
 #include "khgdal/khGDALDataset.h"
 
+using namespace std;
+
+template <typename T>
+ostream& operator<<(ostream& os, const khExtents<T>& e) {
+  os << e.north() << ", " << e.south() << ", " << e.east() << ", " << e.west();
+  return os;
+}
+
+template <typename T>
+ostream& operator<<(ostream& os, const khSize<T>& s)
+{
+    os << s.width << ", " << s.height;
+    return os;
+}
+
+ostream& operator<<(ostream& os, const khGeoExtents& ge)
+{
+    khSize<std::uint32_t> raster_size(
+        (ge.extents().width() / ge.absPixelWidth() + 0.5),
+        (ge.extents().height() / ge.absPixelHeight() + 0.5));
+    os << ge.extents() << endl << raster_size;
+    return os;
+}
+
+bool geoExtentsEqual(const khExtents<double> & extents, const khSize<std::uint32_t> & size, const khGeoExtents & ge) {
+  bool status = true;
+  khGeoExtents expected(extents, size);
+  if (expected.extents() != ge.extents()) {
+    status = false;
+  }
+  const double epsilon = 0.000001;
+  for (size_t i = 0; i < 6; ++i) {
+    if (fabs(expected.geoTransform()[i] - ge.geoTransform()[i]) > epsilon) {
+      status = false;
+    }
+  }
+  return status;
+}
+
 TEST(GDALDatasetTest, FlatLowRes) {
   khGDALDataset ds("fusion/testdata/lowres.tiff");
-  ASSERT_EQ(6, ds.normalizedTopLevel());
+  EXPECT_EQ(6, ds.normalizedTopLevel());
+  EXPECT_FALSE(ds.IsMercator());
 }
 
 TEST(GDALDatasetTest, FlatHighRes) {
   khGDALDataset ds("fusion/testdata/highres.tiff");
-  ASSERT_EQ(31, ds.normalizedTopLevel());
+  EXPECT_PRED3(geoExtentsEqual,
+      khExtents<double>(NSEWOrder, 0, -0.187, 166021.63009607795, 166021.44309607794),
+      khSize<std::uint32_t>(10, 10),
+      ds.geoExtents());
+  EXPECT_EQ(khSize<std::uint32_t>(10, 10), ds.rasterSize());
+  EXPECT_EQ(
+      khExtents<std::int64_t>(NSEWOrder, 1073741824, 1073741814, 1073741834, 1073741824),
+      ds.alignedPixelExtents());
+  EXPECT_EQ(
+      khExtents<std::int64_t>(NSEWOrder, 1073741824, 1073741814, 1073741834, 1073741824),
+      ds.croppedPixelExtents());
+  EXPECT_EQ(khSize<std::uint32_t>(10, 10), ds.alignedRasterSize());
+  EXPECT_EQ(khSize<std::uint32_t>(10, 10), ds.croppedRasterSize());
+  EXPECT_PRED3(geoExtentsEqual,
+      khExtents<double>(NSEWOrder, 0, -1.6763806343078613e-06, 1.6763806343078613e-06, 0),
+      khSize<std::uint32_t>(10, 10),
+      ds.alignedGeoExtents());
+  EXPECT_PRED3(geoExtentsEqual,
+      khExtents<double>(NSEWOrder, 0, -1.6763806343078613e-06, 1.6763806343078613e-06, 0),
+      khSize<std::uint32_t>(10, 10),
+      ds.croppedGeoExtents());
+  EXPECT_EQ(31, ds.normalizedTopLevel());
+  EXPECT_EQ(khSize<std::uint32_t>(10, 10), ds.normalizedRasterSize());
+  EXPECT_PRED3(geoExtentsEqual,
+      khExtents<double>(NSEWOrder, 0, -1.6763806343078613e-06, 1.6763806343078613e-06, 0),
+      khSize<std::uint32_t>(10, 10),
+      ds.normalizedGeoExtents());
+  EXPECT_TRUE(ds.needReproject());
+  EXPECT_FALSE(ds.needSnapUp());
+  EXPECT_FALSE(ds.normIsCropped());
 }
 
 // This verifies that the resolution tops out at the maximum zoom level
 TEST(GDALDatasetTest, FlatTooHighRes) {
   khGDALDataset ds("fusion/testdata/toohighres.tiff");
-  ASSERT_EQ(31, ds.normalizedTopLevel());
+  EXPECT_PRED3(geoExtentsEqual,
+      khExtents<double>(NSEWOrder, 0, -0.185, 166021.62809607794, 166021.44309607794),
+      khSize<std::uint32_t>(10, 10),
+      ds.geoExtents());
+  EXPECT_EQ(khSize<std::uint32_t>(10, 10), ds.rasterSize());
+  EXPECT_EQ(
+      khExtents<std::int64_t>(NSEWOrder, 1073741824, 1073741814, 1073741834, 1073741824),
+      ds.alignedPixelExtents());
+  EXPECT_EQ(
+      khExtents<std::int64_t>(NSEWOrder, 1073741824, 1073741814, 1073741834, 1073741824),
+      ds.croppedPixelExtents());
+  EXPECT_EQ(khSize<std::uint32_t>(10, 10), ds.alignedRasterSize());
+  EXPECT_EQ(khSize<std::uint32_t>(10, 10), ds.croppedRasterSize());
+  EXPECT_PRED3(geoExtentsEqual,
+      khExtents<double>(NSEWOrder, 0, -1.6763806343078613e-06, 1.6763806343078613e-06, 0),
+      khSize<std::uint32_t>(10, 10),
+      ds.alignedGeoExtents());
+  EXPECT_PRED3(geoExtentsEqual,
+      khExtents<double>(NSEWOrder, 0, -1.6763806343078613e-06, 1.6763806343078613e-06, 0),
+      khSize<std::uint32_t>(10, 10),
+      ds.croppedGeoExtents());
+  EXPECT_EQ(31, ds.normalizedTopLevel());
+  EXPECT_EQ(khSize<std::uint32_t>(10, 10), ds.normalizedRasterSize());
+  EXPECT_PRED3(geoExtentsEqual,
+      khExtents<double>(NSEWOrder, 0, -1.6763806343078613e-06, 1.6763806343078613e-06, 0),
+      khSize<std::uint32_t>(10, 10),
+      ds.normalizedGeoExtents());
+  EXPECT_TRUE(ds.needReproject());
+  EXPECT_FALSE(ds.needSnapUp());
+  EXPECT_FALSE(ds.normIsCropped());
 }
 
 TEST(GDALDatasetTest, MercLowRes) {
@@ -37,7 +135,8 @@ TEST(GDALDatasetTest, MercLowRes) {
       std::string(),
       khExtents<double>(),
       khTilespace::MERCATOR_PROJECTION);
-  ASSERT_EQ(4, ds.normalizedTopLevel());
+  EXPECT_EQ(4, ds.normalizedTopLevel());
+  EXPECT_TRUE(ds.IsMercator());
 }
 
 TEST(GDALDatasetTest, MercHighRes) {
@@ -45,7 +144,36 @@ TEST(GDALDatasetTest, MercHighRes) {
       std::string(),
       khExtents<double>(),
       khTilespace::MERCATOR_PROJECTION);
-  ASSERT_EQ(31, ds.normalizedTopLevel());
+  EXPECT_PRED3(geoExtentsEqual,
+      khExtents<double>(NSEWOrder, 0, -0.187, 166021.63009607795, 166021.44309607794),
+      khSize<std::uint32_t>(10, 10),
+      ds.geoExtents());
+  EXPECT_EQ(khSize<std::uint32_t>(10, 10), ds.rasterSize());
+  EXPECT_EQ(
+      khExtents<std::int64_t>(NSEWOrder, 1073741824, 1073741814, 1073741834, 1073741824),
+      ds.alignedPixelExtents());
+  EXPECT_EQ(
+      khExtents<std::int64_t>(NSEWOrder, 1073741824, 1073741814, 1073741834, 1073741824),
+      ds.croppedPixelExtents());
+  EXPECT_EQ(khSize<std::uint32_t>(10, 10), ds.alignedRasterSize());
+  EXPECT_EQ(khSize<std::uint32_t>(10, 10), ds.croppedRasterSize());
+  EXPECT_PRED3(geoExtentsEqual,
+      khExtents<double>(NSEWOrder, 0, -0.18661383911967278, 0.18661383911967278, 0),
+      khSize<std::uint32_t>(10, 10),
+      ds.alignedGeoExtents());
+  EXPECT_PRED3(geoExtentsEqual,
+      khExtents<double>(NSEWOrder, 0, -0.18661383911967278, 0.18661383911967278, 0),
+      khSize<std::uint32_t>(10, 10),
+      ds.croppedGeoExtents());
+  EXPECT_EQ(31, ds.normalizedTopLevel());
+  EXPECT_EQ(khSize<std::uint32_t>(10, 10), ds.normalizedRasterSize());
+  EXPECT_PRED3(geoExtentsEqual,
+      khExtents<double>(NSEWOrder, 0, -0.18661383911967278, 0.18661383911967278, 0),
+      khSize<std::uint32_t>(10, 10),
+      ds.normalizedGeoExtents());
+  EXPECT_TRUE(ds.needReproject());
+  EXPECT_FALSE(ds.needSnapUp());
+  EXPECT_FALSE(ds.normIsCropped());
 }
 
 // This verifies that the resolution tops out at the maximum zoom level
@@ -54,7 +182,36 @@ TEST(GDALDatasetTest, MercTooHighRes) {
       std::string(),
       khExtents<double>(),
       khTilespace::MERCATOR_PROJECTION);
-  ASSERT_EQ(31, ds.normalizedTopLevel());
+  EXPECT_PRED3(geoExtentsEqual,
+      khExtents<double>(NSEWOrder, 0, -0.185, 166021.62809607794, 166021.44309607794),
+      khSize<std::uint32_t>(10, 10),
+      ds.geoExtents());
+  EXPECT_EQ(khSize<std::uint32_t>(10, 10), ds.rasterSize());
+  EXPECT_EQ(
+      khExtents<std::int64_t>(NSEWOrder, 1073741824, 1073741814, 1073741834, 1073741824),
+      ds.alignedPixelExtents());
+  EXPECT_EQ(
+      khExtents<std::int64_t>(NSEWOrder, 1073741824, 1073741814, 1073741834, 1073741824),
+      ds.croppedPixelExtents());
+  EXPECT_EQ(khSize<std::uint32_t>(10, 10), ds.alignedRasterSize());
+  EXPECT_EQ(khSize<std::uint32_t>(10, 10), ds.croppedRasterSize());
+  EXPECT_PRED3(geoExtentsEqual,
+      khExtents<double>(NSEWOrder, 0, -0.18661383911967278, 0.18661383911967278, 0),
+      khSize<std::uint32_t>(10, 10),
+      ds.alignedGeoExtents());
+  EXPECT_PRED3(geoExtentsEqual,
+      khExtents<double>(NSEWOrder, 0, -0.18661383911967278, 0.18661383911967278, 0),
+      khSize<std::uint32_t>(10, 10),
+      ds.croppedGeoExtents());
+  EXPECT_EQ(31, ds.normalizedTopLevel());
+  EXPECT_EQ(khSize<std::uint32_t>(10, 10), ds.normalizedRasterSize());
+  EXPECT_PRED3(geoExtentsEqual,
+      khExtents<double>(NSEWOrder, 0, -0.18661383911967278, 0.18661383911967278, 0),
+      khSize<std::uint32_t>(10, 10),
+      ds.normalizedGeoExtents());
+  EXPECT_TRUE(ds.needReproject());
+  EXPECT_FALSE(ds.needSnapUp());
+  EXPECT_FALSE(ds.normIsCropped());
 }
 
 // This tests a case where the level is different between flat and mercator
@@ -64,8 +221,8 @@ TEST(GDALDatasetTest, FlatVsMerc) {
       std::string(),
       khExtents<double>(),
       khTilespace::MERCATOR_PROJECTION);
-  ASSERT_EQ(6, flat.normalizedTopLevel());
-  ASSERT_EQ(3, merc.normalizedTopLevel());
+  EXPECT_EQ(6, flat.normalizedTopLevel());
+  EXPECT_EQ(3, merc.normalizedTopLevel());
 }
 
 // Test a case using a mercator image that doesn't need reprojection as an
@@ -75,7 +232,36 @@ TEST(GDALDatasetTest, NativeMerc) {
       std::string(),
       khExtents<double>(),
       khTilespace::MERCATOR_PROJECTION);
-  ASSERT_EQ(14, ds.normalizedTopLevel());
+  EXPECT_PRED3(geoExtentsEqual,
+      khExtents<double>(NSEWOrder, 0, -40000, 206021.44309607794, 166021.44309607794),
+      khSize<std::uint32_t>(10, 10),
+      ds.geoExtents());
+  EXPECT_EQ(khSize<std::uint32_t>(10, 10), ds.rasterSize());
+  EXPECT_EQ(
+      khExtents<std::int64_t>(NSEWOrder, 8192, 8176, 8276, 8260),
+      ds.alignedPixelExtents());
+  EXPECT_EQ(
+      khExtents<std::int64_t>(NSEWOrder, 8192, 8176, 8276, 8260),
+      ds.croppedPixelExtents());
+  EXPECT_EQ(khSize<std::uint32_t>(16, 16), ds.alignedRasterSize());
+  EXPECT_EQ(khSize<std::uint32_t>(16, 16), ds.croppedRasterSize());
+  EXPECT_PRED3(geoExtentsEqual,
+      khExtents<double>(NSEWOrder, 0, -39135.758482009172, 205462.73203055188, 166326.97354854271),
+      khSize<std::uint32_t>(16, 16),
+      ds.alignedGeoExtents());
+  EXPECT_PRED3(geoExtentsEqual,
+      khExtents<double>(NSEWOrder, 0, -39135.758482009172, 205462.73203055188, 166326.97354854271),
+      khSize<std::uint32_t>(16, 16),
+      ds.croppedGeoExtents());
+  EXPECT_EQ(14, ds.normalizedTopLevel());
+  EXPECT_EQ(khSize<std::uint32_t>(16, 16), ds.normalizedRasterSize());
+  EXPECT_PRED3(geoExtentsEqual,
+      khExtents<double>(NSEWOrder, 0, -39135.758482009172, 205462.73203055188, 166326.97354854271),
+      khSize<std::uint32_t>(16, 16),
+      ds.normalizedGeoExtents());
+  EXPECT_TRUE(ds.needReproject());
+  EXPECT_FALSE(ds.needSnapUp());
+  EXPECT_FALSE(ds.normIsCropped());
 }
 
 int main(int argc, char **argv) {
