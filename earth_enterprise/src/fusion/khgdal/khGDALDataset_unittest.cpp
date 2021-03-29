@@ -21,11 +21,6 @@ TEST(GDALDatasetTest, FlatLowRes) {
   ASSERT_EQ(6, ds.normalizedTopLevel());
 }
 
-TEST(GDALDatasetTest, FlatMedRes) {
-  khGDALDataset ds("fusion/testdata/medres.tiff");
-  ASSERT_EQ(14, ds.normalizedTopLevel());
-}
-
 TEST(GDALDatasetTest, FlatHighRes) {
   khGDALDataset ds("fusion/testdata/highres.tiff");
   ASSERT_EQ(31, ds.normalizedTopLevel());
@@ -43,14 +38,6 @@ TEST(GDALDatasetTest, MercLowRes) {
       khExtents<double>(),
       khTilespace::MERCATOR_PROJECTION);
   ASSERT_EQ(4, ds.normalizedTopLevel());
-}
-
-TEST(GDALDatasetTest, MercMedRes) {
-  khGDALDataset ds("fusion/testdata/medres.tiff",
-      std::string(),
-      khExtents<double>(),
-      khTilespace::MERCATOR_PROJECTION);
-  ASSERT_EQ(14, ds.normalizedTopLevel());
 }
 
 TEST(GDALDatasetTest, MercHighRes) {
