@@ -25,14 +25,12 @@ std::ostream& operator<<(std::ostream& os, const khExtents<T>& e) {
 }
 
 template <typename T>
-std::ostream& operator<<(std::ostream& os, const khSize<T>& s)
-{
+std::ostream& operator<<(std::ostream& os, const khSize<T>& s) {
   os << s.width << ", " << s.height;
   return os;
 }
 
-std::ostream& operator<<(std::ostream& os, const khGeoExtents& ge)
-{
+std::ostream& operator<<(std::ostream& os, const khGeoExtents& ge) {
   khSize<std::uint32_t> raster_size(
       (ge.extents().width() / ge.absPixelWidth() + 0.5),
       (ge.extents().height() / ge.absPixelHeight() + 0.5));
