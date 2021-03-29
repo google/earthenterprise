@@ -61,6 +61,11 @@ TEST(GDALDatasetTest, FlatLowRes) {
   EXPECT_FALSE(ds.IsMercator());
 }
 
+TEST(GDALDatasetTest, FlatMedRes) {
+  khGDALDataset ds("fusion/testdata/medres.tiff");
+  ASSERT_EQ(14, ds.normalizedTopLevel());
+}
+
 TEST(GDALDatasetTest, FlatHighRes) {
   khGDALDataset ds("fusion/testdata/highres.tiff");
   EXPECT_PRED3(geoExtentsEqual,
@@ -137,6 +142,14 @@ TEST(GDALDatasetTest, MercLowRes) {
       khTilespace::MERCATOR_PROJECTION);
   EXPECT_EQ(4, ds.normalizedTopLevel());
   EXPECT_TRUE(ds.IsMercator());
+}
+
+TEST(GDALDatasetTest, MercMedRes) {
+  khGDALDataset ds("fusion/testdata/medres.tiff",
+      std::string(),
+      khExtents<double>(),
+      khTilespace::MERCATOR_PROJECTION);
+  ASSERT_EQ(14, ds.normalizedTopLevel());
 }
 
 TEST(GDALDatasetTest, MercHighRes) {
