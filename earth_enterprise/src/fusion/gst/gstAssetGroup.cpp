@@ -37,7 +37,7 @@ const char* shortAssetName(const char* n) {
       break;
     }
   }
-  return sname.toUtf8().constData();
+  return sname.toStdString().c_str();
 }
 
 bool isAssetPath(const QString& str) {

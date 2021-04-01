@@ -1003,6 +1003,8 @@ void AssetManager::iconAssetMenu(QIconViewItem* item, const QPoint& mouse_pos) {
   ShowAssetMenu(icon->getAssetHandle(), mouse_pos);
 }
 
+#include <typeinfo>
+
 void AssetManager::ShowAssetMenu(const gstAssetHandle& asset_handle,
                                  const QPoint& mouse_pos) {
   enum { BUILD_ASSET, CANCEL_ASSET, MODIFY_ASSET,
@@ -1016,7 +1018,12 @@ void AssetManager::ShowAssetMenu(const gstAssetHandle& asset_handle,
   // first item in menu should be the asset name since the table
   // might get redrawn after the menu has popped-up
   AssetDisplayHelper a(current_asset->type, current_asset->subtype);
-  menu.insertItem(a.GetPixmap(), shortAssetName(asset_handle->getName().toUtf8().constData()));
+  //menu.insertItem(a.GetPixmap(), shortAssetName(asset_handle->getName().toUtf8().constData()));
+  //auto prettyName = AssetPrettyName().toStdString();
+  std::string temp = "US_Population";
+  std::string shortName = shortAssetName(asset_handle->getName().toStdString().c_str());
+  notify(NFY_WARN, "shortName %s", shortName.c_str());
+  menu.insertItem(a.GetPixmap(), shortName.c_str());
 
   menu.insertSeparator();
   menu.insertSeparator();
