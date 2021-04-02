@@ -18,26 +18,49 @@
 #include <Qt/qregexp.h>
 #include <gstAssetManager.h>
 #include <khConstants.h>
-
+#include <vector>
+#include <exception>
 #include "gstAssetGroup.h"
 
-const char* shortAssetName(const char* n) {
-  QString sname(n);
-  QStringList suffix;
-  suffix << kVectorAssetSuffix.c_str() << kImageryAssetSuffix.c_str()
-         << kMercatorImageryAssetSuffix.c_str() << kTerrainAssetSuffix.c_str()
-         << kVectorProjectSuffix.c_str() << kImageryProjectSuffix.c_str()
-         << kMercatorImageryProjectSuffix.c_str() << kTerrainProjectSuffix.c_str()
-         << kDatabaseSuffix.c_str() << kMapLayerSuffix.c_str() << kMapProjectSuffix.c_str()
-         << kMapDatabaseSuffix.c_str() << kMercatorMapDatabaseSuffix.c_str()
-         << kVectorLayerSuffix.c_str();
-  for (QStringList::Iterator it = suffix.begin(); it != suffix.end(); ++it) {
-    if (sname.endsWith(*it)) {
-      sname.truncate(sname.length() - it->length());
-      break;
+class SuffixNotFound : public std::exception
+{
+private:
+    std::string aname;
+
+public:
+    SuffixNotFound(const std::string& _aname) : aname(_aname) {}
+
+    const char* what() const noexcept
+    {
+        std::string ret { "No suffix found for " };
+        ret += aname;
+        return ret.c_str();
     }
+};
+
+const char* shortAssetName(const char* n) {
+
+  static const std::vector<std::string> suffixes =
+  {
+      kVectorAssetSuffix, kImageryAssetSuffix, kMercatorImageryAssetSuffix,
+      kTerrainAssetSuffix, kVectorProjectSuffix, kImageryProjectSuffix,
+      kMercatorImageryProjectSuffix, kTerrainProjectSuffix,
+      kDatabaseSuffix, kMapLayerSuffix, kMapProjectSuffix,
+      kMapDatabaseSuffix, kMercatorMapDatabaseSuffix, kVectorLayerSuffix
+  };
+
+  std::string saname { n };
+
+  for (const auto& elem : suffixes)
+  {
+      auto pos = saname.rfind(elem);
+      if (pos != std::string::npos)
+      {
+          return saname.substr(0,pos).c_str();
+      }
   }
-  return sname.toStdString().c_str();
+
+  throw SuffixNotFound(saname);
 }
 
 bool isAssetPath(const QString& str) {
