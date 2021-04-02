@@ -386,10 +386,10 @@ class khTilespaceFlat : public khTilespace {
   }
 
   // Return the level where this pixel size belongs. It will always "snapup"
-  // the level.
+  // the level except that it will stop at the maximum Fusion level.
   inline unsigned int LevelFromDegPixelSize(double degPixelSize) const {
     unsigned int level = 0;
-    for (; level < NumFusionLevels; ++level) {
+    for (; level < MaxFusionLevel; ++level) {
       if (degPixelSize >= DegPixelSize(level))
         break;
     }
@@ -431,10 +431,10 @@ class khTilespaceMercator : public khTilespace {
   }
 
   // Return the level where this pixel size belongs. It will always "snapup"
-  // the level.
+  // the level except that it will stop at the maximum Fusion level.
   inline unsigned int LevelFromPixelSizeInMeters(double pixelSizeInMeters) const {
     unsigned int level = 0;
-    for (; level < NumFusionLevels; ++level) {
+    for (; level < MaxFusionLevel; ++level) {
       if (pixelSizeInMeters >= AveragePixelSizeInMercatorMeters(level))
         break;
     }

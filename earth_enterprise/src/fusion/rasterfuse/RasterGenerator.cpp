@@ -131,28 +131,6 @@ ImageInfo::ImageInfo(const std::string &infile,
   // this function would add the filename again.
   srcDS.EnsureKeyholeNormalizedInfo();
 
-  if (srcDS.normalizedTopLevel() > MaxFusionLevel) {
-    double estimatedPixelWidth;
-    double estimatedPixelHeight;
-
-    // TODO: take into account projection type when calculating
-    // estimated pixel width/height.
-    khGDALDatasetImpl::GetReprojectedPixelSizeInDegrees(
-        srcDS.get(), &estimatedPixelWidth, &estimatedPixelHeight);
-    estimatedPixelWidth  = khGeomUtils::DegreesToMeters(estimatedPixelWidth);
-    estimatedPixelHeight = khGeomUtils::DegreesToMeters(estimatedPixelHeight);
-
-    char buff[1024];
-    snprintf(buff, sizeof(buff),
-             "input pixel size with reprojection: (xy) %.4f m, %.4f m.\n"
-             "This tool supports pixel size upto: (xy) %.4f m, %.4f m.\n"
-             "You may down-sample the imagery and retry.\n",
-             estimatedPixelWidth, estimatedPixelHeight,
-             kWidthAtMaxResolution, kWidthAtMaxResolution);
-    // TODO: Add a auto-down-sampling option for handling this case.
-    throw khException(kh::tr(buff));
-  }
-
   // catch any exceptions, prefix the string w/ the filename and rethrow
   try {
     // get the raster bands for use in validation
