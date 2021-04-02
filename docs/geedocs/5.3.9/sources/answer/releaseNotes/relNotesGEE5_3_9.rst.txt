@@ -1,0 +1,43 @@
+
+Release notes: Open GEE 5.3.9
+
+-[ New Features ]-
+
+New feature here
+
+. New feature description goes here.
+
+A paragraph or two to describe...
+
+-[ Supported Platforms ]-
+
+The Open GEE 5.3.9 release is supported on 64-bit versions of the
+following operating systems:
+
+Red Hat Enterprise Linux version 7.x, including the most recent
+security patches
+
+CentOS 7.x
+
+Ubuntu 16.04 LTS
+
+Google Earth Enterprise 5.3.9 is compatible with Google Earth
+Enterprise Client (EC) version 7.1.5 and above.
+
+To upgrade from Open GEE 5.2.0, do NOT uninstall it. We recommend that
+you upgrade Open GEE 5.2.0 by simply installing Open GEE 5.3.9.
+Installing Open GEE 5.3.9 on top of Open GEE 5.2.0 will ensure that
+your PostgreSQL databases are backed up and upgraded correctly to the
+new PostgreSQL version used by Open GEE 5.3.9.
+
+-[ Resolved Issues ]-
+
+      Number  Description  Resolution  9999  text of summary  resolved
+
+-[ Known Issues ]-
+
+See the
+
+GitHub issues page
+
+ for a list of known issues.

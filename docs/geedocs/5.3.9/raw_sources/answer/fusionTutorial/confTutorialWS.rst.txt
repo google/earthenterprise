@@ -1,0 +1,278 @@
+|Google logo|
+
+============================
+Configure Tutorial Workspace
+============================
+
+.. container::
+
+   .. container:: content
+
+      To accommodate users who are working through the tutorial at the
+      same time as other users (or even those same users) are working on
+      production data, Google recommends that you configure a tutorial
+      workspace on each workstation where you install the tutorial
+      data. That way, you can keep the tutorial source volume and asset
+      root separate from your production source volume(s) and asset
+      root.
+
+      This article describes how to configure the tutorial workspace
+      and how to switch back and forth between the tutorial asset root
+      and the production asset root. You will also learn how to clean up the
+      tutorial files when they are no longer needed.
+
+      -  :ref:`Download the Tutorial Source Files <Download_Tutorial_Source>`
+      -  :ref:`Configure the tutorial asset root and source volume <Configuring_Tutorial_Asset_Root>`
+      -  :ref:`Select the tutorial asset root <Select_Tutorial_Asset_Root>`
+      -  :ref:`Clean up the tutorial workspace <Clean_Up_Tutorial_Workspace>`
+
+      .. _Download_Tutorial_Source:
+      .. rubric:: Download the Tutorial Source Files
+
+      The tutorial source files are available in the following archives.
+      It can be downloaded all together, or for convenience it can be
+      downloaded in two parts.
+
+      -  `FusionTutorial-Full.tar.gz <https://opengee-dev.s3.amazonaws.com/FusionTutorial-Full.tar.gz>`__
+         - Contains all the source data needed to complete the tutorial
+         - 600 MB
+      -  `FusionTutorial-NoMosaicImagery.tar.gz <https://opengee-dev.s3.amazonaws.com/FusionTutorial-NoMosaicImagery.tar.gz>`__
+         - Contains all the source data needed to complete the tutorial,
+         except for the Mosaic section - 282 MB
+
+      Once the source files are downloaded, as root, create the
+      ``/opt/google/share/tutorials/fusion`` directory if it doesn't
+      exist. Extract each archive downloaded to that location. Be sure
+      all the files have read permission for all users and directories
+      have read and execute permission for all users.
+
+      .. note::
+
+         Due to a bug in the current Google Earth Enterprise Open
+         Source version, vector source files also need the write
+         permission.
+
+      .. _Configuring_Tutorial_Asset_Root:
+      .. rubric:: Configuring the tutorial asset root and source volume
+
+      When you install Google Earth Enterprise, you configure a source
+      volume and asset root for your production data. If you accepted
+      the default values, they are ``/gevol/src`` and ``/gevol/assets``,
+      respectively.
+
+      The installation script installs the tutorial files in
+      ``/opt/google/share/tutorials/fusion``, so you must add that path
+      as the source volume for the tutorial. In addition, Google
+      recommends that you add a tutorial asset root for users to store
+      the data they create with Google Earth Enterprise Fusion while
+      working through the tutorial.
+
+      The following procedure describes how to configure an asset root
+      and the tutorial source volume for each tutorial user. You must
+      configure them for *each* user on *each* workstation where you
+      install the Google Earth Enterprise Fusion tutorial files.
+
+      .. rubric:: To configure a tutorial asset root and source volume:
+         :name: to-configure-a-tutorial-asset-root-and-source-volume
+
+      #. On the command line, log in as root.
+      #. Stop the system manager by entering:
+
+         ``/etc/init.d/gefusion stop``
+
+      #. Enter:
+
+         ``geconfigureassetroot --new --assetroot --chown /username/assets``
+
+         where *username* is the name of the user.
+
+         The *username* does not have to be the user’s official account
+         name. It can be anything that distinguishes that user from
+         other users on that particular workstation, such as
+         ``edaniels`` or just ``Emily``.
+
+         .. note::
+
+            Google recommends that you place the tutorial asset
+            root on the same partition as the publish root, so the
+            publisher uses hard links instead of making copies of the
+            tutorial databases.
+
+            If you place the tutorial asset root on the root partition,
+            ensure that there is enough disk space for the data created by
+            each user working through the tutorial. If a user completes all
+            lessons in the tutorial, allow 1.5 GB of disk space.
+
+         The tool asks if you want to create a new source volume.
+
+      #. Enter **Y**, and press **Enter**.
+
+         You are prompted to enter a directory for the source volume.
+
+      #. Enter ``/opt/google/share/tutorials/fusion``, and press
+         **Enter**.
+
+         The tool asks if you want to add more volumes.
+
+      #. If you want to create tutorial workspaces for more users,
+         enter **Y**, press **Enter**, and repeat steps **3** through
+         **5**. If not, skip this step. Otherwise, enter **N**, and
+         press **Enter**.
+
+         The tool displays the message “Configured
+         ``/``\ *username*\ ``/assets``\ ” and returns you to the
+         command line prompt.
+
+      #. Log out as root.
+      #. Start the system manager by entering:
+
+         ``/etc/init.d/gefusion start``
+
+         .. note::
+
+            The new source volume and asset root are
+            automatically selected for you. You do not have to run the
+            ``geselectassetroot`` command. (See the next section, :ref:`Select
+            the Tutorial Asset Root <Select_Tutorial_Asset_Root>`, for
+            more information about selecting different asset roots.)
+
+      .. _Select_Tutorial_Asset_Root:
+      .. rubric:: Select the tutorial asset root
+
+      There are two occasions when users must select a different asset
+      root:
+
+      -  When multiple users share a single workstation, each user must
+         select his or her own tutorial asset root.
+      -  When a user switches from the tutorial data to real production
+         data, he or she must select the appropriate asset root.
+
+      This section explains how to select a different asset root.
+
+      **Caution:** Note that even though your source volumes and asset
+      roots are separate for each user or for the tutorial and
+      production data, there is only one publish root on each virtual
+      server for Earth databases and one for Map databases.
+
+      When two users are sharing a single workstation, they are both
+      publishing to the same publish root. When one user publishes a
+      database on that workstation, it overwrites any database published
+      previously by another user on that same workstation. Likewise, if
+      a user is switching back and forth between tutorial and production
+      data on the same workstation, it is possible to overwrite a production
+      database with a tutorial database and vice versa. Of course, the
+      user can simply republish the desired database to make it available
+      to Google Earth EC again.
+
+      .. rubric:: To select the tutorial asset root:
+         :name: to-select-the-tutorial-asset-root
+
+      #. On the command line, log in as root.
+      #. Stop the system manager by entering:
+
+         ``/etc/init.d/gefusion stop``
+
+      #. Enter:
+
+         ``geselectassetroot --assetroot /username/assets``
+
+         where *username* is the name you used in step **3** of
+         :ref:`Configuring the tutorial asset root and source volume <Configuring_Tutorial_Asset_Root>`.
+
+      #. Log out as root.
+      #. Start the system manager by entering:
+
+         ``/etc/init.d/gefusion start``
+
+      .. _Clean_Up_Tutorial_Workspace:
+      .. rubric:: Clean up the tutorial workspace
+
+      When a user completes the tutorial or no longer needs the tutorial
+      data, you can clean up that tutorial workspace, if desired, by
+      removing the tutorial source files, asset root, and published
+      databases. This section describes the best way to perform that
+      cleanup.
+
+      .. note::
+
+         Google recommends that you keep the tutorial files intact, since
+         they use very little space and can come in handy for users to practice,
+         even after they have quite a bit of experience with Google Earth
+         Enterprise Fusion.
+
+      .. rubric:: To remove the tutorial source files, asset root, and
+         databases:
+         :name: to-remove-the-tutorial-source-files-asset-root-and-databases
+
+      #. At the command line prompt, log in as root.
+      #. Stop the system manager by entering:
+
+         ``/etc/init.d/gefusion stop``
+
+      #. Select the production asset root by entering:
+
+         ``geselectassetroot --assetroot /gevol/assets``
+
+         Substitute the appropriate asset root path, if necessary.
+
+      #. Stop the Google Earth Enterprise Server:
+
+         ``/etc/init.d/geserver stop``
+
+      #. Delete the tutorial files:
+
+         ``rm -Rf /opt/google/share/tutorials/fusion/``
+
+      #. Delete the user’s tutorial asset root by entering:
+
+         ``rm -Rf /username/assets``
+
+         where *username* is the name of the user you specified when you
+         configured the tutorial workspace.
+
+         .. warning::
+
+            Make sure you are removing the tutorial asset
+            root, not the production root. If you delete the production
+            root, there is no way to recover it (other than from backups,
+            if available).
+
+      #. Start the Google Earth Enterprise Fusion system manager and
+         Google Earth Enterprise Server:
+
+         ``/etc/init.d/gefusion start``
+         ``/etc/init.d/geserver start``
+
+         The order in which you start them does not matter.
+
+      #. List the databases on the current server by entering:
+
+         ``geserveradmin --listdbs``
+
+         The tool displays a list of all databases ever published
+         (other than deleted databases) on the server. If the server
+         type is omitted, the server type defaults to ``stream``.
+
+      #. Select the database you want to remove by entering:
+
+         ``geserveradmin --deletedb db_name...``
+
+         where *db_name* is the name of the database you want to delete.
+
+         .. note::
+
+            If you want to delete a currently published database,
+            you can either publish a different database to the same virtual
+            server or disable the virtual server on which it is published.
+            Then you can delete the database.
+
+            This tool does not delete the actual files. It is similar to
+            putting files in the trash on a Windows or Mac desktop.
+
+      #. Permanently delete the selected databases by entering:
+
+         ``geserveradmin --garbagecollect``
+
+.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
+   :width: 130px
+   :height: 44px

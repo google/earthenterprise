@@ -1,0 +1,271 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Add flat imagery to Mercator map databases in GEE 5.1.0 &#8212; Google Earth Enterprise 5.3.9 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Add KML layers" href="addKMLLayers.html" />
+    <link rel="prev" title="Map projection types in GEE 5.1.0" href="mapProjectTypesInGEE5.1.0.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="addKMLLayers.html" title="Add KML layers"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="mapProjectTypesInGEE5.1.0.html" title="Map projection types in GEE 5.1.0"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" accesskey="U">Fusion Resources and Projects</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="mapProjectTypesInGEE5.1.0.html"
+                        title="previous chapter">Map projection types in GEE 5.1.0</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="addKMLLayers.html"
+                        title="next chapter">Add KML layers</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp2.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp2.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="add-flat-imagery-to-mercator-map-databases-in-gee-5-1-0">
+<h1>Add flat imagery to Mercator map databases in GEE 5.1.0<a class="headerlink" href="#add-flat-imagery-to-mercator-map-databases-in-gee-5-1-0" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>When you build a Mercator-based map database, you must build
+imagery projects specifically for use with Mercator-based
+projection (EPSG: 3857). However, with GEE 5.1.0, if you already
+have database imagery projects in the Plate Carrée projection
+(EPSG: 4326), you can reuse them for your Mercator-based map
+database using <em>Mercator on the Fly</em>. When disk space is a key
+consideration, you only need imagery projects in Plate Carrée
+projection for 2D flat, 2D Mercator, and 3D databases, reducing
+the storage requirements for your assets.</p>
+<p><em>Mercator on the Fly</em> converts a Plate Carrée-based imagery
+project into a Mercator-based imagery project when you create your
+map database in Fusion. When GEE Server hosts the published
+Mercator database, the server requests the <em>Mercator on the Fly</em>
+imagery project in the database and serves it with a Mercator
+projection. With some projections, you may see a reduction in
+serving speed when projecting a <em>Mercator on the Fly</em> imagery
+project. For more information about performance, see <a class="reference internal" href="#mercator-fly-performance-data"><span class="std std-ref">Mercator on
+the Fly Performance Data</span></a>.</p>
+<p>As you decide which type of imagery project to build, you will need
+to consider the projection types you need and whether disk space
+or serving speed is important. For 2D flat, 2D Mercator, and 3D
+databases, you can use flat imagery with <em>Mercator on the Fly</em> if
+disk space is a key consideration. However if serving speed is a
+key consideration, you should build both flat and Mercator imagery
+projects. The following table shows the decision matrix to guide
+you:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="25%" />
+<col width="13%" />
+<col width="13%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Build projects/serve databases</th>
+<th class="head">Mercator</th>
+<th class="head">2D flat and 3D</th>
+<th class="head">2D flat, Mercator, and 3D</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Flat imagery project</td>
+<td><strong>X</strong></td>
+<td><img alt="image1" src="../../images/checkmark-g16.png" /></td>
+<td><img alt="image2" src="../../images/checkmark-g16.png" /> Disk space is most important. Flat imagery projects used for all
+database types, with <em>Mercator on the Fly</em> used to serve flat imagery for Mercator map databases.</td>
+</tr>
+<tr class="row-odd"><td>Mercator imagery project</td>
+<td><img alt="image3" src="../../images/checkmark-g16.png" /></td>
+<td><strong>X</strong></td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>Flat and Mercator imagery projects</td>
+<td><img alt="image4" src="../../images/checkmark-g16.png" /></td>
+<td><img alt="image5" src="../../images/checkmark-g16.png" /></td>
+<td><img alt="image6" src="../../images/checkmark-g16.png" /> Serving speed is most important. Flat imagery projects used for 3D and 2D flat
+databases; Mercator imagery projects for Mercator map databases.</td>
+</tr>
+</tbody>
+</table>
+<p>Of course, if you are serving imagery <em>only</em> as Mercator map
+databases, you should only build Mercator imagery projects.</p>
+<p class="rubric">To add a flat imagery resource to a Mercator-based map
+database:</p>
+<ol class="arabic">
+<li><p class="first">Select <strong>Asset Manager</strong> from the <strong>Tools</strong> menu. The Asset
+Manager dialog appears.</p>
+</li>
+<li><p class="first">Select <strong>Mercator Map Tools (2D)</strong> from the Asset Manager
+toolbar. The tools for Mercator maps appear in the toolbar.</p>
+</li>
+<li><p class="first">Click <a class="reference internal" href="../../images/iconDatabaseMap.png"><img alt="image7" src="../../images/iconDatabaseMap.png" style="width: 20px; height: 20px;" /></a>. The Map Database Editor appears with no
+projects selected.</p>
+<p><a class="reference internal" href="../../images/mapsMercDatabaseEditor.png"><img alt="Mercator Maps Database Editor" src="../../images/mapsMercDatabaseEditor.png" style="width: 434px; height: 175px;" /></a></p>
+</li>
+<li><p class="first">Click <img alt="image9" src="../../images/icon_new.gif" /> next to <strong>Map Project</strong>. The Open Asset dialog
+appears.</p>
+</li>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Projects/Map</span></code>folder.</p>
+</li>
+<li><p class="first">Select the map project that you want to add to the map database
+and click <strong>Open</strong>.
+The map project appears in the Map Database Editor next to Map Project.</p>
+</li>
+<li><p class="first">Click <img alt="image10" src="../../images/icon_new.gif" /> next to <strong>Imagery Project</strong>. The Open Asset dialog appears.</p>
+</li>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Projects/Imagery</span></code> folder.</p>
+</li>
+<li><p class="first">Select <strong>Flat Imagery Project</strong> from the <strong>Type</strong> drop-down list,
+then select the imagery project to add and click <strong>Open</strong>.
+The imagery project appears in the Map Database Editor next to Imagery
+Project.</p>
+</li>
+<li><p class="first">Select <strong>File &gt; Save</strong>.</p>
+</li>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT/Databases</span></code> folder.</p>
+</li>
+<li><p class="first">In the <strong>Name</strong> field, enter a name, and click <strong>Save</strong>.</p>
+<p>In the Asset Manager, the new map database appears, along with the
+other databases you have created. Notice that the <strong>Category</strong>
+column distinguishes between the Google Earth databases and the
+Google Maps database.</p>
+</li>
+<li><p class="first">Right-click the name of your map database, and select <strong>Build</strong>
+from the context menu.</p>
+<p>The status of the database immediately changes to <strong>Waiting</strong> or
+<strong>Queued</strong> and then to <strong>In Progress</strong>.</p>
+<p>When Google Earth Enterprise Fusion finishes building the
+database, its <strong>Current State</strong> column in the Asset Manager
+changes to <strong>Succeeded</strong>, and its <strong>Current Version</strong> column
+changes to the date and time the most recent build was started.</p>
+</li>
+</ol>
+<p class="rubric" id="mercator-fly-performance-data">Mercator on the Fly performance data</p>
+<p>Mercator resolution increases relative to Plate Carrée as latitude
+increases (or decreases) from the equator for any given map level.
+Therefore to obtain the correct Mercator resolution, tiles must
+be sampled from higher Plate Carrée levels (known as upsampling).
+The higher the latitude, the greater the number of tiles required
+and, as a result, processing time for <em>Mercator on the Fly</em>
+increases (although not proportionally). The following table lists
+the number of Plate Carrée tiles required to produce a single
+<em>Mercator on the Fly</em> tile vs. latitude (north or south) and the
+approximate expected increase in processing time assuming cached
+tiles.</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="25%" />
+<col width="19%" />
+<col width="19%" />
+<col width="38%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Approximate Latitude Range(degrees)</th>
+<th class="head">Level Up to sample</th>
+<th class="head">MotF P.C. tiles processed</th>
+<th class="head">Max Relative Clock Time Ratio (relative to 1 tile)</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>0 to 40</td>
+<td>1</td>
+<td>1-2</td>
+<td>1 to 1.2 (2 tiles)</td>
+</tr>
+<tr class="row-odd"><td>40 to 65</td>
+<td>2</td>
+<td>up to 4</td>
+<td>2.1 (4 tiles)</td>
+</tr>
+<tr class="row-even"><td>65 to 75</td>
+<td>3</td>
+<td>up to 8</td>
+<td>3.2 (8 tiles)</td>
+</tr>
+<tr class="row-odd"><td>75 to 85</td>
+<td>4</td>
+<td>up to 16</td>
+<td>5.1 (16 tiles)</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Learn more</p>
+<p><a class="reference internal" href="../fusionAdministration/pushAndPublishDB.html"><span class="doc">Push and publish databases</span></a>
+<a class="reference internal" href="../geeServerAdmin/makeWMSRequests.html"><span class="doc">Make Web Map Service (WMS) requests</span></a></p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="addKMLLayers.html" title="Add KML layers"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="mapProjectTypesInGEE5.1.0.html" title="Map projection types in GEE 5.1.0"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" >Fusion Resources and Projects</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

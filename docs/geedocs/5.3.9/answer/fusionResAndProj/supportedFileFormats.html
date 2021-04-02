@@ -1,0 +1,239 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Supported file formats in GEE &#8212; Google Earth Enterprise 5.3.9 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Apply alpha masking to imagery" href="applyAlphaMask.html" />
+    <link rel="prev" title="Fusion Resources and Projects" href="../fusionResAndProj.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="applyAlphaMask.html" title="Apply alpha masking to imagery"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../fusionResAndProj.html" title="Fusion Resources and Projects"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" accesskey="U">Fusion Resources and Projects</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../fusionResAndProj.html"
+                        title="previous chapter">Fusion Resources and Projects</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="applyAlphaMask.html"
+                        title="next chapter">Apply alpha masking to imagery</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp2.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp2.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="supported-file-formats-in-gee">
+<h1>Supported file formats in GEE<a class="headerlink" href="#supported-file-formats-in-gee" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>The following tables list the raster data (imagery and terrain)
+file formats and the vector file formats that are supported by
+<strong>Google Earth Enterprise (GEE) Fusion</strong>.</p>
+<p>Imagery data consists of satellite and overhead photographs.
+Terrain data provides topographical information about a geographic
+area.</p>
+<p>Both imagery and terrain data are types of raster data, that is,
+characterized by a grid of cells covering an area of interest,
+where each pixel, the smallest unit of information in the grid,
+displays a unique attribute. All raster data must have geographic
+coordinates and projection information included in the file
+headers or contained in external text-based world files and
+projection files. All imagery data must be in 8-bit format with
+either one band for panchromatic or three bands for color. All
+terrain data can be in 16-bit or 32-bit format with a single band.</p>
+<p>In Google Earth EC, the imagery data is draped over the terrain
+data, giving the imagery a topographical appearance.</p>
+<p>Google Earth Enterprise Fusion imports common imagery and terrain
+data formats shown below, as a subset of the <a class="reference external" href="http://www.gdal.org/formats_list.html">raster formats
+supported by GDAL</a>.</p>
+<p class="rubric">Supported imagery and terrain data formats</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">File Format</th>
+<th class="head">Notes</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>DTED</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>Erdas Imagine (IMG)</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>GeoTIFF</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>GIF</td>
+<td>Geographic coordinates and projection information must be accompanied
+by external world and projection files.</td>
+</tr>
+<tr class="row-even"><td>JPEG</td>
+<td>Geographic coordinates and projection information must be accompanied
+by external world and projection files.</td>
+</tr>
+<tr class="row-odd"><td>JPEG2000</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>Microstation (DGN)</td>
+<td>Microstation DGN files from prior to version 8 are supported.
+Versions 8 and later are not supported.</td>
+</tr>
+<tr class="row-odd"><td>MrSID</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>NITF</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>PNG</td>
+<td>Geographic coordinates and projection information must be accompanied
+by external world and projection files.</td>
+</tr>
+<tr class="row-even"><td>TAB</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>TIF</td>
+<td>Geographic coordinates and projection information must be accompanied
+by external world and projection files.</td>
+</tr>
+<tr class="row-even"><td>USGS ASCII DEM</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>USGS SDTS DEM</td>
+<td>&#160;</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last"><strong>Importing large imagery files?</strong> Although Fusion does not
+allow you to import raw imagery source files larger than 80 GB,
+you can split large resource files into smaller ones using the
+<code class="docutils literal notranslate"><span class="pre">gesplitkhvr</span></code> tool. See the tutorial <a class="reference internal" href="../fusionTutorial/segmentLargeImageryFiles.html"><span class="doc">Segmenting Large Imagery Files</span></a>.</p>
+</div>
+<p class="rubric">Supported vector data formats</p>
+<p>Vector data consists of geographic features that are either
+geographic coordinates (points), sequences of connected geographic
+coordinates (lines), or closed sequences of connected geographic
+coordinates (polygons). Each feature typically has attribute
+fields, such as name, street address, or a web site URL.</p>
+<p>Google Earth Enterprise Fusion imports data in the common vector
+and point file formats, as a subset of the <a class="reference external" href="http://www.gdal.org/ogr_formats.html">OGR vector
+formats</a>.</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="24%" />
+<col width="76%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">File Format</th>
+<th class="head">Notes</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>ESRI Shape File (.shp)</td>
+<td>For each ESRI shape file you import into Google Earth Enterprise
+Fusion, one DBF and one SHX configuration file, each with the same
+name as the original and the appropriate extension (.dbf and .shx)
+must be located in the same folder. In addition, if there is any
+projection in the image, a PRJ file with the same name as the
+original file and the appropriate extension (.prj) must be located
+in the same folder. Other associated files you can include with
+each SHP file are SBN, SBX, CPG, and LYR.</td>
+</tr>
+<tr class="row-odd"><td>Generic ASCII</td>
+<td>Point data only in comma-separated values or tab-delimited text
+format.</td>
+</tr>
+<tr class="row-even"><td>KML/KMZ</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>MapInfo File (.tab)</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>US Census Tiger Line Files</td>
+<td>&#160;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="applyAlphaMask.html" title="Apply alpha masking to imagery"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../fusionResAndProj.html" title="Fusion Resources and Projects"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" >Fusion Resources and Projects</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,247 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Release notes: Open GEE 5.3.5 &#8212; Google Earth Enterprise 5.3.9 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Release notes: Open GEE 5.3.4" href="relNotesGEE5_3_4.html" />
+    <link rel="prev" title="Release notes: Open GEE 5.3.6" href="relNotesGEE5_3_6.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="relNotesGEE5_3_4.html" title="Release notes: Open GEE 5.3.4"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="relNotesGEE5_3_6.html" title="Release notes: Open GEE 5.3.6"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../releaseNotes.html" accesskey="U">Release notes</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="relNotesGEE5_3_6.html"
+                        title="previous chapter">Release notes: Open GEE 5.3.6</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="relNotesGEE5_3_4.html"
+                        title="next chapter">Release notes: Open GEE 5.3.4</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp11.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp11.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="release-notes-open-gee-5-3-5">
+<h1>Release notes: Open GEE 5.3.5<a class="headerlink" href="#release-notes-open-gee-5-3-5" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p class="rubric">Supported Platforms</p>
+<p>The Open GEE 5.3.5 release is supported on 64-bit versions of the
+following operating systems:</p>
+<ul class="simple">
+<li>Red Hat Enterprise Linux version 6.x and 7.x, including the
+most recent security patches</li>
+<li>CentOS 6.x and 7.x</li>
+<li>Ubuntu 16.04 LTS</li>
+</ul>
+<p>Google Earth Enterprise 5.3.5 is compatible with Google Earth
+Enterprise Client (EC) version 7.1.5 and above.</p>
+<p>To upgrade from Open GEE 5.2.0, do NOT uninstall it. We recommend
+that you upgrade Open GEE 5.2.0 by simply installing Open GEE
+5.3.5. Installing Open GEE 5.3.5 on top of Open GEE 5.2.0 will
+ensure that your PostgreSQL databases are backed up and upgraded
+correctly to the new PostgreSQL version used by Open GEE 5.3.5.</p>
+<p class="rubric">New Features</p>
+<p>In 5.3.5, we moved documentation, examples, and tutorials into a
+separate RPM called opengee-extra. This mainly includes the
+documentation, ExampleSearch, and Fusion Tutorial files.  You
+can choose whether to install opengee-extra depending on if you
+need those items.</p>
+<p class="rubric">Resolved Issues</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="11%" />
+<col width="89%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Number</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>1782</td>
+<td>RPM name change causes Fusion and Server services to be off after upgrade</td>
+</tr>
+<tr class="row-odd"><td>1778</td>
+<td>Databases published with SSL virtual hosts fail to cut</td>
+</tr>
+<tr class="row-even"><td>1774</td>
+<td>CGI Error Handler Slows Cutter</td>
+</tr>
+<tr class="row-odd"><td>1772</td>
+<td>Geecheck reports server is not installed in dual configuration</td>
+</tr>
+<tr class="row-even"><td>1768</td>
+<td>Option to not install documentation</td>
+</tr>
+<tr class="row-odd"><td>1749</td>
+<td>Allow users to serve WMS of 3D files from server UI</td>
+</tr>
+<tr class="row-even"><td>1742</td>
+<td>Mis-configured Apache ErrorDocuments</td>
+</tr>
+<tr class="row-odd"><td>1735</td>
+<td>Vector packet description string retrieved by geglxinfo is incorrect</td>
+</tr>
+<tr class="row-even"><td>1717</td>
+<td>Use standard static_assert instead of home grown compile assert</td>
+</tr>
+<tr class="row-odd"><td>1715</td>
+<td>Documentation currently references old/unsupported configurations</td>
+</tr>
+<tr class="row-even"><td>1714</td>
+<td>Separate Portable Builds</td>
+</tr>
+<tr class="row-odd"><td>1711</td>
+<td>Portable Archive Contains FileUnpacker Build Directory</td>
+</tr>
+<tr class="row-even"><td>1698</td>
+<td>Standardize the use of unsigned integers</td>
+</tr>
+<tr class="row-odd"><td>1680</td>
+<td>Broken Links in Portable Windows Documentation</td>
+</tr>
+<tr class="row-even"><td>1675</td>
+<td>Move to gradle 6</td>
+</tr>
+<tr class="row-odd"><td>1677</td>
+<td>Some mercator maps fail to display in dual-server setups</td>
+</tr>
+<tr class="row-even"><td>1667</td>
+<td>FusionTutorial files are available on s3.  download_tutorial.sh needs to be updated.</td>
+</tr>
+<tr class="row-odd"><td>1666</td>
+<td>User sees “plugin failed to load” alerts when browsing to portable server page</td>
+</tr>
+<tr class="row-even"><td>1657</td>
+<td>fatal error: autoingest/sysman/plugins/MapLayerAssetD.h: No such file or directory</td>
+</tr>
+<tr class="row-odd"><td>1650</td>
+<td>WMS https doesn’t work behind reverse proxies</td>
+</tr>
+<tr class="row-even"><td>1649</td>
+<td>Consolidate XML loading code into AssetSerializer</td>
+</tr>
+<tr class="row-odd"><td>1643</td>
+<td>geserver_init still relies on initscripts</td>
+</tr>
+<tr class="row-even"><td>1642</td>
+<td>Getop does not have an option to print status and exit</td>
+</tr>
+<tr class="row-odd"><td>1634</td>
+<td>Portable server on Windows stops working if user clicks inside terminal window</td>
+</tr>
+<tr class="row-even"><td>1622</td>
+<td>Make public unpacker function for accessing globe directories</td>
+</tr>
+<tr class="row-odd"><td>1621</td>
+<td>EL6 scons uses Python 2.6</td>
+</tr>
+<tr class="row-even"><td>1616</td>
+<td>Allow missing rows in publish_context_table</td>
+</tr>
+<tr class="row-odd"><td>1608</td>
+<td>Cutter fails when polygon level is 24</td>
+</tr>
+<tr class="row-even"><td>1604</td>
+<td>WMS with reverse proxies doesn’t work</td>
+</tr>
+<tr class="row-odd"><td>1602</td>
+<td>Create a make.bat file to generate html from rst file for Windows users</td>
+</tr>
+<tr class="row-even"><td>1598</td>
+<td>Incorrect RedHat 7 Install Instructions</td>
+</tr>
+<tr class="row-odd"><td>1593</td>
+<td>Python Dependency Issues on EL6</td>
+</tr>
+<tr class="row-even"><td>1579</td>
+<td>Add an option to misc.xml for disabling minification</td>
+</tr>
+<tr class="row-odd"><td>474</td>
+<td>Running gee_check on some supported platforms reports that the platform is not supported</td>
+</tr>
+<tr class="row-even"><td>254</td>
+<td>Automasking fails for images stored with UTM projection</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="relNotesGEE5_3_4.html" title="Release notes: Open GEE 5.3.4"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="relNotesGEE5_3_6.html" title="Release notes: Open GEE 5.3.6"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../releaseNotes.html" >Release notes</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

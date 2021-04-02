@@ -19,4 +19,4 @@
 #  earth_enterprise/installer/
 # Format is 1 line (comment lines ignored):
 #   full version number: e.g., 3.1.2.3, 5.2.4, etc
-5.3.8
+5.3.9

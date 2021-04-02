@@ -1,0 +1,346 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Setting Up the Tutorial &#8212; Google Earth Enterprise 5.3.9 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Defining and Building Resources" href="buildResource.html" />
+    <link rel="prev" title="About this Tutorial" href="about.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="buildResource.html" title="Defining and Building Resources"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="about.html" title="About this Tutorial"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionTutorial.html" accesskey="U">Fusion Tutorial</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="about.html"
+                        title="previous chapter">About this Tutorial</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="buildResource.html"
+                        title="next chapter">Defining and Building Resources</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp3.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp3.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="setting-up-the-tutorial">
+<h1>Setting Up the Tutorial<a class="headerlink" href="#setting-up-the-tutorial" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>In Google Earth Enterprise Open Source, the fusion tutorial data
+is not included in the installation packages. Refer to <a class="reference internal" href="confTutorialWS.html"><span class="doc">Configure Tutorial Workspace</span></a> for download and
+installation instructions.</p>
+<p>In older versions, the Google Earth Enterprise Fusion tutorial
+data is provided on the Google Earth Enterprise Fusion
+installation DVD and should have been installed in
+<code class="docutils literal notranslate"><span class="pre">/opt/google/share/tutorials/fusion/</span></code> on your workstation or
+network. In addition, your system administrator should have
+configured a tutorial environment for you to work on the tutorial
+lessons, keeping your practice data separate from your live
+production data.</p>
+<p>If Google Earth Enterprise Fusion or the tutorial files are not
+installed or you encounter an error message that tells you that a
+tutorial source file is not readable or you cannot save a
+resource, contact your system administrator or refer to <a class="reference internal" href="confTutorialWS.html"><span class="doc">Configure Tutorial Workspace</span></a> to install the
+files and configure the tutorial environment before saving any
+practice data.</p>
+<p>As you follow the steps in this tutorial, you will begin to learn
+how to create 2D and 3D databases, as well as become familiar
+with the Google Earth Enterprise Fusion user interface.</p>
+<ul class="simple">
+<li><a class="reference internal" href="#selectassetroot"><span class="std std-ref">Select the Tutorial Asset Root</span></a></li>
+<li><a class="reference internal" href="#launchfusion"><span class="std std-ref">Launch Google Earth Enterprise Fusion</span></a></li>
+<li><a class="reference internal" href="#assetnavtree"><span class="std std-ref">Build the Asset Navigation Tree</span></a></li>
+<li><a class="reference internal" href="#definesrcprov"><span class="std std-ref">Define Source Providers</span></a></li>
+<li><a class="reference internal" href="#definerespath"><span class="std std-ref">Define Resource Paths</span></a></li>
+</ul>
+<p class="rubric" id="selectassetroot">Select the Tutorial Asset Root</p>
+<p>There are two occasions when you must select a different asset
+root:</p>
+<ul class="simple">
+<li>When multiple users share a single workstation, you must select
+your own tutorial asset root.</li>
+<li>When you switch from the tutorial data to real production data,
+you must select the appropriate asset root.</li>
+</ul>
+<p>To configure asset roots for multiple users, see <a class="reference internal" href="confTutorialWS.html"><span class="doc">Configure Tutorial Workspace</span></a>.</p>
+<p>This section explains how to select a different asset root.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last"><strong>Caution:</strong> Even though your source volumes and asset roots
+are separate for each user or for the tutorial and production
+data, there is only one publish root on each virtual server for
+Earth databases and one for Map databases.</p>
+</div>
+<p>When two users are sharing a single workstation, both users are
+publishing to the same publish root. When one user publishes a
+database on that workstation, it overwrites any database that
+might have been published previously by another user on that same
+workstation. Likewise, if you are switching back and forth between
+tutorial and production data on the same workstation, it is
+possible to overwrite a production database with a tutorial
+database and vice versa. Of course, you can republish the desired
+database to make it available to Google Earth EC again.</p>
+<p class="rubric">To select the tutorial asset root:</p>
+<ol class="arabic">
+<li><p class="first">On the command line, log in as root.</p>
+</li>
+<li><p class="first">Stop the system manager by entering:</p>
+<p><code class="docutils literal notranslate"><span class="pre">/etc/init.d/gefusion</span> <span class="pre">stop</span></code></p>
+</li>
+<li><p class="first">Enter:</p>
+<p><code class="docutils literal notranslate"><span class="pre">geselectassetroot</span> <span class="pre">--assetroot</span> <span class="pre">/username/assets</span></code></p>
+<p>where <em>username</em> is the name you or your system administrator
+used when configuring the tutorial asset root. (If you do not
+know the path of your tutorial asset root, contact your system
+administrator.)</p>
+</li>
+<li><p class="first">When you return to the prompt, log out as root.</p>
+</li>
+<li><p class="first">Start the system manager by entering:</p>
+<p><code class="docutils literal notranslate"><span class="pre">/etc/init.d/gefusion</span> <span class="pre">start</span></code></p>
+</li>
+</ol>
+<p class="rubric" id="launchfusion">Launch Google Earth Enterprise Fusion</p>
+<ol class="arabic simple">
+<li>Open a Linux terminal window.</li>
+<li>Enter <code class="docutils literal notranslate"><span class="pre">fusion</span></code> (or <code class="docutils literal notranslate"><span class="pre">fusion</span> <span class="pre">&amp;</span></code> to return to the Linux
+prompt).</li>
+</ol>
+<p>When the application starts, the Google Earth Enterprise Fusion
+graphical user interface (GUI) appears.</p>
+<p class="rubric" id="assetnavtree">Build the Asset Navigation Tree</p>
+<p>The components of a Google Earth Enterprise Fusion database are
+called <em>assets</em>. The main location where you store all of your
+Google Earth Enterprise Fusion assets is called the <em>asset root</em>.
+The asset root is located in the main Google Earth Enterprise
+Fusion volume–in most cases, <code class="docutils literal notranslate"><span class="pre">/gevol/assets</span></code>. For the tutorial
+lessons, this guide refers to the <em>tutorial asset root</em> to
+differentiate it from the asset root that contains your live data.</p>
+<p>In this exercise, you add subfolders to the tutorial asset root,
+so you can store your assets in an organized way.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last"><strong>Caution:</strong> Once you create subfolders in your asset root, you
+cannot delete them. This makes it especially important for you
+to plan out and organize your subfolders before you or anyone
+else begins working with real data in Google Earth Enterprise
+Fusion.</p>
+</div>
+<p class="rubric" id="to-add-a-subfolder">To add a subfolder:</p>
+<ol class="arabic">
+<li><p class="first">Open the Asset Manager by selecting <strong>Tools &gt; Asset Manager</strong>.
+The Asset Manager appears:
+<img alt="Asset Manager" src="../../images/assetManager-full.png" />
+The asset navigation tree appears on the left side of the Asset
+Manager, and <code class="docutils literal notranslate"><span class="pre">ASSET_ROOT</span></code> is the only folder on the tree.</p>
+</li>
+<li><p class="first">Right-click <strong>ASSET_ROOT</strong>, and select <strong>New Subfolder</strong> from
+the context menu.
+The New Subfolder dialog appears.</p>
+</li>
+<li><p class="first">Enter <strong>Resources</strong> as the name of the new subfolder, and click
+<strong>OK</strong>.
+The new subfolder appears in the asset navigation tree.</p>
+</li>
+<li><p class="first">In the same way, add three more subfolders:</p>
+<ul class="simple">
+<li><strong>MapLayers</strong></li>
+<li><strong>Projects</strong></li>
+<li><strong>Databases</strong></li>
+</ul>
+<p>All four subfolders appear in alphabetical order in the asset
+navigation tree.</p>
+</li>
+<li><p class="first">For the Projects and Resources folders you just created,
+right-click to create the following subfolders:</p>
+<ul class="simple">
+<li><strong>Vector</strong></li>
+<li><strong>Imagery</strong></li>
+<li><strong>Terrain</strong></li>
+</ul>
+<p>You do not need to create Vector, Imagery, and Terrain
+subfolders for the MapLayers or Databases folders.</p>
+</li>
+<li><p class="first">Close the Asset Manager by clicking the close box (<strong>X</strong>) in
+the top right corner.</p>
+</li>
+</ol>
+<p class="rubric" id="definesrcprov">Define Source Providers</p>
+<p>The <strong>Provider Manager</strong> allows you to create a list of
+organizations that provide the source data you use in Google
+Earth. For each provider, you specify a unique lookup key (any
+unique abbreviation you choose) and copyright information. When
+you create a resource, a data provider is associated with it, so
+that when the resource is displayed in Google Earth EC, the
+appropriate copyright information is also displayed.</p>
+<p class="rubric" id="to-create-a-source-provider">To create a source provider:</p>
+<ol class="arabic">
+<li><p class="first">Open the Provider Manager by selecting <strong>Tools &gt; Provider
+Manager</strong>.
+<img alt="Provider Manager" src="../../images/providerManager.png" /></p>
+</li>
+<li><p class="first">Click the <img alt="Page Icon" src="../../images/icon_new1.gif" /> icon:</p>
+<p>The <strong>Edit Provider</strong> dialog appears.
+<img alt="Edit Provider Dialog" src="../../images/newProvider.png" /></p>
+</li>
+<li><p class="first">Enter the following information:</p>
+<p><strong>Name:</strong> USGS Imagery
+<strong>Key:</strong> USGS-I
+<strong>Copyright Text:</strong> Imagery © 2005 USGS
+To enter the copyright symbol, open a text editor, press
+<strong>CTRL-SHIFT-U</strong>, then enter the Unicode 00A9. Copy and paste the
+displayed symbol into the dialog.</p>
+</li>
+<li><p class="first">Click <strong>OK</strong>.</p>
+</li>
+<li><p class="first">Repeat steps <strong>2</strong> through <strong>4</strong> to add the following source
+providers:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="31%" />
+<col width="13%" />
+<col width="56%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Key</th>
+<th class="head">Copyright Text</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>i3</td>
+<td>i3</td>
+<td>Imagery © 2005 i3</td>
+</tr>
+<tr class="row-odd"><td>USGS Maps</td>
+<td>USGS-M</td>
+<td>Roads © 2005 USGS</td>
+</tr>
+<tr class="row-even"><td>GNIS/US Census Bureau</td>
+<td>GNIS</td>
+<td>Population © 2005 GNIS</td>
+</tr>
+<tr class="row-odd"><td>USGS POIs</td>
+<td>USGS-P</td>
+<td>POIs © 2004 USGS</td>
+</tr>
+<tr class="row-even"><td>USGS Terrain</td>
+<td>USGS-T</td>
+<td>Terrain © USGS 2003</td>
+</tr>
+<tr class="row-odd"><td>NASA Imagery</td>
+<td>NASA</td>
+<td>Imagery courtesy NASA’s Earth Observatory</td>
+</tr>
+</tbody>
+</table>
+<p>The new providers appear in the Provider Manager dialog in the
+order in which you added them:
+<img alt="Provider Manager Full" src="../../images/providerManager-full.png" /></p>
+</li>
+<li><p class="first">Click <strong>OK</strong> to close the Provider Manager.</p>
+</li>
+</ol>
+<p class="rubric" id="definerespath">Define Resource Paths</p>
+<p>The <strong>Asset Manager Resource Editor Default Source Paths</strong> screen
+allows you to specify default paths for Vector, Imagery, and
+Terrain resource types.</p>
+<p class="rubric" id="to-define-resource-paths">To define resource paths:</p>
+<ol class="arabic">
+<li><p class="first">Open the Asset Manager Resource Editor Default Source Paths by
+selecting <strong>Edit &gt; Preferences &gt; Asset Manager</strong>.
+<img alt="Asset Manager Config" src="../../images/assetManagerConfig.png" /></p>
+</li>
+<li><p class="first">Click the <img alt="Folder Icon" src="../../images/iconProjBrowser.png" /> icon on the right-hand side for Vector.</p>
+<p>The <strong>Select Folder</strong> dialog appears.
+<img alt="Select Folder Dialog" src="../../images/assetFolderSelection.png" /></p>
+</li>
+<li><p class="first">Navigate to <code class="docutils literal notranslate"><span class="pre">/opt/google/share/tutorials/fusion</span></code>.</p>
+</li>
+<li><p class="first">Select <strong>Vector</strong>, then click <strong>OK</strong>.</p>
+</li>
+<li><p class="first">Repeat steps <strong>2</strong> through <strong>4</strong> for <strong>Imagery</strong> and
+<strong>Terrain</strong>.</p>
+</li>
+<li><p class="first">Click the <strong>OK</strong> button to close the Asset Manager Resource Editor Default
+Source Paths, and go on to the <a class="reference internal" href="buildResource.html"><span class="doc">next lesson</span></a>.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="buildResource.html" title="Defining and Building Resources"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="about.html" title="About this Tutorial"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionTutorial.html" >Fusion Tutorial</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

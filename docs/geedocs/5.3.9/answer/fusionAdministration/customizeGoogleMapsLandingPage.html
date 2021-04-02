@@ -1,0 +1,167 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Customize your Google Maps landing page &#8212; Google Earth Enterprise 5.3.9 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Monitor system processes" href="monitorSystemProcess.html" />
+    <link rel="prev" title="Configure fonts for the Text Style dialog" href="confTextStyleDialogFont.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="monitorSystemProcess.html" title="Monitor system processes"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="confTextStyleDialogFont.html" title="Configure fonts for the Text Style dialog"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" accesskey="U">Fusion Administration</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="confTextStyleDialogFont.html"
+                        title="previous chapter">Configure fonts for the Text Style dialog</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="monitorSystemProcess.html"
+                        title="next chapter">Monitor system processes</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp1.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp1.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="customize-your-google-maps-landing-page">
+<h1>Customize your Google Maps landing page<a class="headerlink" href="#customize-your-google-maps-landing-page" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>Google uses the Google Maps API to create a sample web application
+that provides a very basic way to display your Google Maps
+database output in a browser. The sample web application and the
+Google Maps API are automatically installed with Google Earth
+Enterprise Fusion.</p>
+<p>Google recommends that you use the sample application to display
+your Google Maps data at first. After you see how it looks, you
+can create your own Google Maps web application that looks more
+like your other web applications, using the provided sample web
+application as a guide. Documentation for the Google Maps
+JavaScript API is at <cite>Google Maps JavaScript API V3
+Reference &lt;https://developers.google.com/maps/documentation/javascript/reference&gt;</cite>.</p>
+<p>To get started, make a copy of the sample application files
+(<code class="docutils literal notranslate"><span class="pre">maps_local.html</span></code>, <code class="docutils literal notranslate"><span class="pre">maps_google.html,</span> <span class="pre">fusionmaps.js</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">fusionmaps.css</span></code>). Then configure a virtual host on which you
+can experiment, and move the copied files to that virtual host.
+When you create the Apache configuration file for the new virtual
+host, change <code class="docutils literal notranslate"><span class="pre">/maps/maps_google.html</span></code> or
+<code class="docutils literal notranslate"><span class="pre">/maps/maps_local.html</span></code> in the following line to point to your
+copy of the example files on the new virtual host:</p>
+<p><code class="docutils literal notranslate"><span class="pre">RewriteRule</span> <span class="pre">^/default_map/+$</span> <span class="pre">/maps/maps_google.html</span> <span class="pre">[PT]</span></code>
+or</p>
+<p><code class="docutils literal notranslate"><span class="pre">RewriteRule</span> <span class="pre">^/default_map/+$</span> <span class="pre">/maps/maps_local.html</span> <span class="pre">[PT]</span></code>
+You can edit the rest of the sample application in whatever ways
+you like, adding your own logo, branding, and so on.</p>
+<p class="rubric" id="configuring-the-google-maps-api-license-key">Configuring the Google Maps API License Key</p>
+<p>Google Maps supports only specific browser/operating system
+combinations. Even if you are using a supported browser, there are
+some features in Google Earth Enterprise Fusion that are not
+supported by some browsers on certain operating systems.</p>
+<p>As long as you are connected to the Internet and have a license
+key for the Google Maps API, there is no problem (regardless of
+your platform), since your server contacts Google’s servers for
+functions that are not supported in the browser.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The following procedure assumes that you have received
+an email from Google that contains your license key for the Google
+Maps API.</p>
+</div>
+<p class="rubric" id="to-configure-your-google-maps-api-license-key">To configure your Google Maps API license key:</p>
+<ol class="arabic">
+<li><p class="first">Open <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/maps/maps_google.html</span></code>.</p>
+</li>
+<li><p class="first">Locate the following line in the script:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">script</span> <span class="n">src</span><span class="o">=</span><span class="s2">&quot;http://maps.google.com/maps?file=api&amp;v=2&amp;key=abcdefg&quot;</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span><span class="o">&gt;&lt;/</span><span class="n">script</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Replace the <code class="docutils literal notranslate"><span class="pre">key</span></code> placeholder (‘<code class="docutils literal notranslate"><span class="pre">abcdefg</span></code>’) with your
+Google Maps API license key. Your key is contained in an email
+sent from Google.</p>
+</li>
+<li><p class="first">Save the <code class="docutils literal notranslate"><span class="pre">maps_google.html</span></code> file.</p>
+</li>
+<li><p class="first">Restart the Google Earth Enterprise Server (as root):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">geserver</span> <span class="n">restart</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="monitorSystemProcess.html" title="Monitor system processes"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="confTextStyleDialogFont.html" title="Configure fonts for the Text Style dialog"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" >Fusion Administration</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,261 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Release notes: GEE 5.1.0 &#8212; Google Earth Enterprise 5.3.9 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Release notes: GEE 5.0.2" href="relNotesGEE5_0_2.html" />
+    <link rel="prev" title="Release notes: GEE 5.1.1" href="relNotesGEE5_1_1.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="relNotesGEE5_0_2.html" title="Release notes: GEE 5.0.2"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="relNotesGEE5_1_1.html" title="Release notes: GEE 5.1.1"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../releaseNotes.html" accesskey="U">Release notes</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="relNotesGEE5_1_1.html"
+                        title="previous chapter">Release notes: GEE 5.1.1</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="relNotesGEE5_0_2.html"
+                        title="next chapter">Release notes: GEE 5.0.2</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp11.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp11.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="release-notes-gee-5-1-0">
+<h1>Release notes: GEE 5.1.0<a class="headerlink" href="#release-notes-gee-5-1-0" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p class="rubric">Overview</p>
+<p>This document includes the following information about the Google
+Earth Enterprise 5.1.0 release:</p>
+<p class="rubric">New Features</p>
+<p>Google Earth Enterprise 5.1.0 release introduces greater map
+building flexibility with an additional Plate Carrée map
+projection and for the first time adds the ability to use flat
+imagery resources in all three database types. Whether storage
+space is a key consideration or performance speed when serving
+your map databases, GEE now offers different options when planning
+your imagery resources.</p>
+<p><strong>Support for Flat Projection</strong> (Plate Carrée—EPSG:4326). The
+<a class="reference internal" href="../fusionResAndProj/mapProjectTypesInGEE5.1.0.html"><span class="doc">Flat Projection</span></a> map is useful because
+the imagery layers for Google Earth EC and Google Maps can share
+the same database.</p>
+<p><strong>Add flat imagery to a Mercator map database</strong>; when the Mercator
+map is served on GEE Server, the flat imagery is projected as
+<a class="reference internal" href="../fusionResAndProj/addFlatImageryToMercatorMapDBInGEE5.1.0.html"><span class="doc">Mercator on the Fly</span></a>. Now that your
+Mercator map databases can share the same imagery projects as a
+Flat Projection map databases, you can save on storage space and
+database building time by eliminating the need for Mercator-based
+imagery.</p>
+<p><strong>Configure SSL/HTTPS with command line option</strong>. You can now
+create and register a location-based virtual host using the
+command line tool <code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--addvh</span> <span class="pre">--ssl</span></code>. See <a class="reference internal" href="../geeServerConfigAndSecurity/configureGeeServer_SSL_HTTPS.html"><span class="doc">Configure GEE Server for SSL/HTTPS</span></a>.</p>
+<p><strong>Set TRANSPARENT and BGCOLOR parameters when making WMS
+requests</strong>. You can now determine if your map should be
+transparent, allowing other map layers beneath to be visible, and
+you can also set the background color of the map. See <a class="reference internal" href="../geeServerAdmin/makeWMSRequests.html"><span class="doc">Make Web Map Service (WMS) requests</span></a>.</p>
+<p><strong>Display All option for center labels for polygon settings in the
+Map Layer dialog</strong>. By default, GEE will display center labels of
+polygons so that they do not overlap, hiding some labels where
+necessary. Alternatively, check the <strong>Display All</strong> option for
+center labels for polygon settings in the <strong>Map Layer</strong> dialog to
+show all labels of polygons, irrespective of whether they overlap.
+See <a class="reference internal" href="../fusionTutorial/createMapDB.html"><span class="doc">Creating a Map Database</span></a>.</p>
+<p class="rubric">Supported Platforms</p>
+<p>The Google Earth Enterprise 5.1.0 release is supported on 64-bit
+versions of the following operating systems:</p>
+<ul class="simple">
+<li>Ubuntu 10.04 LTS and 12.04 LTS</li>
+<li>Red Hat Enterprise Linux versions 6.0 to 6.5, including the most recent security patches</li>
+<li>CentOS 6.5</li>
+</ul>
+<p>GEE 5.1.0 is compatible with Google Earth Enterprise Client (EC)
+and Plugin versions 7.0.1 - 7.1.1.1888 for Windows, Mac, and
+Linux.</p>
+<p class="rubric">Library Updates</p>
+<p><strong>Google Maps JavaScript Maps API V3:</strong></p>
+<ul class="simple">
+<li>Updated to version 3.17. See <a class="reference external" href="https://code.google.com/p/gmaps-api-issues/wiki/JavascriptMapsAPIv3Changelog">change release</a> information.</li>
+</ul>
+<p><strong>Apache HTTP Server:</strong></p>
+<ul class="simple">
+<li>Updated from version 2.2.27 to 2.2.29. See <a class="reference external" href="http://www.apache.org/dist/httpd/CHANGES_2.2.29">Apache HTTP Server Project</a> for information about the vulnerabilities addressed.</li>
+</ul>
+<p class="rubric">Known Issues</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="25%" />
+<col width="25%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Number</th>
+<th class="head">Description</th>
+<th class="head">Workaround</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>17725523</td>
+<td>When attempting to install GEE 5.1.0 on RHEL 6 using the GUI installer, the process is likely to fail.</td>
+<td>To install GEE 5.1.0 on RHEL 6, use the command line installer for Fusion and Server instead.</td>
+</tr>
+<tr class="row-odd"><td>17532512</td>
+<td>When canceling the build process of a map database, the processes that build the map
+layer project will not be canceled.</td>
+<td><p class="first">When canceling the build process of a map database, you need also manually cancel the
+build process for the map layer project:</p>
+<blockquote class="last">
+<div><ol class="arabic simple">
+<li>In the Asset Manager dialog, right-click the map database name that you are trying to
+cancel the build and choose <strong>Asset Versions</strong> from the context menu. The Properties dialog appears.</li>
+<li>Select the version that you want to cancel, right-click and select <strong>Version Properties</strong> from the
+context menu to open the Version Properties dialog.</li>
+<li>Click the <strong>+</strong> next to <strong>MapDatabase</strong> to open the tree of assets in the database. Right-click
+the <strong>MapLayer</strong> assets under <strong>Project</strong> and click <strong>Cancel</strong> in the context menu. The MapLayerLevels
+processing is canceled. Close the Version Properties and Properties dialogs to return to the Asset Manager.</li>
+</ol>
+</div></blockquote>
+</td>
+</tr>
+<tr class="row-even"><td>17363564</td>
+<td>3D databases with terrain projects, including overlay insets, that do not include worldwide coverage,
+may cause Google Earth 7.1.1 to crash.</td>
+<td>Include worldwide terrain in all terrain projects, even when building overlays, as worldwide coveragei
+enables the regions of overlay inset to fill with values from the base terrain.i
+See <a class="reference internal" href="../fusionTutorial/buildProject.html"><span class="doc">Defining and Building Projects</span></a> and <a class="reference internal" href="../fusionResAndProj/createTerrainOverlays.html"><span class="doc">Create terrain overlays</span></a>.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Resolved Issues</p>
+<p>The following resolved issues are incremental fixes and relative to the
+last official build, <a class="reference internal" href="relNotesGEE5_0_2.html"><span class="doc">GEE 5.0.2</span></a>.</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="25%" />
+<col width="25%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Number</th>
+<th class="head">Description</th>
+<th class="head">Resolution</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>14254303</td>
+<td>When installing Fusion, the GUI installer skips the screen that enables group and user name settings to be created.</td>
+<td>Fixed. you can accept the default <strong>user</strong> name: <em>gefusionuser</em>, and <strong>group</strong> name: <em>gegroup</em> or specify
+your own custom names.</td>
+</tr>
+<tr class="row-odd"><td>15290004, 15313028</td>
+<td>When attempting to cancel a cut using the <strong>Cutter</strong> tool, the Cancel button does
+not properly kill any running task on GEE Server.</td>
+<td>Fixed. The <strong>Cutter</strong> cancel process now kills any running task on GEE Server.</td>
+</tr>
+<tr class="row-even"><td>16618751</td>
+<td>When attempting to specify the <code class="docutils literal notranslate"><span class="pre">--lut</span></code> option for the <code class="docutils literal notranslate"><span class="pre">gevirtualraster</span></code> tool, no file is specified.</td>
+<td>The <code class="docutils literal notranslate"><span class="pre">--lut</span></code> option has been removed from the <code class="docutils literal notranslate"><span class="pre">gevirtualraster</span></code> command and supporting
+documentation as the LUT file type is not being used.</td>
+</tr>
+<tr class="row-odd"><td>16135553</td>
+<td>When the <code class="docutils literal notranslate"><span class="pre">gemaskgen</span></code> tool terminates in error, there is insufficient error logging.</td>
+<td>A check for size of source/output raster and logging support for gemaskgen has been improved,
+providing more information about processes and when they are terminated in error.</td>
+</tr>
+<tr class="row-even"><td>17300345</td>
+<td>When adding a new imagery resource to an existing imagery project that was originally built with GEE 4.4.1,
+adding a new imagery resource and rebuilding the imagery project with GEE 5.x fails.</td>
+<td>Fixed. Existing imagery projects with older imagery resources now rebuild successfully.</td>
+</tr>
+<tr class="row-odd"><td>16683365</td>
+<td>The option to serve 3D databases using WMS has been deprecated.</td>
+<td>Fixed. WMS now serves 2D flat projection map databases in addition to Mercator projection map databases.
+See <a class="reference internal" href="../geeServerAdmin/makeWMSRequests.html"><span class="doc">Make Web Map Service (WMS) requests</span></a>.</td>
+</tr>
+<tr class="row-even"><td>16701881</td>
+<td>When attempting to set the maximum number of CPUs used for Fusion processing tasks, <strong>geselectassetroot
+–numcpus</strong> fails to update the value specified.</td>
+<td>Fixed. The <strong>geselectassetroot –numcpus</strong> tool specifies the
+<a class="reference internal" href="../fusionAdministration/multipleCPUConfig.html"><span class="doc">maximum number of CPUs</span></a> for Fusion processing.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="relNotesGEE5_0_2.html" title="Release notes: GEE 5.0.2"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="relNotesGEE5_1_1.html" title="Release notes: GEE 5.1.1"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../releaseNotes.html" >Release notes</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

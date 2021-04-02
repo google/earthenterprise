@@ -1,0 +1,167 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>EC Supported Authentication Methods &#8212; Google Earth Enterprise 5.3.9 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Portable" href="../portable.html" />
+    <link rel="prev" title="Fix Earth EC issues" href="fixEarthECIssues.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../portable.html" title="Portable"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="fixEarthECIssues.html" title="Fix Earth EC issues"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../googleEarthEnterpriseClient.html" accesskey="U">Google Earth Enterprise client</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="fixEarthECIssues.html"
+                        title="previous chapter">Fix Earth EC issues</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../portable.html"
+                        title="next chapter">Portable</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp7.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp7.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="ec-supported-authentication-methods">
+<h1>EC Supported Authentication Methods<a class="headerlink" href="#ec-supported-authentication-methods" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Authentication Type</th>
+<th class="head">Version 7.0.8</th>
+<th class="head">Version 7.3.2</th>
+<th class="head">Version 7.3.3</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Basic</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr class="row-odd"><td>PKI</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr class="row-even"><td>OAuth 2.0</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr class="row-odd"><td>SAML 2.0</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Basic Authentication</p>
+<p>Basic authentication is the simplest login method. The user supplies a
+username and password that are compared against known username/password
+combinations to verify the user’s identity.</p>
+<p class="rubric">PKI Authentication</p>
+<p>With Public Key Infrastructure authentication, the user has their own
+security certificate, with a public key, that they provide to the server
+to verify their identity. This is often in the form of a smart card
+that can be read by the client’s computer.</p>
+<p class="rubric">SAML 2.0 and OAuth 2.0 (Unsupported as of 7.3.3)</p>
+<p>SAML and OAuth operate differently under the hood, but the underlying
+concept is similar. In both cases, when a user attempts to access a
+service, they are redirected to a separate Identity Provider to login.
+Once their identity has been verified, an access token is created that
+allows access the requested service.</p>
+<blockquote>
+<div><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In SAML and OAuth workflows, Basic and PKI login can still be used by
+the Identity Provider to validate the user. However, the resulting
+access token may allow access to multiple sites or services. This is
+often referred to as Single Sign-On.</p>
+</div>
+</div></blockquote>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../portable.html" title="Portable"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="fixEarthECIssues.html" title="Fix Earth EC issues"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../googleEarthEnterpriseClient.html" >Google Earth Enterprise client</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>
