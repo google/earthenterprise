@@ -1,0 +1,222 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Import pre-processed data &#8212; Google Earth Enterprise 5.3.9 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Import a subset of imagery" href="importSubsetOfImagery.html" />
+    <link rel="prev" title="Apply alpha masking to imagery" href="applyAlphaMask.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="importSubsetOfImagery.html" title="Import a subset of imagery"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="applyAlphaMask.html" title="Apply alpha masking to imagery"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" accesskey="U">Fusion Resources and Projects</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="applyAlphaMask.html"
+                        title="previous chapter">Apply alpha masking to imagery</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="importSubsetOfImagery.html"
+                        title="next chapter">Import a subset of imagery</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp2.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp2.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="import-pre-processed-data">
+<h1>Import pre-processed data<a class="headerlink" href="#import-pre-processed-data" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>You can import pre-processed data into Fusion. The data comes in
+folders that have Fusion-specific extension names. For example,
+raster data is inside a pair of Imagery and Terrain folders that
+have the same file name with different extensions. Vector data is
+in a single folder with a .kvp extension. There is a diferent
+Fusion import command or command option for each extension. The
+extensions and their import commands are described below:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="27%" />
+<col width="20%" />
+<col width="53%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">File Extension</th>
+<th class="head">Data Types</th>
+<th class="head">Import Command</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>.kip</td>
+<td>Imagery</td>
+<td><code class="docutils literal notranslate"><span class="pre">genewimageryresource</span></code></td>
+</tr>
+<tr class="row-odd"><td>.ktp</td>
+<td>Terrain</td>
+<td><code class="docutils literal notranslate"><span class="pre">genewterrainresource</span></code></td>
+</tr>
+<tr class="row-even"><td>.kvp</td>
+<td>Vector</td>
+<td><code class="docutils literal notranslate"><span class="pre">genewvectorresource</span></code></td>
+</tr>
+<tr class="row-odd"><td>.kmp</td>
+<td>Mask</td>
+<td><code class="docutils literal notranslate"><span class="pre">--havemask</span></code> command option
+Use the <code class="docutils literal notranslate"><span class="pre">--nomask</span></code> option to import files without a mask.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">To import pre-processed data to Fusion:</p>
+<ol class="arabic">
+<li><p class="first">Copy the data to an appropriate directory on your Fusion
+machine. For example, for imagery: <code class="docutils literal notranslate"><span class="pre">/gevol/src/imagery/...</span></code></p>
+</li>
+<li><p class="first">Verify that <code class="docutils literal notranslate"><span class="pre">read</span></code> and <code class="docutils literal notranslate"><span class="pre">execute</span></code> permissions are set on the
+folder and subfiles so that the Fusion user (<code class="docutils literal notranslate"><span class="pre">gefusionuser</span></code>
+by default) can access and read the files.</p>
+</li>
+<li><p class="first">Open a terminal window on your processing machine, then change
+directory to your asset root:</p>
+<p><code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">/gevol/assets</span></code></p>
+</li>
+<li><p class="first">Use the appropriate command for the type of data you have:
+imagery, terrain, or vector. Your command must contain either
+the <code class="docutils literal notranslate"><span class="pre">--havemask</span></code> or <code class="docutils literal notranslate"><span class="pre">--nomask</span></code> option. To import imagery
+that includes pre-processed mask files, use <code class="docutils literal notranslate"><span class="pre">-havemask</span></code>. If
+your raster data does not have a mask, use <code class="docutils literal notranslate"><span class="pre">-nomask</span></code>.
+For example, the NASA Blue Marble imagery does not have a mask.
+If you import it without using <code class="docutils literal notranslate"><span class="pre">-nomask</span></code>, it displays a black
+line and circular gaps at each pole because the map edges are
+masked and the center of the earth is exposed.</p>
+<p>Commands are in the format:</p>
+<p><code class="docutils literal notranslate"><span class="pre">[commandname]</span> <span class="pre">[options]</span> <span class="pre">[--meta</span> <span class="pre">&lt;key&gt;=&lt;value&gt;]...</span> <span class="pre">-o</span> <span class="pre">&lt;assetname&gt;</span> <span class="pre">{</span> <span class="pre">--filelist</span> <span class="pre">&lt;file&gt;</span> <span class="pre">|</span> <span class="pre">&lt;sourcefile&gt;</span> <span class="pre">...}</span></code></p>
+<p>For all <code class="docutils literal notranslate"><span class="pre">genew{imagery,terrain,vector}resource</span></code> tools, the
+output path (<code class="docutils literal notranslate"><span class="pre">-o</span> <span class="pre">path</span></code>) must be relative to the asset root
+directory.</p>
+<p>You can specify source file names on the command line or in a
+file list. To view supported command options, enter
+<code class="docutils literal notranslate"><span class="pre">[commandname]</span> <span class="pre">--help</span> <span class="pre">|</span> <span class="pre">-?</span></code></p>
+<table border="1" class="colwidths-given docutils" id="id1">
+<caption><span class="caption-text">genew Commands</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="10%" />
+<col width="40%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">File Type</th>
+<th class="head">Command</th>
+<th class="head">Example</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>.kip (Imagery)</td>
+<td><code class="docutils literal notranslate"><span class="pre">genewimageryresource</span> <span class="pre">--provider</span> <span class="pre">&lt;PROVIDER_KEY&gt;</span> <span class="pre">--havemask</span> <span class="pre">-o</span>
+<span class="pre">path/to/resource/directory/resourcename</span>
+<span class="pre">/path/to/imagery.kip</span></code></td>
+<td>To add files named <code class="docutils literal notranslate"><span class="pre">SanFrancisco.kip</span></code> and <code class="docutils literal notranslate"><span class="pre">SanFrancisco.kmp</span></code> to the
+<code class="docutils literal notranslate"><span class="pre">/gevol/assets/imagery/noam/usa/ca/SanFrancisco</span></code> directory:
+<code class="docutils literal notranslate"><span class="pre">genewimageryresource</span> <span class="pre">--havemask</span> <span class="pre">-o</span> <span class="pre">imagery/noam/usa/ca/SanFrancisco</span>
+<span class="pre">/gevol/src/imagery/noam/usa/ca/SanFrancisco.kip</span></code></td>
+</tr>
+<tr class="row-odd"><td>.ktp (Terrain)</td>
+<td><code class="docutils literal notranslate"><span class="pre">genewterrainresource</span> <span class="pre">--provider</span> <span class="pre">&lt;PROVIDER_KEY&gt;</span> <span class="pre">--havemask</span> <span class="pre">-o</span>
+<span class="pre">path/to/resource/directory/resourcename</span>
+<span class="pre">/path/to/terrain.ktp</span></code></td>
+<td>To add files named <code class="docutils literal notranslate"><span class="pre">GTOPO30.ktp</span></code> and <code class="docutils literal notranslate"><span class="pre">GTOPO30.kmp</span></code> to the
+<code class="docutils literal notranslate"><span class="pre">/gevol/assets/terrain/world/</span></code> directory:
+<code class="docutils literal notranslate"><span class="pre">genewterrainresource</span> <span class="pre">--havemask</span> <span class="pre">-o</span> <span class="pre">terrain/world/GTOPO30</span>
+<span class="pre">/gevol/src/terrain/world/GTOPO30.ktp</span></code></td>
+</tr>
+<tr class="row-even"><td>.kvp (Vector)</td>
+<td><code class="docutils literal notranslate"><span class="pre">genewvectorresource</span> <span class="pre">--provider</span> <span class="pre">&lt;PROVIDER_KEY&gt;</span> <span class="pre">--encoding</span> <span class="pre">&lt;ENCODING_SCHEME&gt;</span> <span class="pre">-o</span>
+<span class="pre">path/to/resource/directory/resourcename</span> <span class="pre">/path/to/vector.kvp</span></code></td>
+<td>To add a file named <code class="docutils literal notranslate"><span class="pre">income.kvp</span></code> to the
+<code class="docutils literal notranslate"><span class="pre">/gevol/assets/vector/noam/usa/demographic/</span></code> directory:
+<code class="docutils literal notranslate"><span class="pre">genewvectorresource</span> <span class="pre">-o</span> <span class="pre">vector/noam/usa/demographic/income</span>
+<span class="pre">/gevol/src/vector/processed/noncommercial/nationalatlas/income.kvp</span></code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p class="first">Use the <code class="docutils literal notranslate"><span class="pre">gebuild</span></code> command to build the asset:</p>
+<p><code class="docutils literal notranslate"><span class="pre">gebuild</span> <span class="pre">path/to/resource/directory/resourcename</span></code></p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="importSubsetOfImagery.html" title="Import a subset of imagery"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="applyAlphaMask.html" title="Apply alpha masking to imagery"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" >Fusion Resources and Projects</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

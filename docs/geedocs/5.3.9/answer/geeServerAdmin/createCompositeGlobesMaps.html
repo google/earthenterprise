@@ -1,0 +1,267 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Create composite globes and maps &#8212; Google Earth Enterprise 5.3.9 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="View 3D databases" href="view3DDatabases.html" />
+    <link rel="prev" title="Create Portable Globes and Maps" href="createPortableGlobesMaps.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="view3DDatabases.html" title="View 3D databases"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="createPortableGlobesMaps.html" title="Create Portable Globes and Maps"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerAdmin.html" accesskey="U">GEE Server administration</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="createPortableGlobesMaps.html"
+                        title="previous chapter">Create Portable Globes and Maps</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="view3DDatabases.html"
+                        title="next chapter">View 3D databases</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp4.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp4.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="create-composite-globes-and-maps">
+<h1>Create composite globes and maps<a class="headerlink" href="#create-composite-globes-and-maps" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p class="rubric">Contents</p>
+<p><a class="reference internal" href="#introduction-composite-globes-maps"><span class="std std-ref">Introduction</span></a>
+<a class="reference internal" href="#creating-composite-maps-globes"><span class="std std-ref">Creating composite maps and globes</span></a>
+<a class="reference internal" href="#extracting-layers-composite-map-globe"><span class="std std-ref">Extracting layers from a composite map or globe</span></a></p>
+<p class="rubric" id="introduction-composite-globes-maps">Introduction</p>
+<p>A composite globe (<code class="docutils literal notranslate"><span class="pre">.glc</span></code>) is an assembly of layers from
+existing portable globes or maps. A portable globe or map stores
+all the geospatial data available within your specified area of
+interest—your cut—including all high-resolution imagery, terrain,
+vector data, KML files, and searchable point of interest (POI)
+locations. Outside the specified area of interest, the globe or
+map stores only low-resolution imagery and terrain. You specify
+the levels of resolution when you cut the globe or map.</p>
+<p>When you create a composite globe or map, you define your viewing
+area using a KML polygon, select layers, and, for
+globes, specify base globe options. One of the key benefits of
+using composite maps and globes is that you can apply layers that
+use different cuts or regions of interest, then assemble them to
+create one single portable map or globe.</p>
+<p>For example, you may want to create a composite map for a hiking
+trip. You might cut a road map using one region of interest and
+then cut imagery and a park map of the hiking trail using
+additional regions of interest. Ordinarily, cuts from map
+databases would result in separate <code class="docutils literal notranslate"><span class="pre">.glm</span></code> files. By assembling
+the <code class="docutils literal notranslate"><span class="pre">.glm</span></code> files into a composite <code class="docutils literal notranslate"><span class="pre">.glc</span></code> file, the result is a
+single portable map.</p>
+<p><img alt="GEE composite map example" src="../../images/composite_hiking_map.png" /></p>
+<p class="rubric" id="creating-composite-maps-globes">Creating composite maps and globes</p>
+<p>You can create composite files of portable globes and maps with
+the <strong>Assembly tool</strong> feature of the Google Earth Enterprise (GEE)
+Server. You provide a KML polygon definition to identify the area
+of interest. This polygon not only defines the viewing area, but
+is used by Fusion to create a localized search database.</p>
+<p>You select 2D or 3D layers to add to the composite file from any
+of the cut maps or globes that are available in the
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/cutter/globes</span></code> directory. In
+addition, for globes, you specify a base globe.</p>
+<p>New <code class="docutils literal notranslate"><span class="pre">.glc</span></code> files are added to the default
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/cutter/globes</span></code> directory. If you
+want to change the location of your portable files directory, see
+<a class="reference internal" href="../portable/portableUserGuideWinLinux.html#serve-globe-map-gee-server"><span class="std std-ref">Serving a globe or map from GEE Server</span></a>.</p>
+<p>If you want to extract the 2D or 3D layers from a composite .glc
+file, use the Disassembly tool, specifying a target directory
+for the extracted files.</p>
+<p class="rubric">To assemble a composite map or globe:</p>
+<ol class="arabic">
+<li><p class="first">Access the Google Earth Enterprise Server Admin console in a
+browser window by going to myserver.mydomainname.com/admin,
+replacing myserver and mydomainname with your server and
+domain.</p>
+</li>
+<li><p class="first">Sign in with the default credentials or the username and
+password assigned to you:</p>
+<ul class="simple">
+<li>Default username: <em>geapacheuser</em></li>
+<li>Default password: <em>geeadmin</em></li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you do not know your username and password,
+contact your Google Earth Enterprise Server System
+Administrator.</p>
+</div>
+</li>
+<li><p class="first">Click <strong>Dashboard</strong> to view information about the
+portable files registered on and published to the Server.</p>
+</li>
+<li><p class="first">Click the <strong>Settings</strong> button in the top right of the window
+and choose <strong>Glc Assembly</strong> from the <strong>Tools</strong> menu. The GLC
+Assembly tool window appears.</p>
+</li>
+<li><p class="first">Enter a name for the offline map or globe.</p>
+<p>The name defines the file name for your composite map or globe.
+Composite maps and globes are created as <code class="docutils literal notranslate"><span class="pre">.glc</span></code> files. Spaces,
+slashes, and double dots (..) will be converted to underscores
+in the saved map or globe name.</p>
+</li>
+<li><p class="first">Enter a description to be associated with the composite file.</p>
+<p>The description appears in the list of portable files in
+Portable when you click the Folder icon and also on the
+Dashboard page in the GEE Server admin console.</p>
+</li>
+<li><p class="first">Provide a KML polygon to define your area of interest,
+including the definition of your localized search database.</p>
+</li>
+<li><p class="first">Choose either 2D or 3D to see a list of the available layers
+from the maps and globes you have available in the
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/cutter/globes</span></code> directory.</p>
+</li>
+<li><p class="first">Click the <strong>Layers</strong> drop-down list to select a layer to add to
+your composite file. The selected layer appears as Layer 1.
+Check the <strong>Use Search?</strong> box to include a localized search
+database with this layer.</p>
+</li>
+<li><p class="first">To add more layers, click the <strong>Layers</strong> drop-down list and
+continue to select from the available maps or globes.</p>
+<p>Select the layers in the order that you want them to appear in
+your portable globe or map. If you need to remove a layer,
+click <strong>delete</strong>.</p>
+<p><img alt="GEE Assembly tool" src="../../images/AssemblyTool-full.png" /></p>
+<p>When you have no more layers available, the <strong>Layers</strong>
+drop-down list indicates that all available layers are in use.</p>
+</li>
+<li><p class="first">To select a base globe option, click the <strong>Base globe options</strong>
+drop-down list and choose a portable globe, then click <strong>Yes</strong> to use
+the imagery and terrain data for the selected base globe.</p>
+<p><img alt="GEE Assembly tool base globe options" src="../../images/Base_globe_options.png" /></p>
+<p>If your base globe is a portable file created using Portable
+Server 4.4 or earlier, click <strong>Yes</strong> next to <strong>Old (4.4) globe</strong>.
+This option only affects the imagery layer within older <code class="docutils literal notranslate"><span class="pre">.glb</span></code>
+files.</p>
+</li>
+<li><p class="first">Click <strong>Assemble Glc</strong>.</p>
+</li>
+</ol>
+<p class="rubric" id="extracting-layers-composite-map-globe">Extracting layers from a composite map or globe</p>
+<p>If you want to extract the 2D or 3D layers from a composite
+<code class="docutils literal notranslate"><span class="pre">.glc</span></code> file, you use the <strong>Glc Disassembly</strong> tool, specifying a
+target directory for the extracted files.</p>
+<p class="rubric">To disassemble a composite file:</p>
+<ol class="arabic">
+<li><p class="first">Access the Google Earth Enterprise Server Admin console in a
+browser window by going to myserver.mydomainname.com/admin,
+replacing myserver and mydomainname with your server and
+domain.</p>
+</li>
+<li><p class="first">Sign in with the default credentials or the username and
+password assigned to you:</p>
+<ul class="simple">
+<li>Default username: <em>geapacheuser</em></li>
+<li>Default password: <em>geeadmin</em></li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you do not know your username and password,
+contact your Google Earth Enterprise Server System
+Administrator.</p>
+</div>
+</li>
+<li><p class="first">Click <strong>Dashboard</strong> to view information about the
+portable files registered on and published to the Server.</p>
+</li>
+<li><p class="first">Click the <strong>Settings</strong> button in the top right of the window
+and choose <strong>Glc Disassembly</strong> from the <strong>Tools</strong> menu. The GLC
+disassembly tool window appears.</p>
+</li>
+<li><p class="first">Click the <strong>Glc path</strong> drop-down list to select a composite
+file to disassemble.</p>
+<p>By default, the Glc path is the
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/cutter/globes</span></code> directory, where all
+portable maps and globes are stored.</p>
+</li>
+<li><p class="first">Enter a new output directory in the text box.</p>
+</li>
+<li><p class="first">Click <strong>Disassemble glc</strong>.</p>
+<p>The layers in the composite file are extracted and are moved to
+the output directory that you specified. If you included a base
+globe, this portable file is also output to the same directory.</p>
+<p><img alt="GEE Disassembly tool" src="../../images/disassemblyTool-full.png" /></p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="view3DDatabases.html" title="View 3D databases"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="createPortableGlobesMaps.html" title="Create Portable Globes and Maps"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerAdmin.html" >GEE Server administration</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

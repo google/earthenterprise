@@ -1,0 +1,311 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Specifying Search Fields for Individual Layers &#8212; Google Earth Enterprise 5.3.9 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Configuring a Searchable Database" href="confSearchableDB.html" />
+    <link rel="prev" title="Importing and Exporting Style Templates" href="impExpStyleTemplates.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="confSearchableDB.html" title="Configuring a Searchable Database"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="impExpStyleTemplates.html" title="Importing and Exporting Style Templates"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionTutorial.html" accesskey="U">Fusion Tutorial</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="impExpStyleTemplates.html"
+                        title="previous chapter">Importing and Exporting Style Templates</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="confSearchableDB.html"
+                        title="next chapter">Configuring a Searchable Database</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp3.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp3.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="specifying-search-fields-for-individual-layers">
+<h1>Specifying Search Fields for Individual Layers<a class="headerlink" href="#specifying-search-fields-for-individual-layers" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>You can specify one or more fields by configuring layer properties
+in your source data on which users of Google Earth EC can search.
+This lesson guides you through the process of specifying one field
+on one layer as searchable, using the vector project you created
+in <a class="reference internal" href="displayRulesPolygon.html"><span class="doc">Configuring Display Rules for Polygon Data</span></a>. If you have not yet completed
+that lesson, complete at least the first two sections,
+<a class="reference internal" href="displayRulesPolygon.html#define-vector-polygon"><span class="std std-ref">Define and Build a Vector Resource Using Polygon Data</span></a> and
+<a class="reference internal" href="displayRulesPolygon.html#define-vector-project1"><span class="std std-ref">Define, Configure, and Build a Vector Project</span></a>,
+before continuing with this lesson.</p>
+<ul class="simple">
+<li><a class="reference internal" href="#specify-search-fields"><span class="std std-ref">Specify Search Fields in Layer Properties</span></a></li>
+<li><a class="reference internal" href="#build-push-database"><span class="std std-ref">Build and Push Your Database</span></a></li>
+<li><a class="reference internal" href="#specify-poi-search-publish"><span class="std std-ref">Specify Your Point of Interest Search and Publish Your
+Database in Google Earth Enterprise Server</span></a></li>
+<li><a class="reference internal" href="#view-database-search-field"><span class="std std-ref">View your Database with the Search Field</span></a></li>
+</ul>
+<p class="rubric" id="specify-search-fields">Specify Search Fields in Layer Properties</p>
+<p class="rubric">To specify the search fields in your data:</p>
+<ol class="arabic">
+<li><p class="first">Select <strong>Asset Manager</strong> from the <strong>Tools</strong> menu.</p>
+<p>The Asset Manager appears.</p>
+</li>
+<li><p class="first">Navigate to the <code class="docutils literal notranslate"><span class="pre">/ASSET_ROOT/Projects/Vector</span></code> folder.</p>
+</li>
+<li><p class="first">Double-click <strong>CACountyPopulation</strong>.</p>
+<p>The <strong>CACountyPopulation</strong> resource appears in the Vector
+Project Editor dialog.</p>
+</li>
+<li><p class="first">Right-click <strong>CACountyPopulation</strong>, and select <strong>Layer
+Properties</strong> from the context menu.</p>
+<p>The Layer Properties dialog appears.</p>
+</li>
+<li><p class="first">Click the <strong>Search</strong> tab.</p>
+<p><img alt="Layer Properties Search Tab" src="../../images/layerProperties_SearchTab.png" /></p>
+<p>When you specify one or more search fields on this tab, a
+search panel appears in Google Earth EC that allows users to
+search for data in the selected field(s).</p>
+</li>
+<li><p class="first">Click <img alt="New Icon" src="../../images/icon_new1.gif" />. The <strong>Add Search Field</strong> dialog appears.</p>
+<p><img alt="Layer Search Add" src="../../images/layerSearchAdd.png" /></p>
+</li>
+<li><p class="first">Select <strong>COUNTY</strong> from the drop-down list next to <strong>Column Name</strong>,
+select <strong>Search and Display</strong> from the drop-down list next to
+<strong>Use</strong>, and then click <strong>OK</strong>.</p>
+<p><img alt="Search Field1" src="../../images/searchField1.png" /></p>
+<p>These selections allow users to search on the COUNTY field and
+display the county name in the description label.</p>
+</li>
+<li><p class="first">Click <img alt="New Icon" src="../../images/icon_new1.gif" />. The <strong>Add Search Field</strong> dialog appears.</p>
+<p><img alt="Layer Search Add" src="../../images/layerSearchAdd.png" /></p>
+</li>
+<li><p class="first">Select <strong>POP2000</strong> from the drop-down list next to <strong>Column Name</strong>,
+select <strong>Display Only</strong> from the drop-down list next to <strong>Use</strong>,
+and then click <strong>OK</strong>.</p>
+<p><img alt="Search Field2" src="../../images/searchField2.png" /></p>
+<p>These selections result in the county population being
+displayed in the description label for each county that matches
+the user’s search criteria. The first field selected for
+display becomes the placemark name. The second field selected
+for display becomes the snippet. Any additional fields selected
+for display become the description.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This search performs an exact match, which means
+that the Google Earth EC user must enter the value exactly
+as it appears in the database. It can also perform a
+wildcard search, so users can enter part of the text they
+want to match. For example, if a user enters “dakota” in a
+state search, the search results match “North Dakota” and
+“South Dakota”.</p>
+</div>
+<p>Your selections appear on the list of search fields on the
+Search panel in the order in which you added them. Use the Up
+or Down arrows to reorder the list.</p>
+<p><img alt="Layer Properties Search Tab Full" src="../../images/layerProperties_SearchTab-full.png" /></p>
+<p>The order in which the fields appear on this list dictates the
+order in which they appear in the description label in Google
+Earth EC.</p>
+</li>
+<li><p class="first">Click <strong>OK</strong>.</p>
+</li>
+<li><p class="first">Save the project.</p>
+</li>
+</ol>
+<p class="rubric" id="build-push-database">Build and Push To Your Database</p>
+<ol class="arabic">
+<li><p class="first">In the Asset Manager, navigate to the <code class="docutils literal notranslate"><span class="pre">/ASSET_ROOT/Databases</span></code>
+folder.</p>
+</li>
+<li><p class="first">Right-click the <strong>CACountyPopulation</strong> database and select
+<strong>Build</strong> from the context menu.</p>
+<p>The status of the database immediately changes to <strong>Queued</strong>
+and then to <strong>In Progress</strong>.</p>
+</li>
+<li><p class="first">Double-click the <strong>Current Version</strong> or <strong>Current State</strong> column of the
+<strong>CACountyPopulation</strong> to view the progress of the build.</p>
+<p>The Version Properties dialog displays the most recent version
+of that database. You can expand the version tree to view the
+status of the build in real time by clicking the <strong>+</strong> signs.</p>
+<p>When Google Earth Enterprise Fusion finishes building the
+database, its <strong>Current State</strong> column in the Asset Manager changes
+to <strong>Succeeded</strong>, and its <strong>Current Version</strong> column changes to the
+date and time the most recent build was started.</p>
+</li>
+<li><p class="first">Right-click the <strong>CACountyPopulation</strong> database and select
+<strong>Push</strong> from the context menu.</p>
+<p>The Push Database dialog appears. Choose your server
+association from the <strong>Server Associations</strong> drop-down list. The
+most recent version of the selected database is the default
+selection on the <strong>Version</strong> drop-down list.</p>
+</li>
+<li><p class="first">Click <strong>Push</strong>. Google Earth Enterprise Fusion pushes the
+database to Google Earth Enterprise Server, and displays a
+success message when it is done.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you get an error message, contact your Google
+Earth Enterprise Server administrator for help, or check the
+<em>Google Earth Enterprise Administration Guide</em> for more
+information.</p>
+</div>
+</li>
+</ol>
+<p class="rubric" id="specify-poi-search-publish">Specify Your Point of Interest Search and Publish Your
+Database in Google Earth Enterprise Server</p>
+<p>After you push your database to Google Earth Enterprise Server,
+you can publish it for viewing with Google Earth EC.</p>
+<p class="rubric">To publish a database:</p>
+<ol class="arabic">
+<li><p class="first">Access the Google Earth Enterprise Server Admin console in a
+browser window by going to <em>myserver.mydomainname</em>.com/admin,
+replacing <em>myserver</em> and <em>mydomainname</em> with your server and
+domain.</p>
+</li>
+<li><p class="first">Sign in with the default credentials or the username and
+password assigned to you:</p>
+<ul class="simple">
+<li>Default username: <em>geapacheuser</em></li>
+<li>Default password: <em>geeadmin</em></li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you do not know your username and password,
+contact your Google Earth Enterprise Server System
+Administrator.</p>
+</div>
+</li>
+<li><p class="first">Click <strong>Databases</strong> to display the list of databases pushed to
+the server.</p>
+<p>CACountyPopulation-v001 is listed. The Description, Type, Date,
+and Size of the database are also noted.</p>
+</li>
+<li><p class="first">Check the box next to <strong>CACountyPopulation-v001</strong>. The <strong>Publish</strong>
+button on the Databases page appears.</p>
+</li>
+<li><p class="first">Click <strong>Publish</strong>. The Publish dialog appears.</p>
+</li>
+<li><p class="first">Select the <strong>POI Search</strong> radio button labeled <strong>On</strong>. The <strong>+
+Enhanced Search</strong> option appears. Leave its radio button
+setting as <strong>On</strong>. Doing so will first search against the <em>POI
+database</em>, and if no results are found, the <em>GeocodingFederated
+database</em> is automatically searched.</p>
+</li>
+<li><p class="first">Change the default <strong>Publish point</strong> from CACountyPopulation-v001
+to <strong>CACountySearch</strong>.</p>
+<p><img alt="GEE Server Database Publish POI Search dialog" src="../../images/serverDatabasePublish-POI.png" /></p>
+<p>To learn more about the options available in the Publish
+dialog, see</p>
+<ul class="simple">
+<li><a class="reference internal" href="../geeServerAdmin/publishDefaultDatabase.html"><span class="doc">Default database</span></a></li>
+<li><a class="reference internal" href="../geeServerAdmin/createSearchTabs.html"><span class="doc">Search Tabs</span></a></li>
+<li><a class="reference internal" href="../geeServerAdmin/manageSnippetProfiles.html"><span class="doc">Snippet profiles</span></a></li>
+<li><a class="reference internal" href="../geeServerAdmin/makeWMSRequests.html"><span class="doc">WMS</span></a></li>
+</ul>
+</li>
+<li><p class="first">Click <strong>Publish</strong>. The Databases page updates to indicate the
+published status of your database.</p>
+</li>
+</ol>
+<p class="rubric" id="view-database-search-field">View your Database with the Search Field</p>
+<p>Now you can view the POISearch search field in Google Earth EC and
+use it to search on the county information parameters you
+specified in your database.</p>
+<ol class="arabic simple">
+<li>Launch Google Earth EC, and log in to your server.</li>
+<li>Specify the <strong>Publish point</strong> by entering or selecting the URL or
+IP address of your server and database in the <strong>Server</strong> field. For
+this tutorial, the <strong>Publish point</strong> is
+<em>myserver.mydomainname</em>.com/CACountySearch, where <em>myserver</em>
+and <em>mydomainname</em> are specific to your server. An example URL
+would be <a class="reference external" href="http://myhostname/CACountySearch">http://myhostname/CACountySearch</a>.</li>
+<li>Click the <strong>Sign In</strong> button.</li>
+</ol>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">If you have logged in to this server with Google
+Earth EC previously, log out, clear your cache, and log back
+in. See <a class="reference internal" href="../googleEarthEnterpriseClient/clearGoogleEarthEC.html"><span class="doc">clearing your cache</span></a>.</p>
+</div>
+<p>Google Earth EC displays your database with the search field you
+specified. When you enter a search string, such as “San”, all of
+the counties containing that string appear in the search results,
+and POI icons indicate the location of each of the search results
+on the map.</p>
+<p><img alt="Database With POI Search Field" src="../../images/ECSearchTab-POI.png" /></p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="confSearchableDB.html" title="Configuring a Searchable Database"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="impExpStyleTemplates.html" title="Importing and Exporting Style Templates"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionTutorial.html" >Fusion Tutorial</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,327 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Publish databases using disconnected publishing &#8212; Google Earth Enterprise 5.3.9 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Troubleshoot push/publishing issues" href="troubleshootPushPublishIssues.html" />
+    <link rel="prev" title="Push and publish databases" href="pushAndPublishDB.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="troubleshootPushPublishIssues.html" title="Troubleshoot push/publishing issues"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pushAndPublishDB.html" title="Push and publish databases"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" accesskey="U">Fusion Administration</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pushAndPublishDB.html"
+                        title="previous chapter">Push and publish databases</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="troubleshootPushPublishIssues.html"
+                        title="next chapter">Troubleshoot push/publishing issues</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp1.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp1.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="publish-databases-using-disconnected-publishing">
+<h1>Publish databases using disconnected publishing<a class="headerlink" href="#publish-databases-using-disconnected-publishing" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>If you want to publish databases on a server that does not have a
+network connection to your Google Earth Enterprise Fusion
+workstations, you can create a database that can be output to
+portable media, which can then be pushed and published to GEE
+Server.</p>
+<p>A large database can be copied to portable media and loaded onto
+the server using <code class="docutils literal notranslate"><span class="pre">geserveradmin</span></code> commands, saving the time and
+bandwidth required to send terabytes of data over the network. In
+addition, you can also create deltas for the same databases, which
+can then be sent over the network.</p>
+<p class="rubric" id="before-you-begin">Before you begin</p>
+<p>To use the disconnected publishing service, you need to install
+the <strong>GEE Server - Disconnected Add-on</strong>, which you can add by
+running the installation process and choosing <strong>Custom</strong> as the
+installation type.</p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">Disconnected production servers require X11 libraries,
+including Mesa. Google Earth Enterprise Server does not require
+an X server to be running or installed, however; only the
+libraries are required.</p>
+</div>
+<p class="rubric" id="prepare-a-disconnected-database">Prepare a disconnected database</p>
+<p>Before creating a disconnected database, you can estimate the
+space required to store the disconnected database by running
+<code class="docutils literal notranslate"><span class="pre">gedisconnectedsend</span></code> with the <code class="docutils literal notranslate"><span class="pre">--report_size_only</span></code> option.</p>
+<p class="rubric" id="to-estimate-the-size-of-a-disconnected-database">To estimate the size of a disconnected database:</p>
+<ol class="arabic">
+<li><p class="first">From the command line, specify the database that you want to
+publish with the <code class="docutils literal notranslate"><span class="pre">--report_size_only</span></code> flag:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gedisconnectedsend --report_size_only --sendpath <span class="se">\</span>
+/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb
+</pre></div>
+</div>
+</li>
+</ol>
+<p class="rubric" id="to-create-a-disconnected-database">To create a disconnected database:</p>
+<ol class="arabic">
+<li><p class="first">Create an output directory on your portable media, which you
+will specify when you create the disconnected database.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rm -rf /media/ddb/test_ver001/
+mkdir -p /media/ddb/test_ver001/
+</pre></div>
+</div>
+</li>
+</ol>
+<p>Create the disconnected database and output the file to your
+portable media:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gedisconnectedsend --output /media/ddb/test_ver001/ <span class="se">\</span>
+--sendpath /gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb
+</pre></div>
+</div>
+<p>In this example,
+<code class="docutils literal notranslate"><span class="pre">/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/</span></code>
+is the path to the <code class="docutils literal notranslate"><span class="pre">gedb</span></code> directory of the disconnected
+database.</p>
+<p class="rubric">Prepare delta disconnected databases</p>
+<p>The disconnected database command includes the option
+<code class="docutils literal notranslate"><span class="pre">--havepath</span></code> or <code class="docutils literal notranslate"><span class="pre">--havepathfile</span></code>, to create a delta
+disconnected database, based on different versions of the same
+database. To create the delta, the assetroot of the GEE Fusion
+machine must store the versions of databases, as reported by
+geserveradmin <code class="docutils literal notranslate"><span class="pre">--listdbs</span></code> on the GEE Server machine, from which
+the delta disconnected database is created.</p>
+<p>When publishing from a GEE Fusion machine (in this example,
+<code class="docutils literal notranslate"><span class="pre">machine_one</span></code>) to a disconnected GEE Server machine (in this
+example, <code class="docutils literal notranslate"><span class="pre">machine_two</span></code>), verify the list of versions of the
+disconnected database for which you want to create the delta:</p>
+<p>For example, on <code class="docutils literal notranslate"><span class="pre">machine_two</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geserveradmin --fusion_host machine_one --listdbs &gt; /home/user_name/ddb/dblist_server_host
+</pre></div>
+</div>
+<p>On <code class="docutils literal notranslate"><span class="pre">machine_one</span></code>, create the delta disconnected database using
+the <code class="docutils literal notranslate"><span class="pre">--havepathfile</span></code> option:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gedisconnectedsend --output /media/ddb/test_ver001/ <span class="se">\</span>
+--havepathfile /home/user_name/ddb/dblist_server_host <span class="se">\</span>
+--sendpath /gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb
+</pre></div>
+</div>
+<p class="rubric" id="publish-on-the-remote-server-host">Publish on the remote server host</p>
+<p>Connect the portable media to the Server host and mount the drive.
+In this example,
+<code class="docutils literal notranslate"><span class="pre">/media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/</span></code>
+is the path to the <code class="docutils literal notranslate"><span class="pre">gedb</span></code> directory of the disconnected
+database.</p>
+<p class="rubric" id="to-publish-on-the-remote-server-host">To publish on the remote server host:</p>
+<ol class="arabic">
+<li><p class="first">Set ownership and permissions for the <code class="docutils literal notranslate"><span class="pre">gedb</span></code> directory:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo chown -R gefusionuser:gegroup ddb/
+sudo chmod -R <span class="m">755</span> ddb/
+</pre></div>
+</div>
+</li>
+<li><p class="first">Register the database on the Server. Specifying the
+–stream_server_url is optional.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geserveradmin --fusion_host fusion_host.company.com <span class="se">\</span>
+--stream_server_url http://your_stream_server <span class="se">\</span>
+--adddb <span class="se">\</span>
+/media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/
+</pre></div>
+</div>
+</li>
+<li><p class="first">Push the files to the Server:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geserveradmin --fusion_host fusion_host.company.com <span class="se">\</span>
+--stream_server_url http://your_stream_server <span class="se">\</span>
+--pushdb <span class="se">\</span>
+/media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/
+</pre></div>
+</div>
+</li>
+<li><p class="first">Publish the database on the Server either using the <a class="reference internal" href="../geeServerAdmin/publishDatabasesPortables.html"><span class="doc">GEE Server
+Admin console</span></a> or on the command
+line. The GEE Server Admin console Publish dialog includes
+options to</p>
+<ul class="simple">
+<li><a class="reference internal" href="../geeServerAdmin/publishDefaultDatabase.html"><span class="doc">set the default database</span></a></li>
+<li><a class="reference internal" href="../geeServerAdmin/createSearchTabs.html"><span class="doc">add search</span></a></li>
+<li><a class="reference internal" href="../geeServerAdmin/manageSnippetProfiles.html"><span class="doc">add snippet profiles</span></a></li>
+<li><a class="reference internal" href="../geeServerAdmin/manageVirtualHosts.html"><span class="doc">specify a virtual host</span></a></li>
+<li><a class="reference internal" href="../geeServerAdmin/makeWMSRequests.html"><span class="doc">turn on WMS</span></a>.</li>
+</ul>
+<p><strong>To publish on the command line:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geserveradmin --fusion_host fusion_host.company.com <span class="se">\</span>
+--stream_server_url http://your_stream_server <span class="se">\</span>
+--publishdb <span class="se">\</span>
+/media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/
+</pre></div>
+</div>
+</li>
+<li><p class="first">Verify that the database manifests:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>geserveradmin --stream_server_url http://your_stream_server <span class="se">\</span>
+--listdbs
+
+geserveradmin --stream_server_url http://your_stream_server <span class="se">\</span>
+--dbdetails <span class="se">\</span>
+/media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb
+</pre></div>
+</div>
+</li>
+<li><p class="first">Verify the integrity of files in the published database:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ssh your_server
+
+/opt/google/bin/geindexcheck --database <span class="se">\</span>
+/gevol/published_dbs/stream_space/your_fusion_host/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb
+
+/opt/google/bin/geindexcheck --mode all --database <span class="se">\</span>
+/gevol/published_dbs/stream_space/your_fusion_host/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">The paths in the examples above were split onto multiple
+lines for documentation using backslashes. They should be
+entered on one line when completing your commands.</p>
+</div>
+</li>
+</ol>
+<p class="rubric" id="symbolic-links">Symbolic links</p>
+<p>Symbolic links are turned on by default in the published databases
+configuration file, <code class="docutils literal notranslate"><span class="pre">AllowSymLinks=Y</span></code> in the
+<code class="docutils literal notranslate"><span class="pre">/gevol/published_dbs/.config</span></code>, resulting in hard or soft
+symbolic links being created, depending on the logical volumes of
+the relevant directories:</p>
+<ul class="simple">
+<li><strong>hard-link</strong>: the disconnected database folder and
+published_dbs folder are on the same logical volume.</li>
+<li><strong>soft-link</strong>: the disconnected database folder and
+published_dbs folder are on different logical volumes.</li>
+<li>If the disconnected database folder is in <code class="docutils literal notranslate"><span class="pre">/tmp</span></code>, the
+directory files will be copied.</li>
+</ul>
+<p class="rubric">Rewrite KML Layer URLs</p>
+<p>If the disconnected database contains KML layers, the KML layers’s
+URLs may require adjustments in order to resolve the KML content
+in a disconnected environment. (See <a class="reference internal" href="../fusionResAndProj/addKMLLayers.html"><span class="doc">Add KML layers</span></a>). Use the <code class="docutils literal notranslate"><span class="pre">gerewritedbroot</span></code>
+command to update the disconnected database KML links with new
+hostname, ports, paths, or filenames.</p>
+<ol class="arabic">
+<li><p class="first">Publish KML content</p>
+<p>Copy, publish, and modify the KML files on the disconnected
+GEE Server machine’s network as needed. Validate that the
+referenced KML files are accessible on the disconnected network
+via HTTP or HTTPS using a web browser or command line tools.
+Note the differences in hostnames, paths, and ports between
+their origninal locations and their locations on the
+disconnected network environment.</p>
+<p>KML files can be served from the
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/htdocs/</span></code> folder or a subfolder, or on a
+separate web server.</p>
+</li>
+<li><p class="first">Identify which dbroot file needs to be updated, and store in an
+environment variable for later use:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">TARGET_DBROOT</span><span class="o">=</span><span class="s1">&#39;/media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/targets/new_target/dbroots/dbroot.v5p.DEFAULT&#39;</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Rewrite the KML layer links in the database on the Server.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/opt/google/bin/gerewritedbroot --source http://your_stream_server/new_target <span class="se">\</span>
+--dbroot_file <span class="nv">$TARGET_DBROOT</span> <span class="se">\</span>
+--kml_server your_stream_server --kml_url_path  your_htdoc_path/ <span class="se">\</span>
+--preserve_kml_filenames
+</pre></div>
+</div>
+</li>
+<li><p class="first">Changes are not refected until the server is restarted.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo service geserver restart
+</pre></div>
+</div>
+</li>
+<li><p class="first">Validate that the server has the correct database information
+by dumping the dbroot as text:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>wget -O dbroot.v5p.DEFAULT http://you_stream_server/new_target/dbRoot.v5
+gedumpdbroot dbroot.v5p.DEFAULT
+</pre></div>
+</div>
+</li>
+</ol>
+<p class="rubric">Delete disconnected databases</p>
+<p>To delete disconnected databases at their end of life use
+<code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--deletedb</span></code>, the same procedure used for
+databases that are published normally.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="troubleshootPushPublishIssues.html" title="Troubleshoot push/publishing issues"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pushAndPublishDB.html" title="Push and publish databases"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionAdministration.html" >Fusion Administration</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

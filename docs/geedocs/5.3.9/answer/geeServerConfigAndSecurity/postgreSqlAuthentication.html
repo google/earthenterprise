@@ -1,0 +1,287 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>PostgreSQL authentication &#8212; Google Earth Enterprise 5.3.9 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Configure GEE Server Admin pages for LDAP authentication" href="configureGeeForLDAP.html" />
+    <link rel="prev" title="Configure GEE Server for SSL/HTTPS" href="configureGeeServer_SSL_HTTPS.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="configureGeeForLDAP.html" title="Configure GEE Server Admin pages for LDAP authentication"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="configureGeeServer_SSL_HTTPS.html" title="Configure GEE Server for SSL/HTTPS"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerConfigAndSecurity.html" accesskey="U">GEE Server Configuration And Security</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="configureGeeServer_SSL_HTTPS.html"
+                        title="previous chapter">Configure GEE Server for SSL/HTTPS</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="configureGeeForLDAP.html"
+                        title="next chapter">Configure GEE Server Admin pages for LDAP authentication</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp5.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp5.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="postgresql-authentication">
+<h1>PostgreSQL authentication<a class="headerlink" href="#postgresql-authentication" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>Client authentication determines which users are allowed to view
+published databases. By default, the GEE Server does not require
+authentication for user access. However, you can configure
+authentication for your server.</p>
+<p>If you use a load-balanced grid of GEE servers, a single common
+authentication source (such as PostgreSQL or LDAP) makes user
+administration easier. When you add users, you can add them to a
+single database instead of to each virtual server.</p>
+<p>Authentication encrypts passwords before transmitting and storing
+them. Besides the security benefits, there are performance
+benefits to encrypting passwords instead of storing them in
+plaintext. As a plaintext password file grows to more than 200
+users, there will likely be a noticeable slowdown. This is because
+the entire password file is read into memory each time the virtual
+server is accessed to search for a password.</p>
+<p>If you have a PostgreSQL database, you can use standard Apache
+authentication methods such as Digest authentication to control
+user access. This is useful if you already store user passwords in
+a PostgreSQL table, or if you want to use a unified authentication
+mechanism other than LDAP for your GEE Server and other systems.</p>
+<p class="rubric">Before you begin</p>
+<ul class="simple">
+<li>Do not use the PostgreSQL database that ships with GEE. Instead,
+install PostgreSQL on a separate port or a different host.</li>
+<li>You must set up client authentication for each virtual server
+you want to use authentication with.</li>
+</ul>
+<p class="rubric" id="apache-modules">Apache modules</p>
+<p>The Apache configuration below uses these modules:</p>
+<ul class="simple">
+<li>The <code class="docutils literal notranslate"><span class="pre">mod_authn_dbd</span></code> module provides the authentication
+back-end with a PostgreSQL server. For more information about
+the module, see the
+<a class="reference external" href="https://httpd.apache.org/docs/2.4/mod/mod_authn_dbd.html">mod_authn_dbd</a>
+section in the Apache documentation.</li>
+<li>The <code class="docutils literal notranslate"><span class="pre">mod_auth_digest</span></code> module is used for Digest
+authentication. For more information about <code class="docutils literal notranslate"><span class="pre">mod_auth_digest</span></code>,
+see the
+<a class="reference external" href="http://httpd.apache.org/docs/2.4/mod/mod_auth_digest.html">mod_auth_digest</a>
+section in the Apache documentation.</li>
+</ul>
+<p class="rubric" id="terms">Terms</p>
+<p>In the steps below, you can replace these names with the names you
+want to use. For example, you can replace <em>geeauthdb</em> with the
+name of your database.</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">geeauthdb</span></code>. The database to connect to.</li>
+<li><code class="docutils literal notranslate"><span class="pre">geepasswd</span></code>. The table that stores user information.</li>
+<li><code class="docutils literal notranslate"><span class="pre">geeuser</span></code>. The user login to connect to the database.</li>
+<li><code class="docutils literal notranslate"><span class="pre">postgres</span></code>. The default PostgreSQL adminstrator user on
+Ubuntu.</li>
+</ul>
+<p class="rubric" id="to-configure-client-authentication-for-postgresql">To configure client authentication for PostgreSQL:</p>
+<ol class="arabic">
+<li><p class="first">Connect to the PostgreSQL server:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>sudo su - postgres
+psql --port=5433
+</pre></div>
+</div>
+</li>
+<li><p class="first">Create the database and user:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>CREATE USER geeuser WITH PASSWORD &#39;geeuserpasswd&#39;;
+CREATE DATABASE geeauthdb;
+GRANT ALL PRIVILEGES ON DATABASE geeauthdb to mypguser;
+\q
+</pre></div>
+</div>
+</li>
+<li><p class="first">Create a table to store the passwords:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>psql --port=5433 --username=geeuser geauthdb
+CREATE TABLE geepasswd (username varchar(32) NOT NULL, realm varchar(255)
+NOT NULL, passwd varchar(255) NOT NULL,
+   realname varchar(255), PRIMARY KEY (username, realm));
+\q
+</pre></div>
+</div>
+<p>The table includes these fields:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">username</span></code>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">realm</span></code>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">password</span></code>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">realname</span></code>. <em>Optional</em>. The realname field does not require
+a value, but is included in case you want to use it. You can
+also add other optional fields if needed.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Create the encrypted password by inserting encyption
+functions into the database with the <code class="docutils literal notranslate"><span class="pre">pgcrypto</span></code> contributed
+module:</p>
+<p><code class="docutils literal notranslate"><span class="pre">psql</span> <span class="pre">--port=5433</span> <span class="pre">--username=geeuser</span> <span class="pre">geauthdb</span> <span class="pre">&lt;</span> <span class="pre">/usr/share/postgresql/8.4/contrib/pgcrypto.sql</span></code></p>
+<p>Note: You can substitute a different method for this step. The <a class="reference external" href="https://httpd.apache.org/docs/2.4/misc/password_encryptions.html#:~:text=Apache%20recognizes%20one%20format%20for,the%20AuthName%20directive%20in%20httpd">Password Formats</a>
+section in the Apache documentation gives examples in multiple
+programming languages for encrypting the password so that it is
+readable by Apache.</p>
+</li>
+<li><p class="first">Make sure the database works by inserting a test user:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>psql --port=5433 --username=geeuser geauthdb
+INSERT INTO geepasswd VALUES (&#39;jsmith&#39;, &#39;realm&#39;, encode(digest( &#39;jsmith&#39; || &#39;:&#39; || &#39;realm&#39; || &#39;:&#39; ||&#39;password&#39;, &#39;md5&#39;), &#39;hex&#39;), &#39;Jane Smith&#39;);
+\q
+</pre></div>
+</div>
+<p>Replace “jsmith”, “realm”, “password” and “Jane Smith” with the
+values you want to use.</p>
+<p>Note: The password is hashed with MD5 because the Apache
+<code class="docutils literal notranslate"><span class="pre">mod_authn_dbd</span></code> module requires it. This also prevents the
+password from appearing in plaintext.</p>
+</li>
+<li><p class="first">Create a file named <code class="docutils literal notranslate"><span class="pre">pgsql-auth.conf</span></code> at</p>
+<p><code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf/extra/pgsql-auth.conf</span></code>.</p>
+</li>
+<li><p class="first">Add these lines to the <code class="docutils literal notranslate"><span class="pre">pgsql-auth.conf</span></code> file:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>``DBDriver pgsql``
+``DBDParams &quot;hostaddr=yourpgserver port=yourport user=geuser password=yourpassword dbname=gee_auth&quot;``
+``DBDMin 4``
+``DBDKeep 8``
+``DBDMax 20``
+``DBDExptime 300``
+</pre></div>
+</div>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">yourpgserver</span></code> and <code class="docutils literal notranslate"><span class="pre">yourport</span></code> with the address or
+hostname of your PostgreSQL database. Replace <code class="docutils literal notranslate"><span class="pre">geuser</span></code> and
+<code class="docutils literal notranslate"><span class="pre">yourpassword</span></code> with the username and password of your test
+user.</p>
+</li>
+<li><p class="first">Open the <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf/gehttpd.conf</span></code> file and
+insert the line:</p>
+<p><code class="docutils literal notranslate"><span class="pre">Include</span> <span class="pre">/opt/google/gehttpd/conf/extra/pgsql-auth.conf</span></code></p>
+<p>above the line:</p>
+<p><code class="docutils literal notranslate"><span class="pre">Include</span> <span class="pre">conf.d/*.conf</span></code></p>
+<p>The result is:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Include Google Earth Server-specific files
+Include /opt/google/gehttpd/conf/extra/pgsql-auth.conf
+Include conf.d/*.conf
+</pre></div>
+</div>
+</li>
+<li><p class="first">Add the following lines at the beginning of the
+<code class="docutils literal notranslate"><span class="pre">&lt;Location&gt;</span></code> directive of your virtual server:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>AuthType Digest
+AuthName &quot;realm&quot;
+AuthDigestDomain &#39;/default_map/&#39;
+AuthDigestProvider dbd
+AuthDBDUserRealmQuery &quot;SELECT passwd FROM geeauth WHERE username = %s and realm = %s&quot;
+BrowserMatch &quot;MSIE&quot; AuthDigestEnableQueryStringHack=On
+</pre></div>
+</div>
+<p>If this is a <code class="docutils literal notranslate"><span class="pre">_ge_</span> <span class="pre">virtual</span></code> server, add:
+<code class="docutils literal notranslate"><span class="pre">BrowserMatch</span> <span class="pre">&quot;GoogleEarth&quot;</span> <span class="pre">AuthDigestEnableQueryStringHack=On</span></code></p>
+<p>If this is a <code class="docutils literal notranslate"><span class="pre">_map_</span> <span class="pre">virtual</span></code> server, add:
+<code class="docutils literal notranslate"><span class="pre">BrowserMatch</span> <span class="pre">&quot;MSIE&quot;</span> <span class="pre">AuthDigestEnableQueryStringHack=On</span></code></p>
+<p>For more information about <code class="docutils literal notranslate"><span class="pre">AuthDigestEnableQueryStringHack</span></code>,
+see the <a class="reference external" href="http://httpd.apache.org/docs/2.4/mod/mod_auth_digest.html">mod_auth_digest</a>
+section in the Apache documentation.</p>
+<p>The final <code class="docutils literal notranslate"><span class="pre">&lt;Location&gt;</span></code> directive looks like:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Location &quot;/default_map/*&quot;&gt;
+AuthType Digest
+AuthName &quot;realm&quot;
+AuthDigestDomain &#39;/default_map/&#39;
+
+AuthDigestProvider dbd
+AuthDBDUserRealmQuery &quot;SELECT passwd FROM geeauth WHERE username = %s and realm = %s&quot;
+BrowserMatch &quot;MSIE&quot; AuthDigestEnableQueryStringHack=On
+
+Require valid-user
+SetHandler gedb-handler
+Include
+conf.d/virtual_servers/runtime/default_map_runtime
+&lt;/Location&gt;
+</pre></div>
+</div>
+</li>
+<li><p class="first">Save and close the virtual server configuration file.</p>
+</li>
+<li><p class="first">Restart the server:</p>
+<p><code class="docutils literal notranslate"><span class="pre">/etc/init.d/geserver</span> <span class="pre">restart</span></code></p>
+<p>After you verify the configuration with your test user, you can
+add your users to the database.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="configureGeeForLDAP.html" title="Configure GEE Server Admin pages for LDAP authentication"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="configureGeeServer_SSL_HTTPS.html" title="Configure GEE Server for SSL/HTTPS"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerConfigAndSecurity.html" >GEE Server Configuration And Security</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,303 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Manage virtual hosts &#8212; Google Earth Enterprise 5.3.9 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Publish default database" href="publishDefaultDatabase.html" />
+    <link rel="prev" title="Display custom logos" href="displayCustomLogos.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="publishDefaultDatabase.html" title="Publish default database"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="displayCustomLogos.html" title="Display custom logos"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerAdmin.html" accesskey="U">GEE Server administration</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="displayCustomLogos.html"
+                        title="previous chapter">Display custom logos</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="publishDefaultDatabase.html"
+                        title="next chapter">Publish default database</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp4.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp4.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="manage-virtual-hosts">
+<h1>Manage virtual hosts<a class="headerlink" href="#manage-virtual-hosts" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>A <em>virtual host</em> combines Apache virtual host functionality with
+publisher mapping within GEE Server so that you can publish
+databases securely. You create and register a virtual host in GEE
+Server, assign a security protocol to it, and then associate
+multiple databases, including portable globes and maps, with that
+single virtual host. Add another virtual host when you want to use
+different authentication and to associate different databases.</p>
+<p>For example, you may have one or two security protocols but many
+databases and portable files to publish. Once you have created a
+virtual host for each security protocol and set up the appropriate
+authentication, you can associate different databases and portable
+globes and maps with the different virtual hosts, depending on the
+security protocols you need to apply.</p>
+<p>You can also use the <a class="reference internal" href="#default-virtual-hosts"><span class="std std-ref">default virtual host</span></a>
+configurations provided with GEE Server.</p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p>See <a class="reference internal" href="../geeServerConfigAndSecurity/configureGeeServer_SSL_HTTPS.html"><span class="doc">Configure GEE Server for SSL/HTTPS</span></a> to add
+virtual hosts for HTTPS servers.</p>
+<p class="last">See <a class="reference internal" href="../fusionAdministration/commandReference.html#geserveradmin"><span class="std std-ref">geserveradmin</span></a> in
+the <a class="reference internal" href="../fusionAdministration/commandReference.html"><span class="doc">Command reference</span></a> for
+information about all the virtual host commands.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You may configure a virtual server in Apache using
+standard virtual host directives but it won’t be capable of
+hosting a GEE database until it is registered using
+<code class="docutils literal notranslate"><span class="pre">geserveradmin</span></code>, as described in <a class="reference internal" href="#create-register-virtual-hosts-digest-auth"><span class="std std-ref">Create and register a
+virtual host in GEE Server</span></a>.</p>
+</div>
+<ul class="simple">
+<li><a class="reference internal" href="#default-virtual-hosts"><span class="std std-ref">Default virtual hosts</span></a></li>
+<li><a class="reference internal" href="#create-register-virtual-hosts-digest-auth"><span class="std std-ref">Create and register a virtual host in GEE
+Server</span></a></li>
+<li><a class="reference internal" href="#configure-virtual-host-custom-port-number"><span class="std std-ref">Configure virtual hosts with a custom port
+number</span></a></li>
+<li><a class="reference internal" href="#associate-db-virtual-host"><span class="std std-ref">Associate a database with a virtual host</span></a></li>
+<li><a class="reference internal" href="#naming-virtual-hosts"><span class="std std-ref">Naming virtual hosts</span></a></li>
+</ul>
+<p class="rubric" id="default-virtual-hosts">Default virtual hosts</p>
+<p>By default, GEE Server has two registered virtual hosts: <em>public</em>
+and <em>secure</em>. The secure virtual host is a protected virtual host
+with basic authentication. The default credentials are:</p>
+<ul class="simple">
+<li>Username: <em>geeuser</em></li>
+<li>Password: <em>geeuser</em></li>
+</ul>
+<p class="rubric">To reset the username and password:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>sudo /opt/google/gehttpd/bin/htpasswd
+/opt/google/gehttpd/conf.d/virtual_servers/.vhpasswd geeuser
+</pre></div>
+</div>
+<p>The public virtual host is unprotected and does not require any
+authentication.</p>
+<p class="rubric" id="create-register-virtual-hosts-digest-auth">Create and register a virtual host with digest
+authentication</p>
+<p>You create and register a virtual host using the
+<code class="docutils literal notranslate"><span class="pre">geserveradmin</span> <span class="pre">--addvh</span></code> command. This action results in a
+location-based virtual host for which you can configure
+authentication and create a password for a given user name. The
+following example shows how to set up <em>digest authentication</em>, one
+of the standard authentication types (<code class="docutils literal notranslate"><span class="pre">AuthType</span></code>) provided by
+Apache server. See <a class="reference external" href="http://httpd.apache.org/docs/2.4/programs/htdigest.html">Apache HTTP Server 2.4
+htdigest</a>.</p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">In GEE 4.4, virtual hosts were previously called <em>virtual
+servers</em>. Now, in GEE 5.x, virtual hosts specify a security
+protocol only and can also be associated with multiple
+published globes and maps. This change decouples the task of
+setting up security protocols from publishing maps and globes.</p>
+</div>
+<p class="rubric">To create and register a virtual host with digest
+authentication:</p>
+<ol class="arabic">
+<li><p class="first">Create and register a virtual host in GEE Server using the
+<code class="docutils literal notranslate"><span class="pre">geserveradmin</span></code> command:</p>
+<p><code class="docutils literal notranslate"><span class="pre">/opt/google/bin/geserveradmin</span> <span class="pre">--addvh</span> <span class="pre">digest</span> <span class="pre">[--vhurl</span> <span class="pre">&lt;url&gt;]</span> <span class="pre">[--vhcachelevel</span> <span class="pre">&lt;level&gt;]</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">geserveradmin</span></code> creates the default location-based virtual host
+<code class="docutils literal notranslate"><span class="pre">digest_host.location</span></code> in <code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf.d/virtual_servers</span></code>
+and registers it in GEE Server.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">vhurl</span></code> specifies the location of the virtual host. It must
+match the corresponding server-side virtual host configuration.</p>
+</li>
+<li><p class="first">Optionally, modify virtual host settings in
+<code class="docutils literal notranslate"><span class="pre">digest_host.location</span></code> to set up authentication.</p>
+</li>
+</ol>
+<p class="rubric">To set up digest authentication:</p>
+<ol class="arabic">
+<li><p class="first">Edit the <code class="docutils literal notranslate"><span class="pre">digest_host.location</span></code> file to set up the
+authentication configuration:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cd /opt/google/gehttpd/conf.d/virtual_servers
+sudo vi digest_host.location
+</pre></div>
+</div>
+</li>
+<li><p class="first">Add the following content to the <code class="docutils literal notranslate"><span class="pre">digest_host.location</span></code> file:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># The digest virtual host.
+RewriteEngine on
+
+&lt;Location /digest_host/&gt;
+   SetHandler fdb-handler
+   AuthType Digest
+   AuthName &quot;Private&quot;
+   AuthDigestProvider file
+   AuthUserFile /opt/google/gehttpd/conf.d/virtual_servers/.htdigest
+   Require valid-user
+&lt;/Location&gt;
+</pre></div>
+</div>
+</li>
+<li><p class="first">Create the password with a given user name using the password path
+that you specified in the <code class="docutils literal notranslate"><span class="pre">digest_host.location</span></code> file:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>sudo htdigest -c /opt/google/gehttpd/conf.d/virtual_servers/.htdigest Private username
+sudo chmod 755 /opt/google/gehttpd/conf.d/virtual_servers/.htdigest
+#Enter password twice at prompt
+</pre></div>
+</div>
+</li>
+<li><p class="first">Restart <code class="docutils literal notranslate"><span class="pre">geserver</span></code> after virtual host settings have been
+modified.</p>
+<p><code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">/etc/init.d/geserver</span> <span class="pre">restart</span></code></p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">A virtual host can also be configured for SSL/HTTPS. See
+<a class="reference internal" href="../geeServerConfigAndSecurity/configureGeeServer_SSL_HTTPS.html"><span class="doc">Configure GEE Server for SSL/HTTPS</span></a>.</p>
+</div>
+</li>
+</ol>
+<p class="rubric" id="configure-virtual-host-custom-port-number">Configure virtual hosts with a custom port number</p>
+<p>You may need to configure a virtual host to use a custom port setting
+number, commonly to differentiate from any default port
+(<code class="docutils literal notranslate"><span class="pre">http:80</span></code>, <code class="docutils literal notranslate"><span class="pre">https:443</span></code>) you may be using or when
+standard port numbers are being used for other purposes. With some
+edits to your Apache configuration files, you can set up custom
+port numbers for any location-based virtual host.</p>
+<p>When creating a location-based virtual host with a custom port
+number, you need to rename and manually include the newly created
+location file, <code class="docutils literal notranslate"><span class="pre">*.location</span></code> or <code class="docutils literal notranslate"><span class="pre">*.location_ssl</span></code>, in
+<code class="docutils literal notranslate"><span class="pre">&lt;Apache</span> <span class="pre">path&gt;/conf.d/virtual_servers/</span></code> into the corresponding
+<code class="docutils literal notranslate"><span class="pre">&lt;Virtual</span> <span class="pre">Host&gt;</span></code> section of the Apache configuration file and
+restart GEE server.</p>
+<p class="rubric">To add a virtual host with a custom port number
+configured for SSL:</p>
+<ol class="arabic">
+<li><p class="first">Run <code class="docutils literal notranslate"><span class="pre">geserveradmin</span></code> on the command line, e.g.,
+adding a virtual host <code class="docutils literal notranslate"><span class="pre">my_custom_port_ssl</span></code> with a virtual
+host URL and custom port number:</p>
+<p><code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">geserveradmin</span> <span class="pre">—addvh</span> <span class="pre">—ssl</span> <span class="pre">my_custom_port_ssl</span> <span class="pre">—vhurl</span> <span class="pre">https://myservername.com:4343</span></code></p>
+</li>
+<li><p class="first">Change the extension of the newly created
+<code class="docutils literal notranslate"><span class="pre">my_custom_port_ssl.location_ssl</span></code> configuration file to
+differentiate from any default port (443) SSL virtual hosts you
+may have configured:</p>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;Apache</span> <span class="pre">path&gt;/conf.d/virtual_servers/my_custom_port_ssl.location_ssl_custom</span></code></p>
+</li>
+<li><p class="first">Then manually add the Include directives for your custom port
+virtual host to the SSL configuration file for Apache server,
+<code class="docutils literal notranslate"><span class="pre">/opt/google/gehttpd/conf/extra/httpd-ssl.conf</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;VirtualHost  _non_default_:4343&gt;
+     # Include all SSL location-based virtual servers with custom port 4343.
+     Include conf.d/virtual_servers/*.location_ssl_custom
+&lt;/VirtualHost&gt;
+</pre></div>
+</div>
+</li>
+<li><p class="first">Restart GEE Server:</p>
+<p><code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">/etc/init.d/geserver</span> <span class="pre">restart</span></code></p>
+</li>
+</ol>
+<p class="rubric" id="associate-db-virtual-host">Associate a database with a virtual host</p>
+<p>To associate a database or portable globe or map with a virtual
+host, you specify the virtual host when you publish in GEE Server.</p>
+<p><img alt="Publish dialog virtual host example" src="../../images/Publishdialog-vh.png" /></p>
+<p>See <a class="reference internal" href="publishDatabasesPortables.html"><span class="doc">Publishing databases and
+portables</span></a>.</p>
+<p class="rubric" id="naming-virtual-hosts">Naming virtual hosts</p>
+<p>Virtual hosts on GEE Server are name-based, meaning that you can
+have multiple names that serve assets running on a single IP
+address. With name-based virtual hosting, GEE Server relies on the
+client to report the host name as part of the HTTP headers. Using
+this method, many different hosts can share the same IP address.</p>
+<p>Although usage of the virtual host names is hidden, reusing the
+name for other assets being served can cause conflicts. To that
+end, GEE Server checks the target path when you create a virtual
+host against reserved words and virtual host paths already
+registered in system, but does not check the virtual host name
+itself. Here is the list of reserved words that we check against:
+“fdb”, “htdocs”, “admin”, “cutter”, “earth”, “icons”, “js”,
+“maps”, “portable”, “shared_assets.”</p>
+<p class="rubric">Learn more</p>
+<ul class="simple">
+<li><a class="reference internal" href="../geeServerConfigAndSecurity/configureGeeServer_SSL_HTTPS.html"><span class="doc">Configure GEE Server for SSL/HTTPS</span></a></li>
+<li><a class="reference internal" href="../geeServerConfigAndSecurity/configureGeeVirtualHostForLDAP.html"><span class="doc">LDAP authentication</span></a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="publishDefaultDatabase.html" title="Publish default database"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="displayCustomLogos.html" title="Display custom logos"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../geeServerAdmin.html" >GEE Server administration</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

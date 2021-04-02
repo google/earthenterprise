@@ -1,0 +1,246 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>System Requirements for GEE Server &#8212; Google Earth Enterprise 5.3.9 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Before you install GEE Server" href="beforeYouInstallGEEServer.html" />
+    <link rel="prev" title="Uninstalling Google Earth Enterprise" href="uninstallGEE.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="beforeYouInstallGEEServer.html" title="Before you install GEE Server"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="uninstallGEE.html" title="Uninstalling Google Earth Enterprise"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../installGEE.html" accesskey="U">Install Google Earth Enterprise</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="uninstallGEE.html"
+                        title="previous chapter">Uninstalling Google Earth Enterprise</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="beforeYouInstallGEEServer.html"
+                        title="next chapter">Before you install GEE Server</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp8.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp8.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="system-requirements-for-gee-server">
+<h1>System Requirements for GEE Server<a class="headerlink" href="#system-requirements-for-gee-server" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>Hardware Requirements</p>
+<blockquote>
+<div><ul class="simple">
+<li>Minimum 2 dual-core Intel or AMD CPUs; 2.0 GHz or higher
+recommended.</li>
+<li>Minimum 4 GB RAM (8 GB RAM for Red Hat Enterprise Linux);
+8 GB RAM (or more) per core recommended for Fusion.</li>
+<li>Minimum 500 GB of total hard disk storage.</li>
+<li>A graphics card with at least 64 MB video RAM (NVIDIA
+GeForce4 or higher preferred for Fusion GUI). You can
+install this graphics card in a separate workstation that
+accesses Fusion.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you plan on cutting globes, this processing can
+be CPU-intensive and you may also need to plan on providing
+more storage depending on the size of the globes.</p>
+</div>
+<p><strong>Note on virtual machines</strong>: Fusion can be both CPU and I/O
+intensive. For optimal, stable performance, you should
+install it only on physical (non-virtual) machines. You can
+run GEE Server on a virtualized platform, provided the guest
+OS is one of our supported 64-bit distributions and you
+allocate sufficient resources to the VM.</p>
+</div></blockquote>
+<p><strong>Software Requirements</strong></p>
+<blockquote>
+<div><p><strong>Operating Systems</strong></p>
+<p>Open GEE is supported only on the 64-bit versions of the
+operating systems listed below.</p>
+<ul class="simple">
+<li>Red Hat Enterprise Linux 6.x and 7.x, including the most
+recent security patches</li>
+<li>CentOS 6.x and 7.x</li>
+<li>Ubuntu 14.04 LTS and 16.04 LTS</li>
+</ul>
+<p><strong>Browsers</strong></p>
+<p>Google Earth Enterprise is supported on the following
+browsers on all operating systems:</p>
+<ul class="simple">
+<li>The latest version of Google Chrome</li>
+<li>The latest version of Mozilla Firefox</li>
+</ul>
+<p>However, Google Earth Enterprise should work with any modern
+browser.</p>
+<p><strong>Google Earth Enterprise Client (EC)</strong></p>
+<p>The following versions of Google Earth Enterprise Client
+(EC) are recommended for use with Google Earth Enterprise:</p>
+<ul class="simple">
+<li>For GEE 5.x, use Google Earth EC version 7.0 or later</li>
+<li>For GEE 4.4, use Google Earth EC version 6.1 or later</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although older versions of Google Earth EC,
+i.e., 6.0 and earlier, <em>may</em> still connect to Google
+Earth Enterprise or Portable 3D databases, not all
+features will be available. Also, as Google Earth
+Enterprise has not been tested or certified against older
+versions of Google Earth EC, there may be unknown
+operational problems.</p>
+</div>
+<p>Google Earth Enterprise Client (EC) is supported on the
+following platforms:</p>
+<ul class="simple">
+<li>Windows</li>
+<li>Mac</li>
+<li>Linux</li>
+</ul>
+<p><strong>Unsupported Versions and Environments</strong></p>
+<p>There are many variations of operating systems and related
+software; point (“x.x”) releases can sometimes contain
+changes that can impact your GEE installation. Although an
+unsupported version of these software packages may appear to
+function correctly, their use in a production environment is
+not recommended. Unexpected results may occur.</p>
+<p>Where possible, you should adhere to the hardware and
+software specifications listed in this document. If a
+problem arises in an unsupported configuration, we may not
+be able to help you resolve it.</p>
+</div></blockquote>
+<p><strong>Network Requirements</strong></p>
+<blockquote>
+<div><p>Each destination server must meet the requirements below
+before you install GEE, and you must not change these
+settings after deploying GEE. The hostname must be the FQDN
+(Fully Qualified Domain Name) of your destination server, e.g.,
+<code class="docutils literal notranslate"><span class="pre">myserver.mydomainname.com</span></code>.</p>
+<p>You can verify the hostname of your workstation by entering
+<code class="docutils literal notranslate"><span class="pre">hostname</span></code> at a shell prompt, and you can verify the
+network connection by using the <code class="docutils literal notranslate"><span class="pre">ping</span></code> command to reach
+other hosts in the same network. The requests should resolve
+using both an IP address and the FQDN.</p>
+<ul class="simple">
+<li>Hostname registered in DNS</li>
+<li>Hosts file is acceptable for small-scale systems</li>
+<li>Allocated IP addresses</li>
+<li>Correct network routing paths</li>
+<li>Network connectivity (Ports 80 and 22; Port 443 for
+HTTPS)</li>
+<li>Default installation of a Supported OS</li>
+<li>Java Development Kit or Runtime Environment (must
+download from Sun; use version 1.6.0_12 or newer)</li>
+<li>OpenSSL 0.9.8y (on OS media)</li>
+<li>Python 2.7.5 (on OS media)</li>
+<li>Storage for all source data and asset tree</li>
+<li>May be local storage (i.e., RAID 5 array)</li>
+<li>NAS storage via NFS acceptable</li>
+<li>SAN storage acceptable</li>
+<li>USB drive not recommended</li>
+</ul>
+</div></blockquote>
+<p>Supported Configurations</p>
+<blockquote>
+<div><p>Google Earth Enterprise products are developed per the
+hardware and software requirements listed above. The
+products are intended to be installed according to the
+processes described in this documentation. When installing            Google Earth Enterprise in an unsupported environment, there
+are risks that the products may not operate as intended.</p>
+<p>Some factors that could affect your installation and
+deployment are:</p>
+<ul class="simple">
+<li>Installations on unsupported operating systems.</li>
+<li>Improperly configured DNS.</li>
+<li>Third party or non-default permissions or security measures
+(no root access, sudo blockers, etc.).</li>
+<li>Complex proxy configurations that prevent the network
+communications from operating as intended.</li>
+</ul>
+</div></blockquote>
+<p>Important System Security Information</p>
+<blockquote>
+<div>We strongly recommend users who wish to host 3D and 2D
+globes online with Google Earth Enterprise follow
+industry standard security practices and review for their
+systems and networks before enabling access. Although we
+takes every precaution to secure the information, there is
+always the risk of unauthorized access outside of a closed
+or protected network.</div></blockquote>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="beforeYouInstallGEEServer.html" title="Before you install GEE Server"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="uninstallGEE.html" title="Uninstalling Google Earth Enterprise"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../installGEE.html" >Install Google Earth Enterprise</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

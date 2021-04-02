@@ -1,0 +1,201 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Monitor builds with Twitter &#8212; Google Earth Enterprise 5.3.9 documentation</title>
+    <link rel="stylesheet" href="../../static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <script type="text/javascript" src="../../static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="GEE Server administration" href="../geeServerAdmin.html" />
+    <link rel="prev" title="Create terrain overlays" href="createTerrainOverlays.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../geeServerAdmin.html" title="GEE Server administration"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="createTerrainOverlays.html" title="Create terrain overlays"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" accesskey="U">Fusion Resources and Projects</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="createTerrainOverlays.html"
+                        title="previous chapter">Create terrain overlays</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../geeServerAdmin.html"
+                        title="next chapter">GEE Server administration</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="../../images/googlelogo_color_260x88dp2.png"><img alt="Google logo" src="../../images/googlelogo_color_260x88dp2.png" style="width: 130px; height: 44px;" /></a></p>
+<div class="section" id="monitor-builds-with-twitter">
+<h1>Monitor builds with Twitter<a class="headerlink" href="#monitor-builds-with-twitter" title="Permalink to this headline">¶</a></h1>
+<div class="docutils container">
+<div class="content docutils container">
+<p>If you want to track the progress of a Fusion build when you are
+away from your computer, you can monitor it on Twitter. For an
+example, see <a class="reference external" href="http://twitter.com/keyholefusion">http://twitter.com/keyholefusion</a>. Monitoring Fusion
+builds with Twitter is useful when you are out of the office and
+do not want to SSH into your server and check your builds manually.</p>
+<p>In addition, you can modify this script so you can use it for
+email or other communication systems. Most Linux systems have a
+mail command for sending email, so you can simply replace the curl
+commands with the appropriate commands.</p>
+<p>To set up Fusion for Twitter, you will need:</p>
+<ul class="simple">
+<li>An Internet connection for your Fusion server.</li>
+<li>A Twitter account for your Fusion server.</li>
+<li>The cURL tool. (For the Ubuntu <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">curl</span></code>
+command.)</li>
+<li>A cron job that is set to call the custom script below.</li>
+</ul>
+<p class="rubric">To set up Fusion for Twitter:</p>
+<ol class="arabic">
+<li><p class="first">Create a new file called <code class="docutils literal notranslate"><span class="pre">getwitter</span></code>.</p>
+</li>
+<li><p class="first">Save the file in a directory like <code class="docutils literal notranslate"><span class="pre">/usr/bin/</span></code> so it is
+automatically in your path.</p>
+</li>
+<li><p class="first">Run the <code class="docutils literal notranslate"><span class="pre">chmod</span></code> command on the file to allow execution.</p>
+</li>
+<li><p class="first">Copy the code below to your <code class="docutils literal notranslate"><span class="pre">getwitter</span></code> file. Change the
+variables to reflect your Fusion server’s Twitter account
+credentials and, if needed, your server’s asset root.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>:literal:`#!/bin/bash
+
+twittername=&quot;YourServersTwitterAccount&quot;
+twitterpass=&quot;YourServersTwitterPassword&quot;
+assetroot=&quot;/gevol/assets/&quot;
+
+find $assetroot.state -iname &quot;*.task&quot; -ls &gt;&gt; /tmp/filelist
+
+taskcount=0
+inprogresscount=1
+declare -a inprogressarray
+declare -a queuedarray
+
+while read line
+do
+asset=`echo $line | awk &#39;{print $13}&#39;`
+status=`/opt/google/bin/gequery --status $asset`
+   if [ &quot;$status&quot; = &quot;InProgress&quot; ]; then
+      inprogressarray[$[${#inprogressarray[@]}+1]]=$asset
+   fi
+   if [ &quot;$status&quot; = &quot;Queued&quot; ]; then
+      queuedarray[$[${#queuedarray[@]}+1]]=$asset
+   fi
+let taskcount=taskcount+1
+done &lt;/tmp/filelist
+
+for inprogress in ${inprogressarray[@]}
+do
+   logfile=`/opt/google/bin/gequery --logfile $inprogress`
+      while read line
+      do
+      progress=$line
+      done &lt;$logfile
+
+   curl --basic --user &quot;$twittername:$twitterpass&quot; --data-ascii
+   &quot;status=#GEEFusion Task$inprogresscount:
+   $progress&amp;source=Google+Earth+Enterprise&quot;
+   &quot;http://twitter.com/statuses/update.json&quot;
+
+   curl --basic --user &quot;$twittername:$twitterpass&quot; --data-ascii
+   &quot;status=#GEEFusion Task$inprogresscount:
+   $inprogress&amp;source=Google+Earth+Enterprise&quot;
+   &quot;http://twitter.com/statuses/update.json&quot;
+
+   let inprogresscount=inprogresscount+1
+   done
+
+   curl --basic --user &quot;$twittername:$twitterpass&quot; --data-ascii
+   &quot;status=#GEEFusion Working on ${#inprogressarray[@]} task(s),
+   ${#queuedarray[@]} queued &amp;source=Google+Earth+Enterprise&quot;
+   &quot;http://twitter.com/statuses/update.json&quot;
+
+   rm /tmp/filelist
+</pre></div>
+</div>
+</li>
+<li><p class="first">Add this file to your cron tab and set it to go off every half
+hour or every hour.</p>
+<p><code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">crontab</span> <span class="pre">-e</span></code></p>
+</li>
+<li><p class="first">To run the Twitter update every 30 minutes, add the line:</p>
+<p><code class="docutils literal notranslate"><span class="pre">*/30</span> <span class="pre">*</span> <span class="pre">*</span> <span class="pre">*</span> <span class="pre">*</span> <span class="pre">/usr/bin/getwitter</span></code></p>
+</li>
+<li><p class="first">Follow your Fusion server on Twitter.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../geeServerAdmin.html" title="GEE Server administration"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="createTerrainOverlays.html" title="Create terrain overlays"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Google Earth Enterprise 5.3.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../fusionResAndProj.html" >Fusion Resources and Projects</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Open GEE Contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

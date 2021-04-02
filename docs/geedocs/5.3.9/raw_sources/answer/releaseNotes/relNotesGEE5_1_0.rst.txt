@@ -1,0 +1,156 @@
+|Google logo|
+
+========================
+Release notes: GEE 5.1.0
+========================
+
+.. container::
+
+   .. container:: content
+
+      .. rubric:: Overview
+
+      This document includes the following information about the Google
+      Earth Enterprise 5.1.0 release:
+
+      .. rubric:: New Features
+
+      Google Earth Enterprise 5.1.0 release introduces greater map
+      building flexibility with an additional Plate Carrée map
+      projection and for the first time adds the ability to use flat
+      imagery resources in all three database types. Whether storage
+      space is a key consideration or performance speed when serving
+      your map databases, GEE now offers different options when planning
+      your imagery resources.
+
+      **Support for Flat Projection** (Plate Carrée—EPSG:4326). The
+      :doc:`Flat Projection <../fusionResAndProj/mapProjectTypesInGEE5.1.0>` map is useful because
+      the imagery layers for Google Earth EC and Google Maps can share
+      the same database.
+
+      **Add flat imagery to a Mercator map database**; when the Mercator
+      map is served on GEE Server, the flat imagery is projected as
+      :doc:`Mercator on the Fly <../fusionResAndProj/addFlatImageryToMercatorMapDBInGEE5.1.0>`. Now that your
+      Mercator map databases can share the same imagery projects as a
+      Flat Projection map databases, you can save on storage space and
+      database building time by eliminating the need for Mercator-based
+      imagery.
+
+      **Configure SSL/HTTPS with command line option**. You can now
+      create and register a location-based virtual host using the
+      command line tool ``geserveradmin --addvh --ssl``. See :doc:`../geeServerConfigAndSecurity/configureGeeServer_SSL_HTTPS`.
+
+      **Set TRANSPARENT and BGCOLOR parameters when making WMS
+      requests**. You can now determine if your map should be
+      transparent, allowing other map layers beneath to be visible, and
+      you can also set the background color of the map. See :doc:`../geeServerAdmin/makeWMSRequests`.
+
+      **Display All option for center labels for polygon settings in the
+      Map Layer dialog**. By default, GEE will display center labels of
+      polygons so that they do not overlap, hiding some labels where
+      necessary. Alternatively, check the **Display All** option for
+      center labels for polygon settings in the **Map Layer** dialog to
+      show all labels of polygons, irrespective of whether they overlap.
+      See :doc:`../fusionTutorial/createMapDB`.
+
+      .. rubric:: Supported Platforms
+
+      The Google Earth Enterprise 5.1.0 release is supported on 64-bit
+      versions of the following operating systems:
+
+      -  Ubuntu 10.04 LTS and 12.04 LTS
+      -  Red Hat Enterprise Linux versions 6.0 to 6.5, including the most recent security patches
+      -  CentOS 6.5
+
+      GEE 5.1.0 is compatible with Google Earth Enterprise Client (EC)
+      and Plugin versions 7.0.1 - 7.1.1.1888 for Windows, Mac, and
+      Linux.
+
+      .. rubric:: Library Updates
+
+      **Google Maps JavaScript Maps API V3:**
+
+      -  Updated to version 3.17. See `change release <https://code.google.com/p/gmaps-api-issues/wiki/JavascriptMapsAPIv3Changelog>`_ information.
+
+      **Apache HTTP Server:**
+
+      -  Updated from version 2.2.27 to 2.2.29. See `Apache HTTP Server Project <http://www.apache.org/dist/httpd/CHANGES_2.2.29>`_ for information about the vulnerabilities addressed.
+
+      .. rubric:: Known Issues
+
+      .. list-table::
+         :widths: 25 25 50
+         :header-rows: 1
+
+         * - Number
+           - Description
+           - Workaround
+         * - 17725523
+           - When attempting to install GEE 5.1.0 on RHEL 6 using the GUI installer, the process is likely to fail.
+           - To install GEE 5.1.0 on RHEL 6, use the command line installer for Fusion and Server instead.
+         * - 17532512
+           - When canceling the build process of a map database, the processes that build the map
+             layer project will not be canceled.
+           - When canceling the build process of a map database, you need also manually cancel the
+             build process for the map layer project:
+
+              #. In the Asset Manager dialog, right-click the map database name that you are trying to
+                 cancel the build and choose **Asset Versions** from the context menu. The Properties dialog appears.
+              #. Select the version that you want to cancel, right-click and select **Version Properties** from the
+                 context menu to open the Version Properties dialog.
+              #. Click the **+** next to **MapDatabase** to open the tree of assets in the database. Right-click
+                 the **MapLayer** assets under **Project** and click **Cancel** in the context menu. The MapLayerLevels
+                 processing is canceled. Close the Version Properties and Properties dialogs to return to the Asset Manager.
+
+         * - 17363564
+           - 3D databases with terrain projects, including overlay insets, that do not include worldwide coverage,
+             may cause Google Earth 7.1.1 to crash.
+           - Include worldwide terrain in all terrain projects, even when building overlays, as worldwide coveragei
+             enables the regions of overlay inset to fill with values from the base terrain.i
+             See :doc:`../fusionTutorial/buildProject` and :doc:`../fusionResAndProj/createTerrainOverlays`.
+
+      .. rubric:: Resolved Issues
+
+      The following resolved issues are incremental fixes and relative to the
+      last official build, :doc:`GEE 5.0.2 <../releaseNotes/relNotesGEE5_0_2>`.
+
+      .. list-table::
+         :widths: 25 25 50
+         :header-rows: 1
+
+         * - Number
+           - Description
+           - Resolution
+         * - 14254303
+           - When installing Fusion, the GUI installer skips the screen that enables group and user name settings to be created.
+           - Fixed. you can accept the default **user** name: *gefusionuser*, and **group** name: *gegroup* or specify
+             your own custom names.
+         * - 15290004, 15313028
+           - When attempting to cancel a cut using the **Cutter** tool, the Cancel button does
+             not properly kill any running task on GEE Server.
+           - Fixed. The **Cutter** cancel process now kills any running task on GEE Server.
+         * - 16618751
+           - When attempting to specify the ``--lut`` option for the ``gevirtualraster`` tool, no file is specified.
+           - The ``--lut`` option has been removed from the ``gevirtualraster`` command and supporting
+             documentation as the LUT file type is not being used.
+         * - 16135553
+           - When the ``gemaskgen`` tool terminates in error, there is insufficient error logging.
+           - A check for size of source/output raster and logging support for gemaskgen has been improved,
+             providing more information about processes and when they are terminated in error.
+         * - 17300345
+           - When adding a new imagery resource to an existing imagery project that was originally built with GEE 4.4.1,
+             adding a new imagery resource and rebuilding the imagery project with GEE 5.x fails.
+           - Fixed. Existing imagery projects with older imagery resources now rebuild successfully.
+         * - 16683365
+           - The option to serve 3D databases using WMS has been deprecated.
+           - Fixed. WMS now serves 2D flat projection map databases in addition to Mercator projection map databases.
+             See :doc:`Make Web Map Service (WMS) requests <../geeServerAdmin/makeWMSRequests>`.
+         * - 16701881
+           - When attempting to set the maximum number of CPUs used for Fusion processing tasks, **geselectassetroot
+             --numcpus** fails to update the value specified.
+           - Fixed. The **geselectassetroot --numcpus** tool specifies the
+             :doc:`maximum number of CPUs <../fusionAdministration/multipleCPUConfig>` for Fusion processing.
+
+.. |Google logo| image:: ../../art/common/googlelogo_color_260x88dp.png
+   :width: 130px
+   :height: 44px
