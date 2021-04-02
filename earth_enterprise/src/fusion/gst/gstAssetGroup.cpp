@@ -18,7 +18,6 @@
 #include <Qt/qregexp.h>
 #include <gstAssetManager.h>
 #include <khConstants.h>
-#include <vector>
 #include <exception>
 #include "gstAssetGroup.h"
 
@@ -93,7 +92,7 @@ bool gstAssetHandleImpl::isValid() const {
 }
 
 Asset gstAssetHandleImpl::getAsset() const {
-  std::string rpath { relativePath().toUtf8().constData() };
+  std::string rpath { relativePath().toStdString() };
   return Asset(rpath);
 }
 
