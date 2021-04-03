@@ -18,24 +18,8 @@
 #include <Qt/qregexp.h>
 #include <gstAssetManager.h>
 #include <khConstants.h>
-#include <exception>
 #include "gstAssetGroup.h"
 
-class SuffixNotFound : public std::exception
-{
-private:
-    std::string aname;
-
-public:
-    SuffixNotFound(const std::string& _aname) : aname(_aname) {}
-
-    const char* what() const noexcept
-    {
-        std::string ret { "No suffix found for " };
-        ret += aname;
-        return ret.c_str();
-    }
-};
 
 const char* shortAssetName(const char* n) {
 
@@ -55,11 +39,12 @@ const char* shortAssetName(const char* n) {
       auto pos = saname.rfind(elem);
       if (pos != std::string::npos)
       {
-          return saname.substr(0,pos).c_str();
+          saname = saname.substr(0,pos);
+          break;
       }
   }
 
-  throw SuffixNotFound(saname);
+  return saname.c_str();
 }
 
 bool isAssetPath(const QString& str) {
@@ -164,7 +149,7 @@ std::vector<gstAssetHandle> gstAssetFolder::getAssetHandles() const {
       list.push_back(handle);
     } else {
       notify(NFY_DEBUG, "Invalid asset found! dirname=%s file=%s",
-             dir_name_.latin1(), (*it).latin1());
+             dir_name_.latin1(), it->latin1());
     }
   }
 
@@ -178,7 +163,7 @@ std::vector<gstAssetFolder> gstAssetFolder::getAssetFolders() const {
   QStringList files = dir.entryList(QDir::Dirs, QDir::Name | QDir::IgnoreCase);
   for (QStringList::Iterator it = files.begin(); it != files.end(); ++it) {
     // do not add if this is an asset, or if it starts with a dot ('.')
-    if (!isAssetPath(*it) && !(*it).startsWith("."))
+    if (!isAssetPath(*it) && !it->startsWith("."))
       list.push_back(gstAssetFolder(dir.filePath(*it)));
   }
 

@@ -15,15 +15,12 @@
 
 #include "fusion/fusionui/AssetChooser.h"
 
-#include <list>
-
 #include <Qt/qstring.h>
 #include <Qt/qlineedit.h>
 #include <Qt/qpushbutton.h>
 #include <Qt/qcombobox.h>
 #include <Qt/qmessagebox.h>
 #include <Qt/q3iconview.h>
-//#include <qiconview.h>
 #include <Qt/qinputdialog.h>
 #include <Qt/qapplication.h>
 #include <Qt/qcoreevent.h>
