@@ -297,8 +297,4 @@ bool etMesh<V,T>::saveSMF(const char *fname) {
   return false;
 }
 
-
-/* template etMesh<etVec3f, etFace3i>; */
-
-
 #endif
