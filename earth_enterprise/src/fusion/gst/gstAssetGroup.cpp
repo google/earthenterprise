@@ -47,6 +47,16 @@ const char* shortAssetName(const char* n) {
   return saname.c_str();
 }
 
+const char* shortAssetName(const std::string& str)
+{
+    return shortAssetName(str.c_str());
+}
+
+const char* shortAssetName(const QString& str)
+{
+    return shortAssetName(str.toStdString().c_str());
+}
+
 bool isAssetPath(const QString& str) {
   static QRegExp rx(".*\\.k[vit](asset|project)$|"
                     ".*\\.k[i](masset|mproject)$|"

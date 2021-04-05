@@ -59,7 +59,7 @@ class FolderItem : public QIconViewItem {
 
 FolderItem::FolderItem(QIconView* parent, const gstAssetFolder& f)
     : QIconViewItem(parent), folder(f) {
-  setText(shortAssetName(f.name().toUtf8().constData()));
+  setText(shortAssetName(f.name()));
   AssetDisplayHelper a(AssetDefs::Invalid, std::string());
   setPixmap(a.GetPixmap());
   setKey(QString("0" + text()));
@@ -83,7 +83,7 @@ AssetItem::AssetItem(QIconView* parent, gstAssetHandle handle)
 
   auto name = handle->getName().toStdString();
   auto pos = name.rfind('.');
-  auto test = shortAssetName(name.c_str());
+  auto test = shortAssetName(name);
   if (pos != std::string::npos)
   {
       name = name.substr(0,pos);

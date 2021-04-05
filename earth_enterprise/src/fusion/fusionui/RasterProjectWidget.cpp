@@ -223,7 +223,7 @@ QString RasterLayerItem::text(int col) const {
           config_.overridemax));
     }
 
-    return QString(shortAssetName(config_.dataAsset.c_str())) + level;
+    return QString(shortAssetName(config_.dataAsset)) + level;
   } else {
     return QString();
   }
