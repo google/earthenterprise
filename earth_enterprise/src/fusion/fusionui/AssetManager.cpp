@@ -1811,7 +1811,7 @@ void AssetManager::UpdateTableItem(int row, gstAssetHandle handle,
     int bpos = aname.rfind('/') + 1, epos = aname.rfind('.');
     aname = aname.substr(bpos,epos-bpos);
 
-    if (aname != std::string(assetTableView->GetItem(i)->text().toUtf8().constData()))
+    if (aname != assetTableView->GetItem(i)->text().toStdString())
     {
         assetTableView->GetItem(i)->setText(aname.c_str());
     }
