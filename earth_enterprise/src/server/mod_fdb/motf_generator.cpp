@@ -80,10 +80,6 @@ struct UpsampledTile {
  */
 typedef std::vector<UpsampledTile> UpsampledTileVector;
 
-inline bool IsNoDataTile(const UpsampledTile& x) {
-  return (x.dataflag == 0);
-}
-
 const int kMotfTileSize = ImageryQuadnodeResolution;
 
 void CreateDstTransform(const MotfParams &motf_params,
@@ -167,7 +163,7 @@ void CreateDstTransform(const MotfParams &motf_params,
   (*dst_geo_transform)[5] = (min_dst_y - max_dst_y) / kMotfTileSize;
 }
 
-GDALDataset* GetSrcTile(const MotfParams &motf_params,
+GDALDataset* GetSrcTile(request_rec* r, const MotfParams &motf_params,
                        int levelup,
                        bool* has_alpha,
                        const UpsampledTile &upsampled_tile,
@@ -190,16 +186,19 @@ GDALDataset* GetSrcTile(const MotfParams &motf_params,
   std::string vsidatafile;
   ServerdbReader::ReadBuffer buf;
   reader->GetData(*arg_map, buf, is_cacheable);
+
   bool non_pb_jpeg = gecommon::IsJpegBuffer(buf.data());
   // Create GDAL dataset from raw jpeg if source data is non protobuf jpeg
   // format(e.g. GEE4.x 2D Flat imagery packets)
   GDALDataset* hdata_ds = NULL;  // Define source bands(uncut) GDAL dataset
   if (non_pb_jpeg) {
     hdata_ds = geGdalVSI::VsiGdalOpenInternalWrap(&vsidatafile, buf);
+
   // Create GDAL dataset from EarthImageryPacket protobuf.
   } else if (imagery_pb.ParseFromString(buf)) {
     const std::string& image_data = imagery_pb.image_data();
     hdata_ds =  geGdalVSI::VsiGdalOpenInternalWrap(&vsidatafile, image_data);
+
   // Return NULL if source data is not valid EarthImageryPacket protobuf.
   } else {
     return NULL;
@@ -350,8 +349,9 @@ void WarpData(const MotfParams &motf_params, int levelup,
   // Get the first source PC tile which makes up the mercator mosaic
   // and initialize the warp process including the destination dataset.
   GDALDataset* hsrctile1_ds;
-  hsrctile1_ds = GetSrcTile(motf_params, levelup, &has_alpha,
+  hsrctile1_ds = GetSrcTile(r, motf_params, levelup, &has_alpha,
                            upsampled_tiles[0], reader, arg_map);
+
   // Make destination data type same as source data's first band.
   GDALDataType data_type =
       GDALGetRasterDataType(GDALGetRasterBand(hsrctile1_ds, 1));
@@ -405,8 +405,9 @@ void WarpData(const MotfParams &motf_params, int levelup,
   // TODO: Move mosaic block to separate function for readability.
   for (int i = 1; i < num_tiles; i++) {
     // Get each source pc tile which makes up the mercator mosaic
-    hsrctile_ds = GetSrcTile(motf_params, levelup, &has_alpha,
+    hsrctile_ds = GetSrcTile(r, motf_params, levelup, &has_alpha,
                              upsampled_tiles[i], reader, arg_map);
+
     // Add the alpha band to the destination tile if any of the source tiles
     // contain the alpha band.
     assert(GDALGetRasterCount(hsrctile_ds) == 3 ||
@@ -495,7 +496,6 @@ void WarpData(const MotfParams &motf_params, int levelup,
   CSLDestroy(papszFileList);
 }
 
-
 // GetUpsampledTiles determines the plate carree(P.C.) map tiles
 // which are necessary to produce a single 256x256 pixel mercator map tile.
 // The tile information is output in a UpsampledTileVector structure
@@ -511,7 +511,8 @@ int GetUpsampledTiles(const MotfParams &motf_params,
                       int levelup,
                       UpsampledTileVector* upsampled_tiles,
                       ServerdbReader* reader,
-                      ArgMap* arg_map) {
+                      ArgMap* arg_map,
+                      request_rec* r) {
   upsampled_tiles->clear();
   UpsampledTile nexttile;
   int num_tiles = 0;  // This routine is designed to loop until num_tiles > 0.
@@ -663,6 +664,7 @@ int GetUpsampledTiles(const MotfParams &motf_params,
       nexttile.xsize = kMotfTileSize;
       nexttile.yoff = kMotfTileSize - tile_north_pixup;
       nexttile.ysize = tile_north_pixup;
+
       upsampled_tiles->push_back(nexttile);
       nexttile.y_up = nexttile.y_up + 1;
       nexttile.x_up = nexttile.x_up;
@@ -680,6 +682,7 @@ int GetUpsampledTiles(const MotfParams &motf_params,
       nexttile.yoff = 0;
       nexttile.ysize = kMotfTileSize - tile_south_pixup;
       tnum = 2;
+
       upsampled_tiles->push_back(nexttile);
     } else {
       nexttile.lat_southup = lat_south;
@@ -759,16 +762,41 @@ int MotfGenerator::GenerateMotfTile(ServerdbReader* reader,
   while ((num_tiles == 0) && (levelup >= 0)) {
     levelup--;  // Reduce Sample up level until tiles are found.
     num_tiles = GetUpsampledTiles(motf_params, levelup,
-                                  &upsampled_tiles, reader, arg_map);
+                                  &upsampled_tiles, reader, arg_map, r);
   }
   if (num_tiles > 0) {
     // Check if all the PC tile data used to create the full MotF mosaic exists.
     // If there are non-existant tiles, remove them and also add a transparent
     // alpha band to the MotF mosaic. Abort if all tiles are missing.
     bool has_alpha = FALSE;
-    upsampled_tiles.erase(
-        std::remove_if(upsampled_tiles.begin(), upsampled_tiles.end(),
-                       IsNoDataTile), upsampled_tiles.end());
+    
+    upsampled_tiles.erase(std::remove_if(upsampled_tiles.begin(), upsampled_tiles.end(),
+        [&](const UpsampledTile& upsampled_tile) {
+          if (upsampled_tile.dataflag != 0) {
+            // Check to make sure that the tile actually contains
+            // data, because blank tiles may not
+            ServerdbReader::ReadBuffer buf;
+            bool is_cacheable;
+            char txt[16];
+            int z_up = motf_params.zmotf + levelup;
+
+            snprintf(txt, sizeof(txt), "%d", upsampled_tile.y_up);
+            (*arg_map)["row"] = txt;
+            snprintf(txt, sizeof(txt), "%d", upsampled_tile.x_up);
+            (*arg_map)["col"] = txt;
+            snprintf(txt, sizeof(txt), "%d", z_up);
+            (*arg_map)["level"] = txt;
+
+            reader->GetData(*arg_map, buf, is_cacheable);
+
+            if (buf.length() > 0) {
+              // false, in this case, means don't remove
+              return false;
+            }
+          }
+          return true;
+        }), upsampled_tiles.end());
+
     if (upsampled_tiles.size() == 0) return HTTP_NOT_FOUND;
     if (num_tiles != static_cast<int>(upsampled_tiles.size()))
       has_alpha = TRUE;
