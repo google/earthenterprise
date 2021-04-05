@@ -81,14 +81,8 @@ class AssetItem : public QIconViewItem {
 AssetItem::AssetItem(QIconView* parent, gstAssetHandle handle)
     : QIconViewItem(parent), assetHandle(handle) {
 
-  auto name = handle->getName().toStdString();
-  auto pos = name.rfind('.');
-  auto test = shortAssetName(name);
-  if (pos != std::string::npos)
-  {
-      name = name.substr(0,pos);
-  }
-  setText(test);
+  auto saname = shortAssetName(handle->getName());
+  setText(saname);
 
   Asset asset = handle->getAsset();
   AssetDisplayHelper a(asset->type, asset->subtype);
