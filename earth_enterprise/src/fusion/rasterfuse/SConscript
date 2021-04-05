@@ -65,3 +65,6 @@ geraster2gigapxl = env.executable('geraster2gigapxl',
 env.install('fusion_bin', [gerasterimport, gepackgen, geraster2kml])
 env.install('tools_bin', [geraster2gigapxl])
 
+env.test('vipm_vector_unittest',
+         'vipm/vipm_vector_unittest.cpp',
+         LIBS=['gtest'])
