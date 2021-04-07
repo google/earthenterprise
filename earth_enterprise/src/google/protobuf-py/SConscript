@@ -1,0 +1,114 @@
+#-*- Python -*-
+#
+# Copyright 2017 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# Builds the protocol buffer library (python).
+
+import os.path
+Import('env')
+
+protobuf_version='protobuf-2.4.1'
+protobuf_ge_version = protobuf_version.replace('protobuf', 'protobuf-ge')
+
+protobuf_source = Dir('#/../../earth_enterprise/src/google/protobuf-py').abspath
+gee_protoc = File('#/../../earth_enterprise/tools/bin/protoc').abspath
+
+local_env = env.DeepCopy()
+
+current_dir = Dir('.').abspath
+build_root = '%s/%s' % (current_dir, protobuf_version)
+install_root = '%s/install' % current_dir
+install_root_opt = '%s/opt/google' % install_root
+
+root_dir = Dir(local_env.exportdirs['root']).abspath
+
+# [1] Copy protobuf-py to build directory.
+protobuf_target = '%s/.copy' % current_dir
+protobuf_copy = local_env.Command(
+    protobuf_target, protobuf_source,
+    [local_env.MultiCommand('\n'.join([
+         'mkdir -p %s/%s' % (current_dir, protobuf_version),
+         'cd %s/%s' % (current_dir, protobuf_version),
+         'rsync -pvr --exclude=SConscript* --exclude=README-HOWTO-upgrade.txt %s/ %s/%s' % (
+             protobuf_source, current_dir, protobuf_version),
+         'touch %s' % protobuf_target]))])
+NoCache(protobuf_target)
+
+# [2] Build protobuf-py.
+python_cmd = local_env['python_bin']
+
+protobuf_target = '%s/.build' % current_dir
+protobuf_build = local_env.Command(
+    protobuf_target, protobuf_copy,
+    [local_env.MultiCommand(
+        'cd %s\n'
+        '%s setup.py compiler "%s"\n'
+        'touch %s' % (build_root, python_cmd, gee_protoc, protobuf_target))])
+NoCache(protobuf_target)
+
+# TODO: use setup.py for creating master installer (install
+# into local directory)?
+
+# [3] Create protobuf-py master installer.
+install_root_lib = '%s/lib/python%s/site-packages' % (
+    install_root, local_env['python_major_version'])
+install_root_doc = '%s/share/doc/packages/%s' % (
+    install_root_opt, protobuf_ge_version)
+
+protobuf_target = '%s/.install' % current_dir
+protobuf_install = local_env.Command(
+    protobuf_target, protobuf_build,
+    [local_env.MultiCommand('\n'.join([
+        'cd %s' % build_root,
+        'rm -rf %s %s' % (install_root_lib, install_root_doc),
+        'mkdir -p %s' % install_root_doc,
+        'cp -pr README.txt %s' % install_root_doc,
+        'mkdir -p %s' % install_root_lib,
+        'rsync -pvr --exclude=*.proto --exclude=google/__init__.py google %s' % install_root_lib,
+        'touch %s/google/__init__.py' % install_root_lib,
+        'touch %s' % protobuf_target]))])
+NoCache(protobuf_target)
+
+# [4] Install for build.
+protobuf_target = '%s/.install_for_build' % current_dir
+protobuf_install_build = local_env.Command(
+    protobuf_target, protobuf_install,
+    [local_env.rsync_cmd % (
+        '%s' % install_root_lib,
+        '%s/lib/python%s' % (root_dir, local_env['python_major_version'])),
+     Touch('$TARGET')])
+NoCache('$TARGET')
+
+
+Default(protobuf_install_build)
+
+local_env.ExecuteOnClean('rm -rf %s' % current_dir)
+
+# Install target.
+if 'install' in COMMAND_LINE_TARGETS:
+  local_env.InstallFileOrDir(
+      '%s/lib' % install_root,
+      '%s/opt/google/gepython/Python-%s' % (
+          local_env.installdirs['common_root'], local_env['python_version']),
+       protobuf_install, 'install')
+  local_env.InstallFileOrDir(
+      '%s/opt/google/share/' % install_root,
+      '%s/opt/google/share/' % Dir(
+          local_env.installdirs['common_root']).abspath,
+      protobuf_install, 'install')
+
+
+Return('protobuf_copy protobuf_install_build')

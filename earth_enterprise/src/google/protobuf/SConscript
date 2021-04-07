@@ -1,0 +1,76 @@
+#
+# Copyright 2017 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# Build the protocol buffer library.
+
+import os.path
+Import('env')
+
+# Modify the CXX flags for a local copy of env
+local_env = env.Clone()
+flags = local_env['CXXFLAGS']
+flags.remove('-Werror') # lots of unsigned/signed comparisons
+flags.append('-I../..')
+flags.append('-Igoogle/protobuf')
+
+local_env['CXXFLAGS'] = flags
+
+# All the .cc files are included except those matching '*test*'.
+cpp_files = [
+  'descriptor.cc',
+  'descriptor_database.cc',
+  'descriptor.pb.cc',
+  'dynamic_message.cc',
+  'extension_set.cc',
+  'extension_set_heavy.cc',
+  'generated_message_reflection.cc',
+  'generated_message_util.cc',
+  'message.cc',
+  'message_lite.cc',
+  'reflection_ops.cc',
+  'repeated_field.cc',
+  'service.cc',
+  'text_format.cc',
+  'unknown_field_set.cc',
+  'wire_format.cc',
+  'wire_format_lite.cc'
+]
+io_files = [
+  'coded_stream.cc',
+# jeffdonner took this out to avoid dependencies on zlib.
+#  'gzip_stream.cc',
+  'printer.cc',
+  'tokenizer.cc',
+  'zero_copy_stream.cc',
+  'zero_copy_stream_impl.cc',
+  'zero_copy_stream_impl_lite.cc'
+]
+stub_files = [
+  'common.cc',
+  'hash.cc',         # perhaps unneeded - copied from 2.0.3
+  'map-util.cc',     # perhaps unneeded
+  'once.cc',
+  'stl_util-inl.cc', # perhaps unneeded
+  'structurally_valid.cc',
+  'strutil.cc',
+  'substitute.cc'
+]
+
+# Compile the cc files and add them to the "proto.a" lib.
+geprotobuf = local_env.sharedLib('geprotobuf', cpp_files
+                    + map(lambda f: 'io/' + f, io_files)
+                    + map(lambda f: 'stubs/' + f, stub_files))
+env.install('common_lib', [geprotobuf])
