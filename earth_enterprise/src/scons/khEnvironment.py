@@ -739,7 +739,6 @@ def DefineProtocolBufferBuilder(env):
   )
 
   # Set tool based on local platform
-  env['TOOLS_BIN'] = env.fs.Dir('../tools/bin/')
   env['PROTOBUF_COMPILER'] = 'protoc'
 
   # Add protocol buffer builder
