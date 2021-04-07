@@ -34,6 +34,15 @@ const char* shortAssetName(const char* n) {
 
   std::string saname { n };
 
+ /*
+	code takes in a long asset name, checks to see if it has one
+	of the appropriate suffixes (e.g. .kiasset, kmmdatabase, .kmlayer, etc)
+	if it is found, it strils off the suffix and returns the short name,
+	if a known suffix is not found, the long asset name will be returned
+
+	i.e. shortAssetName("AnAssetName.kiasset") will return "AnAssetName",
+	     shortAssetName("AnAssetName.notvalid") will return "AnAssetName.notvalid"
+ */
   for (const auto& elem : suffixes)
   {
       auto pos = saname.rfind(elem);

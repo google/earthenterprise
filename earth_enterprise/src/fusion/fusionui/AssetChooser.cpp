@@ -307,8 +307,6 @@ void AssetChooser::accept() {
     // here
     AssetItem* assetItem = dynamic_cast<AssetItem*>(item);
     if (assetItem != NULL) {
-     //   std::string temp { shortAssetName(assetItem->getAssetHandle()->getName()
-     //                                     .toStdString().c_str()) };
       auto saname = shortAssetName(assetItem->getAssetHandle()->getName());
       nameEdit->setText(saname);
       gstAssetHandle asset_handle = assetItem->getAssetHandle();
