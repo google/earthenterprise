@@ -15,15 +15,12 @@
 
 #include "fusion/fusionui/AssetChooser.h"
 
-#include <list>
-
 #include <Qt/qstring.h>
 #include <Qt/qlineedit.h>
 #include <Qt/qpushbutton.h>
 #include <Qt/qcombobox.h>
 #include <Qt/qmessagebox.h>
 #include <Qt/q3iconview.h>
-//#include <qiconview.h>
 #include <Qt/qinputdialog.h>
 #include <Qt/qapplication.h>
 #include <Qt/qcoreevent.h>
@@ -62,7 +59,7 @@ class FolderItem : public QIconViewItem {
 
 FolderItem::FolderItem(QIconView* parent, const gstAssetFolder& f)
     : QIconViewItem(parent), folder(f) {
-  setText(shortAssetName(f.name().toUtf8().constData()));
+  setText(shortAssetName(f.name()));
   AssetDisplayHelper a(AssetDefs::Invalid, std::string());
   setPixmap(a.GetPixmap());
   setKey(QString("0" + text()));
@@ -84,13 +81,8 @@ class AssetItem : public QIconViewItem {
 AssetItem::AssetItem(QIconView* parent, gstAssetHandle handle)
     : QIconViewItem(parent), assetHandle(handle) {
 
-  auto name = handle->getName().toStdString();
-  auto pos = name.rfind('.');
-  if (pos != std::string::npos)
-  {
-      name = name.substr(0,pos);
-  }
-  setText(name.c_str());
+  auto saname = shortAssetName(handle->getName());
+  setText(saname);
 
   Asset asset = handle->getAsset();
   AssetDisplayHelper a(asset->type, asset->subtype);
@@ -179,9 +171,8 @@ AssetChooser::AssetChooser(
   }
 
   // Insert compatible asset items in view filter combobox of OpenDialog.
-  for (size_t i = 0; i < compatible_asset_defs.size(); ++i) {
-    const AssetCategoryDef& asset_category_def = compatible_asset_defs[i];
-    AssetDisplayHelper adh(asset_category_def.type, asset_category_def.subtype);
+  for (const auto& i : compatible_asset_defs) {
+    AssetDisplayHelper adh(i.type, i.subtype);
     compatible_asset_types_.push_back(adh);
     filterCombo->insertItem(adh.GetPixmap(), adh.PrettyName());
   }
@@ -249,8 +240,9 @@ bool AssetChooser::matchFilter(const gstAssetHandle handle) const {
 
   if (match_string_ == all_compatible_assets_filter_text_) {
     assert(!all_compatible_assets_filter_text_.empty());
-    for (size_t i = 0; i < compatible_asset_types_.size(); ++i) {
-      if (a.PrettyName() == compatible_asset_types_[i].PrettyName())
+
+    for (const auto& i : compatible_asset_types_) {
+      if (a.PrettyName() == i.PrettyName())
         return true;
     }
     return false;
@@ -315,9 +307,8 @@ void AssetChooser::accept() {
     // here
     AssetItem* assetItem = dynamic_cast<AssetItem*>(item);
     if (assetItem != NULL) {
-        std::string temp { shortAssetName(assetItem->getAssetHandle()->getName()
-                                          .toStdString().c_str()) };
-      nameEdit->setText(temp.c_str());
+      auto saname = shortAssetName(assetItem->getAssetHandle()->getName());
+      nameEdit->setText(saname);
       gstAssetHandle asset_handle = assetItem->getAssetHandle();
       Asset asset = asset_handle->getAsset();
       type_ = asset->type;
@@ -502,9 +493,9 @@ void AssetChooser::updateView(const gstAssetFolder& folder) {
   // first add all folders
   //
   std::vector<gstAssetFolder> folders = folder.getAssetFolders();
-  for (std::vector<gstAssetFolder>::iterator it = folders.begin();
-       it != folders.end(); ++it) {
-    (void)new FolderItem(iconView, *it);
+
+  for (const auto& it : folders) {
+    (void)new FolderItem(iconView, it);
   }
 
   //
