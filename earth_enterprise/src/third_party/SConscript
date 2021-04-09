@@ -65,7 +65,6 @@ if third_party_env['bundle_3rd_libs']:
       'pyyaml',
       'defusedxml',
       'swig',
-      'python_2',
       'python_3',
       'qt4'
   ]
@@ -96,7 +95,6 @@ else:
       'pyyaml',
       'defusedxml',
       'swig',
-      'python_2',
       'python_3'
   ]
   if qt4_native == 0:
