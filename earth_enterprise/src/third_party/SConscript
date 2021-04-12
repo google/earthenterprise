@@ -65,7 +65,6 @@ if third_party_env['bundle_3rd_libs']:
       'pyyaml',
       'defusedxml',
       'swig',
-      'python_2',
       'python_3',
       'qt4',
       'protobuf'
@@ -97,7 +96,6 @@ else:
       'pyyaml',
       'defusedxml',
       'swig',
-      'python_2',
       'python_3',
       'protobuf'
   ]
