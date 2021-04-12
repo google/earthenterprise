@@ -13,7 +13,7 @@ Add Python Libraries to GEE Python
 
       Additional modules specific to GEE are installed in:
 
-      ``/opt/google/gepython/Python-2.7.x/lib/python2.7/site-packages``
+      ``/opt/google/gepython/Python-3.8.x/lib/python3.8/site-packages``
       , where x is determined by the system Python version.
 
       -  ``psycopg2`` is a PostgreSQL database adapter
@@ -25,7 +25,7 @@ Add Python Libraries to GEE Python
       .. rubric:: Add a Python library
 
       You can add a Python library to either the system Python path, or
-      to the ``/opt/google/gepython/Python-2.7.x`` path for it to be
+      to the ``/opt/google/gepython/Python-3.8.x`` path for it to be
       enabled with GEE. One of the easiest ways to install a Python
       library is to use the Python package tool, ``pip``. You may also
       need to consider any other dependencies for your newly installed

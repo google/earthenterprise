@@ -31,36 +31,32 @@
     * defusedxml
     * pyyaml
 
-#### On CentOS/RHEL 6:
-
-    sudo yum -y install python3-pip
-    sudo pip3.8 install pillow tornado
-
 # Portable Server on Linux
 
 ## Building on Linux
 
-Make sure you have Python, the `pexpect` Pip package, as well as `tornado`, and g++ installed. Swig is bundled for Linux.
+Make sure you have Python, the `pexpect` Pip package, as well as `tornado`, and g++ installed. Swig is bundled for Linux. If Python 3.8 is
+not available from system repos, run `sudo ./scripts/install_python.sh` from `earthenterprise`.
 
 ### Getting a Build Environment
 
 #### On Ubuntu:
 
-    sudo apt-get install g++ python python-pexpect libpython-dev python-psycopg2
+    sudo apt-get install g++
+    sudo pip3.8 install pexpect tornado psycopg2-binary gitpython
 
 #### On CentOS/RHEL 7:
 
-    sudo yum -y install gcc-c++ python python-pip python-psycopg2
-    sudo pip3 install pexpect
+    sudo yum -y install gcc-c++
+    sudo pip3.8 install pexpect tornado pexpect psycopg2-binary gitpython
 
 #### On CentOS/RHEL 6:
 
 If you're running an old version of a Red Hat distribution, such as Cent OS or RHEL 6, the packaged `g++` compiler will be too old.  Enable the EPEL package repository, and install `devtoolset2` to get a more recent compiler:
 
     sudo yum install devtoolset-2-toolchain
-    sudo yum -y install ius-release
-    sudo yum -y install gcc-c++ python27 python27-pip python27-devel
-    sudo pip2.7 install tornado pexpect psycopg2-binary gitpython
+    sudo yum -y install gcc-c++
+    sudo pip3.8 install pexpect tornado pexpect psycopg2-binary gitpython
 
 ### Building
 
@@ -152,7 +148,7 @@ You can install the built Portable Server from this Zip archive.
 To clean build files, run 
 
     cd earthenterprise\earth_enterprise\src\portableserver
-    python build.py --clean
+    python3.8 build.py --clean
 
 
 ## Installing on Windows
@@ -167,7 +163,7 @@ You need to have the Python interpreter and packages listed in [Run-time Prerequ
 Change into the directory you extracted the built Portable Server Zip archive into (in the [Installing on Windows](#installing-on-windows) step). Then, just start `server\portable_server.py`:
 
     1. cd portableserver-windows-5.1.3-20170412\server\ #(substituting your extracted directory)
-    1. python portable_server.py
+    1. python3.8 portable_server.py
 
 You can edit `portableserver-windows-5.1.3-20170412\server\portable.cfg` and `portableserver-windows-5.1.3-20170412\server\remote.cfg` for your configuration needs before starting the server.
 
