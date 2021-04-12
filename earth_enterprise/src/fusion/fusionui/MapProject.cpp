@@ -84,12 +84,12 @@ void MapLayerItem::Init() {
       setText(0, layer_item_config_.legend.GetValue().defaultLocale.name);
     }
 
-    setText(1, shortAssetName(layer_item_config_.assetRef.c_str()));
+    setText(1, shortAssetName(layer_item_config_.assetRef));
     AssetDisplayHelper a(layer_asset->type, layer_asset->subtype);
     setPixmap(1, a.GetPixmap());
   } else {
     setText(0, "<INVALID>");
-    setText(1, shortAssetName(layer_item_config_.assetRef.c_str()));
+    setText(1, shortAssetName(layer_item_config_.assetRef));
     setPixmap(1, AssetDisplayHelper::Pixmap(AssetDisplayHelper::Key_Unknown));
   }
 }
