@@ -37,7 +37,7 @@ void DatabaseWidget::Prefill(const DatabaseEditRequest& request) {
 
   if (request.config.vectorProject.size() != 0) {
     projects.push_back(request.config.vectorProject);
-    vector_project_label->setText(shortAssetName(request.config.vectorProject.c_str()));
+    vector_project_label->setText(shortAssetName(request.config.vectorProject));
   } else {
     vector_project_label->setText(empty_text);
   }
@@ -49,14 +49,14 @@ void DatabaseWidget::Prefill(const DatabaseEditRequest& request) {
   } else {
     if (request.config.imageryProject.size() != 0) {
       projects.push_back(request.config.imageryProject);
-      imagery_project_label->setText(shortAssetName(request.config.imageryProject.c_str()));
+      imagery_project_label->setText(shortAssetName(request.config.imageryProject));
     } else {
       imagery_project_label->setText(empty_text);
     }
 
     if (request.config.terrainProject.size() != 0) {
       projects.push_back(request.config.terrainProject);
-      terrain_project_label->setText(shortAssetName(request.config.terrainProject.c_str()));
+      terrain_project_label->setText(shortAssetName(request.config.terrainProject));
     } else {
       terrain_project_label->setText(empty_text);
     }
@@ -97,7 +97,7 @@ void DatabaseWidget::ChooseVectorProject() {
   if (!chooser.getFullPath(newpath))
     return;
 
-  vector_project_label->setText(shortAssetName(newpath.toUtf8().constData()));
+  vector_project_label->setText(shortAssetName(newpath));
 }
 
 void DatabaseWidget::ChooseImageryProject() {
@@ -110,7 +110,7 @@ void DatabaseWidget::ChooseImageryProject() {
   if (!chooser.getFullPath(newpath))
     return;
 
-  imagery_project_label->setText(shortAssetName(newpath.toUtf8().constData()));
+  imagery_project_label->setText(shortAssetName(newpath));
 }
 
 void DatabaseWidget::ChooseTerrainProject() {
@@ -123,7 +123,7 @@ void DatabaseWidget::ChooseTerrainProject() {
   if (!chooser.getFullPath(newpath))
     return;
 
-  terrain_project_label->setText(shortAssetName(newpath.toUtf8().constData()));
+  terrain_project_label->setText(shortAssetName(newpath));
 }
 
 void DatabaseWidget::ClearVectorProject() {

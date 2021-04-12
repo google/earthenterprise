@@ -292,7 +292,7 @@ void AssetBase::InstallMainWidget() {
 void AssetBase::SetName(const QString& text) {
   asset_path_ = text;
   std::string pretty_name { AssetPrettyName().toStdString() };
-  std::string short_name { shortAssetName(text.toUtf8().constData()) };
+  std::string short_name { shortAssetName(text) };
 
   setCaption(QString(pretty_name.c_str()) + " : " + short_name.c_str());
   emit NameChanged(text);

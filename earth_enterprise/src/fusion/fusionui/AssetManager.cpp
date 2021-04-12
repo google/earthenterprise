@@ -223,9 +223,9 @@ void AssetFolder::setOpen(bool o) {
 
 void AssetFolder::populate() {
   std::vector<gstAssetFolder> folders = folder.getAssetFolders();
-  std::vector<gstAssetFolder>::iterator it = folders.begin();
-  for (; it != folders.end(); ++it) {
-    (void)new AssetFolder(this, *it);
+
+  for (const auto& it : folders) {
+    (void)new AssetFolder(this, it);
   }
 }
 
@@ -267,9 +267,9 @@ static QPixmap uic_load_pixmap_AssetManager(const QString& name) {
 }
 
 bool DatabaseHasValidVersion(const Asset &asset) {
-  AssetStorage::VersionList::const_iterator version = asset->versions.begin();
-  for (; version != asset->versions.end(); ++version) {
-    AssetVersion asset_version(*version);
+
+  for (const auto& version : asset->versions) {
+    AssetVersion asset_version(version);
     if (asset_version->state != AssetDefs::Succeeded)
       continue;
     if (asset_version->subtype == kMapDatabaseSubtype) {
@@ -519,8 +519,8 @@ AssetManager::AssetManager(QWidget* parent)
   {
     gstProviderSet providers;
     if (providers.Load()) {
-      for (unsigned int i = 0; i < providers.items.size(); ++i) {
-        provider_map_[providers.items[i].id] = providers.items[i].key;
+      for (const auto& it : providers.items) {
+        provider_map_[it.id] = it.key;
       }
     }
   }
@@ -1016,7 +1016,10 @@ void AssetManager::ShowAssetMenu(const gstAssetHandle& asset_handle,
   // first item in menu should be the asset name since the table
   // might get redrawn after the menu has popped-up
   AssetDisplayHelper a(current_asset->type, current_asset->subtype);
-  menu.insertItem(a.GetPixmap(), shortAssetName(asset_handle->getName().toUtf8().constData()));
+
+  std::string shortName = shortAssetName(asset_handle->getName());
+
+  menu.insertItem(a.GetPixmap(), shortName.c_str());
 
   menu.insertSeparator();
   menu.insertSeparator();
@@ -1194,10 +1197,9 @@ void AssetManager::PushDatabase(const gstAssetHandle& handle) {
   }
 
   std::vector<QString> nicknames;
-  std::vector<ServerCombination>::const_iterator it =
-      sc_set.combinations.begin();
-  for (; it != sc_set.combinations.end(); ++it) {
-    nicknames.push_back(it->nickname);
+
+  for (const auto& it : sc_set.combinations) {
+    nicknames.push_back(it.nickname);
   }
 
   PushDatabaseDialog push_db_dlg(this, asset, nicknames);
@@ -1235,14 +1237,14 @@ void AssetManager::PushDatabase(const gstAssetHandle& handle) {
   // Update the preferences with the user's choice. We want to remember these
   // choices so that we can automatically select this server next time they
   // push/publish.
-  std::string database_name = shortAssetName(asset->GetRef().toString().c_str());
+  std::string database_name = shortAssetName(asset->GetRef().toString());
   Preferences::UpdatePublishServerDbMap(database_name, nickname.toUtf8().constData());
 
   ServerConfig stream_server, search_server;
-  for (it = sc_set.combinations.begin();
-       it != sc_set.combinations.end(); ++it) {
-    if (nickname == it->nickname) {
-      stream_server = it->stream;
+
+  for (const auto& it : sc_set.combinations) {
+    if (nickname == it.nickname) {
+      stream_server = it.stream;
       search_server = stream_server;
       break;
     }
@@ -1327,10 +1329,9 @@ void AssetManager::PublishDatabase(const gstAssetHandle& handle) {
   }
 
   std::vector<QString> nicknames;
-  std::vector<ServerCombination>::const_iterator it =
-      sc_set.combinations.begin();
-  for (; it != sc_set.combinations.end(); ++it) {
-    nicknames.push_back(it->nickname);
+
+  for (const auto& it : sc_set.combinations) {
+    nicknames.push_back(it.nickname);
   }
 
 
@@ -1370,14 +1371,14 @@ void AssetManager::PublishDatabase(const gstAssetHandle& handle) {
   // Update the preferences with the user's choice. We want to remember these
   // choices so that we can automatically select this server next time they
   // push/publish.
-  std::string database_name = shortAssetName(asset->GetRef().toString().c_str());
+  std::string database_name = shortAssetName(asset->GetRef().toString());
   Preferences::UpdatePublishServerDbMap(database_name, nickname.toUtf8().constData());
 
   ServerConfig stream_server, search_server;
-  for (it = sc_set.combinations.begin();
-       it != sc_set.combinations.end(); ++it) {
-    if (nickname == it->nickname) {
-      stream_server = it->stream;
+
+  for (const auto& it : sc_set.combinations) {
+    if (nickname == it.nickname) {
+      stream_server = it.stream;
       search_server = stream_server;
       break;
     }
@@ -1621,10 +1622,10 @@ void AssetManager::assetsChanged(const AssetChanges& changes) {
 
   // check to see if any of the changes are in this directory
   std::set<std::string> changedHere;
-  for (AssetChanges::CIterator i = changes.items.begin();
-       i != changes.items.end(); ++i) {
-    if (khDirname(i->ref) == curr) {
-      changedHere.insert(AssetVersionRef(i->ref).AssetRef());
+
+  for(const auto& i : changes.items) {
+    if (khDirname(i.ref) == curr) {
+      changedHere.insert(AssetVersionRef(i.ref).AssetRef());
     }
   }
 
@@ -1810,7 +1811,7 @@ void AssetManager::UpdateTableItem(int row, gstAssetHandle handle,
     int bpos = aname.rfind('/') + 1, epos = aname.rfind('.');
     aname = aname.substr(bpos,epos-bpos);
 
-    if (aname != std::string(assetTableView->GetItem(i)->text().toUtf8().constData()))
+    if (aname != assetTableView->GetItem(i)->text().toStdString())
     {
         assetTableView->GetItem(i)->setText(aname.c_str());
     }
