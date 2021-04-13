@@ -142,7 +142,6 @@ def stagedInstallDir_tutorial = new File(stagedInstallDir, 'tutorial')
 def packageInstallRootDir = new File('/')
 def packageInstallLibDir = new File(packageInstallRootDir, 'opt/google/lib')
 
-def stagedInstallDir_python_2 = new File(stagedInstallDir, 'python/python_2')
 def stagedInstallDir_python_3 = new File(stagedInstallDir, 'python/python_3')
 def stagedInstallDir_postgis_opt = new File(stagedInstallDir, 'postgis/opt')
 
@@ -165,7 +164,6 @@ def rpmCapabilityMap = [
     'libltidsdk.so()(64bit)': null,
     '/bin/perl': '/usr/bin/perl',
     '/bin/python': '/usr/bin/python',
-    '/bin/python2.7': '/usr/bin/python2.7',
     '/bin/python3.8': '/usr/bin/python3.8',
     '/bin/sudo': '/usr/bin/sudo'
 ]
@@ -242,49 +240,6 @@ task stageOpenGeeInstall(type: Exec, dependsOn: 'compileOpenGee') {
     commandLine(
         'scons', '-j8', scons_option, 'stage_install',
         "installdir=${stagedInstallDir}")
-}
-
-// RPM that installs python 2 if needed
-task openGeePython2Rpm(type: GeeRpm) {
-    mustRunAfter stageOpenGeeInstall
-
-    packageName = 'gee-python-2.7.18'
-    release = ospackage.release
-    version = '2.7.18'
-    user = 'root'
-    permissionGroup = 'root'
-    packageGroup = 'Application/Productivity'
-    summary = 'Standard Python 2.7.18 installation used by Open GEE'
-    packageDescription = 'Standard Python 2.7.18 installation used by Open GEE'
-    license = 'GPLv2'
-    url = 'https://github.com/google/earthenterprise/tree/master/earth_enterprise/third_party/python_2'
-    type = BINARY
-    autoFindProvides = true
-    autoFindRequires = true
-
-    from (stagedInstallDir_python_2) {
-        into packageInstallRootDir
-    }
-}
-
-task openGeePython2Deb(type: GeeDeb) {
-    mustRunAfter stageOpenGeeInstall
-
-    packageName = openGeePython2Rpm.packageName
-    release = "${findBuildNumber()}"
-    version = openGeePython2Rpm.version
-    user = openGeePython2Rpm.user
-    permissionGroup = openGeePython2Rpm.permissionGroup
-    packageGroup = 'misc'
-    summary = openGeePython2Rpm.summary
-    packageDescription = openGeePython2Rpm.packageDescription
-    license = openGeePython2Rpm.license
-    url = openGeePython2Rpm.url
-    type = BINARY
-
-    from (stagedInstallDir_python_2) {
-        into packageInstallRootDir
-    }
 }
 
 // RPM that installs python 3 if needed
@@ -483,15 +438,7 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeCommonInitScripts) {
     // scons does not include /sbin in the path, so auto-detection of
     // chkconfig fails, so this dependency is explicit.
     requires('chkconfig')
-    requires('shadow-utils')
-
-    if ("${findBuildNumber()}.${rpmPlatformString}".contains('el7')) {
-        requires('python')
-        requires('python-pip')
-    }
-    else {
-        requires('gee-python-2.7.18', '2.7.18', EQUAL)
-    }
+    requires('shadow-utils') 
 
     requiresCommands(packageSharedCommands +
         ['cat', 'cut', 'getent', 'grep'])
@@ -556,8 +503,6 @@ task openGeeCommonDeb (type: GeeDeb, dependsOn: openGeeCommonInitScripts) {
     requires('libtool')
     requires('libxml2-utils')
     requires('openssl')
-    requires('python2.7')
-    requires('python-pip')
 
     // Use single files for install scripts.  Othewrise, OS Package wraps the
     // code in extra statements.
@@ -635,7 +580,7 @@ task openGeeServerRpm(type: GeeRpm, dependsOn: openGeeServerInitScripts) {
         packageSharedCommands +
         [
             // Install script commands:
-            'cat', 'chmod', 'chown', 'cut', 'find', 'getent', 'mkdir', 'python',
+            'cat', 'chmod', 'chown', 'cut', 'find', 'getent', 'mkdir', 'python3.8',
             'sed', 'su', 'sudo'
         ]
     )
@@ -736,7 +681,7 @@ task openGeeServerDeb (type: GeeDeb, dependsOn: openGeeServerInitScripts) {
         packageSharedCommands +
         [
             // Install script commands:
-            'cat', 'chmod', 'chown', 'cut', 'find', 'getent', 'mkdir', 'python',
+            'cat', 'chmod', 'chown', 'cut', 'find', 'getent', 'mkdir', 'python3.8',
             'sed', 'su', 'sudo'
         ]
     )
