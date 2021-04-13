@@ -438,8 +438,7 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeCommonInitScripts) {
     // scons does not include /sbin in the path, so auto-detection of
     // chkconfig fails, so this dependency is explicit.
     requires('chkconfig')
-    requires('shadow-utils')
-    requires('gee-python-3.8.6') 
+    requires('shadow-utils') 
 
     requiresCommands(packageSharedCommands +
         ['cat', 'cut', 'getent', 'grep'])
@@ -504,7 +503,6 @@ task openGeeCommonDeb (type: GeeDeb, dependsOn: openGeeCommonInitScripts) {
     requires('libtool')
     requires('libxml2-utils')
     requires('openssl')
-    requires('gee-python-3.8.6')
 
     // Use single files for install scripts.  Othewrise, OS Package wraps the
     // code in extra statements.
@@ -582,7 +580,7 @@ task openGeeServerRpm(type: GeeRpm, dependsOn: openGeeServerInitScripts) {
         packageSharedCommands +
         [
             // Install script commands:
-            'cat', 'chmod', 'chown', 'cut', 'find', 'getent', 'mkdir', 'python',
+            'cat', 'chmod', 'chown', 'cut', 'find', 'getent', 'mkdir', 'python3.8',
             'sed', 'su', 'sudo'
         ]
     )
@@ -683,7 +681,7 @@ task openGeeServerDeb (type: GeeDeb, dependsOn: openGeeServerInitScripts) {
         packageSharedCommands +
         [
             // Install script commands:
-            'cat', 'chmod', 'chown', 'cut', 'find', 'getent', 'mkdir', 'python',
+            'cat', 'chmod', 'chown', 'cut', 'find', 'getent', 'mkdir', 'python3.8',
             'sed', 'su', 'sudo'
         ]
     )
