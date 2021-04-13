@@ -1253,7 +1253,7 @@ task openGeeRpms(
         'openGeeServerRpm', 'openGeeFullServerRpm',
         'openGeeFusionRpm', 'openGeeFullFusionRpm',
         'openGeeCommonRpm', 'openGeePostGisRpm', 'openGeeExtraRpm',
-        'openGeePython2Rpm', 'openGeePython3Rpm'
+        'openGeePython3Rpm'
     ])
 
 task openGeeDebs(
@@ -1261,7 +1261,7 @@ task openGeeDebs(
         'openGeeServerDeb', 'openGeeFullServerDeb',
         'openGeeFusionDeb', 'openGeeFullFusionDeb',
         'openGeeCommonDeb', 'openGeePostGisDeb', 'openGeeExtraDeb',
-        'openGeePython2Deb', 'openGeePython3Deb'
+        'openGeePython3Deb'
     ])
 
 task osPackage(dependsOn: org.opengee.os.Platform.osId == 'ubuntu' ? openGeeDebs : openGeeRpms) {
