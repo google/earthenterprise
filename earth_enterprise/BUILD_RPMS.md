@@ -82,7 +82,7 @@ To install Python 3.8:
 
 ```bash
 sudo rpm -Uvh python-3*
-sudo python3.8 -m ensurepip
+sudo gee-python3.8 -m ensurepip
 ```
 
 ### Ubuntu
@@ -91,7 +91,7 @@ To install Python 3.8:
 
 ```bash
 sudo dpkg -i python-3*
-sudo python3.8 -m ensurepip
+sudo gee-python3.8 -m ensurepip
 ```
 
 ### All platforms
