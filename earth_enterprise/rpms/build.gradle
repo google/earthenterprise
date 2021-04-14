@@ -439,7 +439,6 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeCommonInitScripts) {
     // chkconfig fails, so this dependency is explicit.
     requires('chkconfig')
     requires('shadow-utils')
-    requires('/usr/bin/python3.8') 
 
     requiresCommands(packageSharedCommands +
         ['cat', 'cut', 'getent', 'grep'])
@@ -504,7 +503,6 @@ task openGeeCommonDeb (type: GeeDeb, dependsOn: openGeeCommonInitScripts) {
     requires('libtool')
     requires('libxml2-utils')
     requires('openssl')
-    requires('/usr/bin/python3.8')
 
     // Use single files for install scripts.  Othewrise, OS Package wraps the
     // code in extra statements.
