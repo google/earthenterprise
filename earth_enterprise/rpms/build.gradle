@@ -259,7 +259,7 @@ task openGeePython3Rpm(type: GeeRpm) {
     type = BINARY
     autoFindProvides = true
     autoFindRequires = true
-    postInstall = file("${buildDir}/gee-python/post-install.sh")
+    postInstall = file("${projectDir}/gee-python/post-install.sh")
 
     from (stagedInstallDir_python_3) {
         into packageInstallRootDir
@@ -280,7 +280,7 @@ task openGeePython3Deb(type: GeeDeb) {
     license = openGeePython3Rpm.license
     url = openGeePython3Rpm.url
     type = BINARY
-    postInstall = file("${buildDir}/gee-python/post-install.sh")
+    postInstall = file("${projectDir}/gee-python/post-install.sh")
 
     from (stagedInstallDir_python_3) {
         into packageInstallRootDir
