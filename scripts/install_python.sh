@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Copyright 2020 the Open GEE Contributors.
+# Copyright 2021 the Open GEE Contributors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,18 +15,13 @@
 # limitations under the License.
 #
 # This script installs Python for OpenGEE using bundled source code.
-# Currently both Python 2.7 and Python 3.8 are installed in order to 
-# facilitate a transition to Python 3.
 SELF_NAME=$(basename "$0")
 INSTALL_PREFIX="/usr"
 STARTING_DIR=$(dirname $(readlink -f "$0"))
-PYTHON_VER2="Python-2.7.18"
 PYTHON_VER3="Python-3.8.6"
 SOURCE_DIR="$STARTING_DIR/../earth_enterprise/third_party"
-SOURCE_27="$SOURCE_DIR/python_2/$PYTHON_VER2.tgz"
 SOURCE_38="$SOURCE_DIR/python_3/$PYTHON_VER3.tgz"
 TMP_WORKSPACE="/tmp/opengee_python_builds"
-TMP_27="$TMP_WORKSPACE/$PYTHON_VER2"
 TMP_38="$TMP_WORKSPACE/$PYTHON_VER3"
 DO_INSTALL="yes"
 INSTALL_SELECTED="no"
@@ -93,20 +88,6 @@ fi
 
 if [ $DO_INSTALL == "yes" ]; then 
   mkdir $TMP_WORKSPACE
-
-  # Check if Python2.7 is installed
-  if [ -f "/usr/bin/python2.7" ]; then
-    echo "Python 2.7 is already installed, skipping..."
-  else
-    # Untar, build, and install python 2.7.
-    mkdir $TMP_27
-    tar -xzf $SOURCE_27 -C $TMP_WORKSPACE
-    cd $TMP_27
-    ./configure --prefix="$INSTALL_PREFIX"
-    make && make altinstall
-    sudo python2.7 -m ensurepip
-  fi
-
   cd $STARTING_DIR
 
   # Check if Python3.8 is installed
@@ -124,11 +105,6 @@ fi
 
 if [ $DO_CLEAN == "yes" ]; then
   # Run clean on individual builds, and then remove the dir.
-  if [ -d $TMP_27 ]; then
-    cd $TMP_27
-    make clean && make distclean
-  fi 
-  
   if [ -d $TMP_38 ]; then
     cd $TMP_38
     make clean && make distclean
