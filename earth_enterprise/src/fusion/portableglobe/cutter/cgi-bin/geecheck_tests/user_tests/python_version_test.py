@@ -21,8 +21,9 @@ from geecheck_tests import common
 
 class TestPython(unittest.TestCase):
 
-  def testVersion(self):
-    self.assertEqual(sys.version_info[:1, (3, 8), msg="Incorrect Python version!")
+  def testPython3Version(self):
+    '''Verify that OpenGEE Server is running Python 3.8'''
+    self.assertEqual(sys.version_info[:2], (3, 8), msg="Incorrect Python version: Version %s found, but version 3.8.x is required." % sys.version)
 
 
 if __name__ == '__main__':
