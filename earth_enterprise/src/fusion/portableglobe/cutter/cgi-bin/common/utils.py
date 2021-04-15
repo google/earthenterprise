@@ -278,7 +278,7 @@ def ExecuteCmd(os_cmd, logger, dry_run=False):
     p = subprocess.Popen(os_cmd, shell=False,
                          stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE)
-    err_data = p.communicate()[1]
+    err_data = p.communicate()[1].decode()
     return_code = p.returncode
     if return_code != 0:
       PrintAndLog("Raising error: %s (return code %d)\n"
@@ -337,6 +337,8 @@ def RunCmd(os_cmd):
     # per call of Popen as after the first call
     # stdout/stderr pipe handles are closed
     results, err_data = p.communicate()
+    results = results.decode()
+    err_data = err_data.decode()
     return_code = p.returncode
     if return_code != 0:
       results = "{0} (return code {1})".format(err_data, return_code)
@@ -449,7 +451,7 @@ def IsProcessRunningForGlobe(tool_name, base_dir):
                                      stdin=ps_subprocess.stdout,
                                      stdout=subprocess.PIPE)
   ps_subprocess.stdout.close()  # Allow p1 to receive a SIGPIPE if p2 exits.
-  procs = grep_subprocess.communicate()[0]
+  procs = grep_subprocess.communicate()[0].decode()
 
   if procs:
     procs = procs.split("/n")

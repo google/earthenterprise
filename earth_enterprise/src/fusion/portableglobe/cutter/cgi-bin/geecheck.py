@@ -79,7 +79,7 @@ class GeeTestResult(unittest.TestResult):
   def _AddErrorToResult(self, error, result):
     (error_type, error_value, error_traceback) = error
     result["error_type"] = error_type.__name__
-    result["error_msg"] = error_value.message
+    result["error_msg"] = str(error_value)
     traceback_list = traceback.extract_tb(error_traceback, MAX_TRACEBACK_SIZE)
     result["error_traceback"] = "".join(traceback.format_list(traceback_list))
 
