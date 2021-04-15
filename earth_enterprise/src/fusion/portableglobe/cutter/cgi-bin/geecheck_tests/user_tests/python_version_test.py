@@ -1,6 +1,6 @@
 #!/usr/bin/env python3.8
 #
-# Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,16 +14,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import sys
 import unittest
 from geecheck_tests import common
 
 
-class TestDns(unittest.TestCase):
+class TestPython(unittest.TestCase):
 
-    def testDns(self):
-      """Test DNS to ensure hostname is correct for IP Address. """
-      self.hostname, self.ip, self.host_check_list = common.GetHostInfo()
-      self.assertTrue(self.hostname in self.host_check_list)
+  def testVersion(self):
+    self.assertEqual(sys.version_info[:1, (3, 8), msg="Incorrect Python version!")
+
 
 if __name__ == '__main__':
-    unittest.main()
+  unittest.main()

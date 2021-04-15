@@ -18,20 +18,15 @@
 import json
 import re
 import sys
-import StringIO
+import io
 import time
 import traceback
 import os
-
-# Need to use unittest2 for Python 2.6.
-try:
-  import unittest2 as unittest
-except ImportError:
-  import unittest
+import unittest
 
 # Capture the error and out streams for use in test reports.
-gee_err_stream = StringIO.StringIO()
-gee_out_stream = StringIO.StringIO()
+gee_err_stream = io.StringIO()
+gee_out_stream = io.StringIO()
 
 # Maximum number of lines in a traceback report.
 MAX_TRACEBACK_SIZE = 5
