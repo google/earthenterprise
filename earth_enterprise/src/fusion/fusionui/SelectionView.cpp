@@ -50,12 +50,14 @@ SelectionView::SelectionView(QWidget* parent, const char* name, Qt::WFlags fl)
           this, SLOT(openContextMenu(int, int, const QPoint&)));
   connect(this, SIGNAL(zoomToBox(const gstBBox&)),
           GfxView::instance, SLOT(zoomToBox(const gstBBox&)));
+  toggle = true;
 }
 
 void SelectionView::configure(gstSelector* selector) {
   //
   // always clear out any previous entries
   //
+  auto _selectionViewTable = selectionTable;
   selectionTable->setNumCols(0);
   selectionTable->setNumRows(0);
 
@@ -72,6 +74,7 @@ void SelectionView::configure(gstSelector* selector) {
   if (src == NULL)
     return;
 
+  // empty picklist is what???
   if (selector->pickList().size() == 0)
     return;
 
@@ -85,7 +88,8 @@ void SelectionView::configure(gstSelector* selector) {
   gstHeaderHandle attrib = src->GetAttrDefs(selector->layer());
 
   int col = 0;
-  if (Preferences::getConfig().dataViewShowFID) {
+  auto config = Preferences::getConfig();
+  if (config.dataViewShowFID) {
     selectionTable->setNumCols(attrib->numColumns() + 1);
     header->setLabel(col++, kh::tr("Feature ID"));
   } else {

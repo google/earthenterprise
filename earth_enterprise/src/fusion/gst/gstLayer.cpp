@@ -325,7 +325,8 @@ void gstLayer::QueryThread() {
 
 
 void gstLayer::SetEnabled(bool s) {
-  if (s && !QueryComplete()) {
+  auto isQueryComplete = QueryComplete();
+  if (s && !isQueryComplete) {
     notify(NFY_WARN, "Cannot enable layer until query is completed.");
     return;
   }

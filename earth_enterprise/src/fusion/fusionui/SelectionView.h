@@ -23,13 +23,14 @@
 using QDockWindow = Q3DockWindow;
 #include "selectionviewbase.h"
 #include <gstBBox.h>
-
+#include <thread>
 class gstSelector;
+
 
 class SelectionView : public SelectionViewBase {
   Q_OBJECT
 
- public:
+ private:
   SelectionView(QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0);
 
 protected slots:
@@ -42,8 +43,16 @@ void configure(gstSelector* s);
  private:
   gstSelector* selector_;
 
+  bool toggle;
   void SaveColumns(int col = -1);
   void ExportSelectedFeatures();
+
+ public:
+  SelectionView& instance()
+  {
+      static SelectionView instance_;
+      return instance_;
+  }
 };
 
 class SelectionViewDocker : public QDockWindow {
@@ -52,10 +61,10 @@ class SelectionViewDocker : public QDockWindow {
                       const char* name = 0, Qt::WFlags f = 0, bool mode = FALSE);
   ~SelectionViewDocker();
 
-  SelectionView* selectionView() const { return selection_view_; }
+  SelectionView* selectionView() const { return &SelectionView::instance(); }//return selection_view_; }
 
- private:
-  SelectionView* selection_view_;
+ //private:
+ // SelectionView* selection_view_;
 };
 
 #endif  // !_SelectionView_h_

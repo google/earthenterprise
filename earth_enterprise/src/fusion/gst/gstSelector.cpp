@@ -64,9 +64,8 @@ gstSelector::gstSelector(gstSource *src, int srcLayerNum,
       config(lcfg, externalContextScripts_),
       gst_layer_(NULL),   // it is not used.
       query_complete_(false) {
-  for (std::vector<DisplayRuleConfig>::const_iterator it =
-           lcfg.displayRules.begin(); it != lcfg.displayRules.end(); ++it) {
-    (void)CreateFilter(*it);
+  for (const auto& it : lcfg.displayRules) {
+    (void)CreateFilter(it);
   }
 }
 
@@ -78,9 +77,9 @@ gstSelector::gstSelector(gstSource *src, const QueryConfig& cfg)
       config(cfg),
       gst_layer_(NULL),   // it is not used.
       query_complete_(false) {
-  for (std::vector<FilterConfig>::const_iterator it = cfg.filters.begin();
-       it != cfg.filters.end(); ++it) {
-    (void)CreateFilter(*it);
+
+  for (const auto& it : cfg.filters) {
+    (void)CreateFilter(it);
   }
 }
 
@@ -94,10 +93,9 @@ gstSelector::gstSelector(
       // Used for callback to collect covered quads statistics.
       gst_layer_(gst_layer),
       query_complete_(false) {
-  for (std::vector<FuseItem>::const_iterator it = cfg.items.begin();
-       it != cfg.items.end(); ++it) {
-    gstFilter* filter = CreateFilter(*it);
-    filter->ReadQueryResultsFile(it->filename.c_str(), source_id_);
+  for (const auto& it : cfg.items) {
+    gstFilter* filter = CreateFilter(it);
+    filter->ReadQueryResultsFile(it.filename.c_str(), source_id_);
   }
   query_complete_ = true;
 }
@@ -120,8 +118,9 @@ void gstSelector::SetConfig(const LayerConfig &newlcfg, bool &keptQueries,
 
   // if necessary, grab ahold of all geoindexes from the filters
   std::vector<gstGeoIndexHandle> keepGeoIndex;
+  unsigned int numfilters = NumFilters();
   if (keepQueries) {
-    for (unsigned int f = 0; f < NumFilters(); ++f) {
+    for (unsigned int f = 0; f < numfilters; ++f) {
       gstGeoIndexHandle index = GetFilter(f)->GetGeoIndex();
       if (!index) {
         notify(NFY_WARN, "Get %d: null geo index", f);
@@ -136,17 +135,16 @@ void gstSelector::SetConfig(const LayerConfig &newlcfg, bool &keptQueries,
 
   // rebuild the filters w/ new config
   int f = 0;
-  for (std::vector<DisplayRuleConfig>::const_iterator to =
-         newlcfg.displayRules.begin();
-       to != newlcfg.displayRules.end(); ++to, ++f) {
-    gstFilter *filter = CreateFilter(*to);
+
+  for (const auto& to : newlcfg.displayRules) {
+    gstFilter *filter = CreateFilter(to);
     if (keepQueries) {
       // restore the geoIndex
       gstGeoIndexHandle index = keepGeoIndex[f];
       if (!index) {
         notify(NFY_WARN, "Set %d: null geo index", f);
       }
-      filter->SetGeoIndex(keepGeoIndex[f]);
+      filter->SetGeoIndex(keepGeoIndex[f++]);
     }
   }
 
@@ -188,14 +186,15 @@ gstGeodeHandle gstSelector::getPickGeode(unsigned int id) {
 }
 
 void gstSelector::applyBox(const gstDrawState& state, int mode) {
-  if (mode == PICK_CLEAR_ADD)
+  if (mode == PICK_CLEAR_ADD && pick_list_.size())
     pick_list_.clear();
 
   //
   // only pick from active features by
   // stepping through each filter and look for matches
   //
-  for (unsigned int f = 0; f < NumFilters(); ++f) {
+  unsigned int numfilters = NumFilters();
+  for (unsigned int f = 0; f < numfilters; ++f) {
     // skip if not visible
     if (!GetFilter(f)->IsVisible(state))
       continue;
@@ -209,7 +208,7 @@ void gstSelector::applyBox(const gstDrawState& state, int mode) {
       GetFilter(f)->IntersectBBox(state.select, &subset);
     }
 
-    for (SelectListIterator it = subset.begin(); it != subset.end(); ++it) {
+    for (const auto& it : subset) {
       // subset now contains a list of all the features whose bounding box
       // intersects our selection box
       // Now we need to load the actual feature and see if the feature itself
@@ -224,7 +223,7 @@ void gstSelector::applyBox(const gstDrawState& state, int mode) {
       gstGeodeHandle geode;
       try {
         geode = theSourceManager->GetFeatureOrThrow(
-            UniqueFeatureId(source_id_, layer_, *it),
+            UniqueFeatureId(source_id_, layer_, it),
             state.IsMercatorPreview());
       } catch(...) {
         // silently ignore. See comment above 'try'
@@ -233,14 +232,14 @@ void gstSelector::applyBox(const gstDrawState& state, int mode) {
 
       if (geode->Intersect(state.select)) {
         if (mode == PICK_CLEAR_ADD) {
-          pick_list_.push_back(*it);
+          pick_list_.push_back(it);
         } else {
           std::vector<int>::iterator found = find(pick_list_.begin(),
-                                                  pick_list_.end(), *it);
+                                                  pick_list_.end(), it);
           if (mode == PICK_SUBTRACT && found != pick_list_.end()) {
             pick_list_.erase(found);
           } else if (mode == PICK_ADD && found == pick_list_.end()) {
-            pick_list_.push_back(*it);
+            pick_list_.push_back(it);
           }
         }
       }
@@ -253,23 +252,22 @@ void gstSelector::applyBoxCutter(const gstDrawState& state,
   // Create BoxCutter and initialize with select bounding box once.
   // Further use it many times.
   fusion_gst::BoxCutter box_cutter(state.select, false);  // cut_holes is false.
-
-  for (unsigned int f = 0; f < NumFilters(); ++f) {
+  unsigned int numfilters = NumFilters();
+  for (unsigned int f = 0; f < numfilters; ++f) {
     if (!GetFilter(f)->IsVisible(state))
       continue;
 
     SelectList select_list;
     GetFilter(f)->IntersectBBox(state.select, &select_list);
 
-    for (SelectListIterator it = select_list.begin();
-         it != select_list.end(); ++it) {
+    for (const auto& it : select_list) {
       // we don't have to worry about GetFeature failing since we only ask for
       // ones that made it past our filter, and even if it did fail we're
       // in the middle of a draw and cannot open an error dialog
       gstGeodeHandle geode;
       try {
         geode = theSourceManager->GetFeatureOrThrow(
-            UniqueFeatureId(source_id_, layer_, *it),
+            UniqueFeatureId(source_id_, layer_, it),
             state.IsMercatorPreview());
       } catch(...) {
         // silently ignore. see comment before 'try'

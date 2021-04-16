@@ -672,6 +672,7 @@ void GfxView::paintGL() {
   }
 
   if (rubberband_on_) {
+    // DRAWS BOX
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();

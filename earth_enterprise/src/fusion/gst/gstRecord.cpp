@@ -309,7 +309,6 @@ gstRecordFormatter::gstRecordFormatter(const gstRecordFormatter& that) {
   arg_ = that.arg_;
 }
 
-
 gstRecordFormatter::~gstRecordFormatter() {
 }
 

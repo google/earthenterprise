@@ -82,6 +82,7 @@ using QMimeSourceFactory = Q3MimeSourceFactory;
 #include <Qt/q3dragobject.h>
 #include <autoingest/.idl/storage/VectorProjectConfig.h>
 #include <third_party/rfc_uuid/uuid.h>
+#include <typeinfo>
 
 using QImageDrag = Q3ImageDrag;
 using QScrollView = Q3ScrollView;
@@ -354,6 +355,21 @@ int LayerItem::width(const QFontMetrics& fm, const Q3ListView* lv, int c) const 
   }
 }
 
+// WHEN STATE SWITCHES TO TRUE, FORCE SELECT THE WHOLE MAP
+
+// for vector of points
+// idl version 1, indexVersion 1, layers 1, serverType VectorProjectConfig::Standard
+// CA_POIs parent_ = gstVectorProject
+// parent_.layers_ = vector<gstLayer*>
+
+
+
+// for highways CAHighways
+// idl version 1, indexVersion 1, layers 2
+// =
+// parent_=
+// parent_.parent_ =
+// parent_.config_ =
 void LayerItem::stateChange(bool state) {
   myProjectManager()->cancelDrag();
 
@@ -378,6 +394,7 @@ void LayerItem::stateChange(bool state) {
   }
 
   layer_->SetEnabled(state);
+  // draw vectors here?????????
   //MainWindow::self->updateGfx();
   //emit redrawPreview();
   myProjectManager()->forcePreviewRedraw();
@@ -388,6 +405,7 @@ void LayerItem::stateChange(bool state) {
 void LayerItem::UpdateFilters() {
   // clear out any children
   while (firstChild() != NULL) {
+    auto firstchild_ = firstChild();
     delete firstChild();
   }
 
@@ -631,6 +649,7 @@ void ProjectManager::selectItem(Q3ListViewItem* item) {
     emit selectionView(NULL);
     emit selectLayer(NULL);
   }
+
 
   if (item == NULL || item->rtti() == FILTER) {
     updateButtons(NULL);
@@ -2131,17 +2150,22 @@ void ProjectManager::contentsMousePressEvent(QMouseEvent* e) {
   if (e->button() == Qt::LeftButton) {
     QPoint p(contentsToViewport(e->pos()));
     Q3ListViewItem* i = itemAt(p);
-    if (i && (i->rtti() == LAYER || i->rtti() == GROUP)) {
-      // if the user clicked into the root decoration of the item,
-      // don't try to start a drag!
-      if (p.x() > header()->cellPos(header()->mapToActual(0)) +
-          treeStepSize() * (i->depth() + (rootIsDecorated() ? 1 : 0)) +
-          itemMargin() ||
-          p.x() < header()->cellPos(header()->mapToActual(0))) {
-        press_pos_ = e->pos();
-        mouse_pressed_ = true;
+    if (i) {
+      auto rtti = i->rtti();
+      if (rtti == LAYER || rtti == GROUP) {
+        // if the user clicked into the root decoration of the item,
+        // don't try to start a drag!
+        if (p.x() > header()->cellPos(header()->mapToActual(0)) +
+              treeStepSize() * (i->depth() + (rootIsDecorated() ? 1 : 0)) +
+              itemMargin() ||
+              p.x() < header()->cellPos(header()->mapToActual(0))) {
+          press_pos_ = e->pos();
+          mouse_pressed_ = true;
+        }
+
       }
     }
+
   }
 
   Q3ListView::contentsMousePressEvent(e);
