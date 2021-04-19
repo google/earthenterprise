@@ -42,7 +42,8 @@ void VectorLayerWidget::Prefill(const VectorLayerXEditRequest& req) {
   if (req.config.vectorResource.empty()) {
     vector_resource_label->setText(empty_text);
   } else {
-    vector_resource_label->setText(shortAssetName(req.config.vectorResource));
+    std::string san = shortAssetName(req.config.vectorResource);
+    vector_resource_label->setText(san.c_str());
   }
 }
 
@@ -66,7 +67,8 @@ void VectorLayerWidget::chooseVectorResource() {
   if (!chooser.getFullPath(newpath))
     return;
 
-  vector_resource_label->setText(shortAssetName(newpath));
+  std::string san = shortAssetName(newpath);
+  vector_resource_label->setText(san.c_str());
 }
 
 // ****************************************************************************

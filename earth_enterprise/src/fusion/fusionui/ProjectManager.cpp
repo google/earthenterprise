@@ -1567,7 +1567,8 @@ void ProjectManager::AddAssetLayer(const char* assetname) {
                                       isasset);
     if (newsource) {
       std::string basename = khBasename(asset->GetRef().toString());
-      QString layername = shortAssetName(basename);
+      std::string san = shortAssetName(basename);
+      QString layername(san.c_str());
       gstLayer* layer = CreateNewLayer(layername,
                                        newsource, 0 /* src layer num */,
                                        asset->GetRef());
@@ -2281,8 +2282,9 @@ void ProjectManager::contentsDropEvent(QDropEvent* e) {
       if (ver) {
          AddAssetLayer(it->latin1());
       } else {
+        std::string san = shortAssetName(*it);
         nogoodversions += QString("   " )
-                       +  QString(shortAssetName(*it))
+                       +  QString(san.c_str())
                        +  QString("\n");
       }
     }

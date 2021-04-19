@@ -37,7 +37,8 @@ void DatabaseWidget::Prefill(const DatabaseEditRequest& request) {
 
   if (request.config.vectorProject.size() != 0) {
     projects.push_back(request.config.vectorProject);
-    vector_project_label->setText(shortAssetName(request.config.vectorProject));
+    std::string san = shortAssetName(request.config.vectorProject);
+    vector_project_label->setText(san.c_str());
   } else {
     vector_project_label->setText(empty_text);
   }
@@ -49,14 +50,16 @@ void DatabaseWidget::Prefill(const DatabaseEditRequest& request) {
   } else {
     if (request.config.imageryProject.size() != 0) {
       projects.push_back(request.config.imageryProject);
-      imagery_project_label->setText(shortAssetName(request.config.imageryProject));
+      std::string san = shortAssetName(request.config.imageryProject);
+      imagery_project_label->setText(san.c_str());
     } else {
       imagery_project_label->setText(empty_text);
     }
 
     if (request.config.terrainProject.size() != 0) {
       projects.push_back(request.config.terrainProject);
-      terrain_project_label->setText(shortAssetName(request.config.terrainProject));
+      std::string san = shortAssetName(request.config.terrainProject);
+      terrain_project_label->setText(san.c_str());
     } else {
       terrain_project_label->setText(empty_text);
     }
@@ -97,7 +100,8 @@ void DatabaseWidget::ChooseVectorProject() {
   if (!chooser.getFullPath(newpath))
     return;
 
-  vector_project_label->setText(shortAssetName(newpath));
+  std::string san = shortAssetName(newpath);
+  vector_project_label->setText(san.c_str());
 }
 
 void DatabaseWidget::ChooseImageryProject() {
@@ -110,7 +114,8 @@ void DatabaseWidget::ChooseImageryProject() {
   if (!chooser.getFullPath(newpath))
     return;
 
-  imagery_project_label->setText(shortAssetName(newpath));
+  std::string san = shortAssetName(newpath);
+  imagery_project_label->setText(san.c_str());
 }
 
 void DatabaseWidget::ChooseTerrainProject() {
@@ -122,8 +127,8 @@ void DatabaseWidget::ChooseTerrainProject() {
   QString newpath;
   if (!chooser.getFullPath(newpath))
     return;
-
-  terrain_project_label->setText(shortAssetName(newpath));
+  std::string san = shortAssetName(newpath);
+  terrain_project_label->setText(san.c_str());
 }
 
 void DatabaseWidget::ClearVectorProject() {
