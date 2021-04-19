@@ -45,7 +45,8 @@ AssetTableItem::AssetTableItem(QTable* table, gstAssetHandle handle)
   Asset asset = handle->getAsset();
   AssetDisplayHelper a(asset->type, asset->PrettySubtype());
   setPixmap(a.GetPixmap());
-  setText(shortAssetName(handle->getName()));
+  std::string san = shortAssetName(handle->getName());
+  setText(san.c_str());
 }
 
 AssetTableItem::~AssetTableItem() {

@@ -21,7 +21,7 @@
 #include "gstAssetGroup.h"
 
 
-const char* shortAssetName(const char* n) {
+std::string shortAssetName(const char* n) {
 
   static const std::vector<std::string> suffixes =
   {
@@ -53,15 +53,15 @@ const char* shortAssetName(const char* n) {
       }
   }
 
-  return saname.c_str();
+  return saname;
 }
 
-const char* shortAssetName(const std::string& str)
+std::string shortAssetName(const std::string& str)
 {
     return shortAssetName(str.c_str());
 }
 
-const char* shortAssetName(const QString& str)
+std::string shortAssetName(const QString& str)
 {
     return shortAssetName(str.toStdString().c_str());
 }
