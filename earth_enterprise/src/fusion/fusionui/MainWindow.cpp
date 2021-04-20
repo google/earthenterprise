@@ -108,6 +108,7 @@ MainWindow::MainWindow(QWidget* parent, const char* name, Qt::WFlags fl)
       draw_stats_(),
       busy_progress_bar_(),
       busy_progress_max_() {
+
   self = this;
 }
 
@@ -257,7 +258,7 @@ void MainWindow::Init() {
 }
 MainWindow::~MainWindow() {
   delete project_manager_docker_;
-  delete selection_view_docker_;
+  //delete selection_view_docker_;
 
   delete asset_manager_;
   delete feature_editor_;
@@ -397,9 +398,9 @@ void MainWindow::show() {
 }
 
 void MainWindow::setupSelectionView() {
-  selection_view_docker_ = new SelectionViewDocker(QDockWindow::InDock, this,
-                                                   "Attribute Table", 0, true);
-  addToolBar(selection_view_docker_, Qt::DockBottom);
+  selection_view_docker_.reset(new SelectionViewDocker(QDockWindow::InDock, this,
+                                                   "Attribute Table", 0, true));
+  addToolBar(selection_view_docker_.get(), Qt::DockBottom);
 }
 
 

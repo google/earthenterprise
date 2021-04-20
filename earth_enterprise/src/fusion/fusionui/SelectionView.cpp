@@ -43,6 +43,7 @@
 #include <Qt/qtextstream.h>
 using QHeader = Q3Header;
 using QPopupMenu = Q3PopupMenu;
+#include <iostream>
 
 SelectionView::SelectionView(QWidget* parent, const char* name, Qt::WFlags fl)
     : SelectionViewBase(parent, name, fl) {
@@ -50,7 +51,6 @@ SelectionView::SelectionView(QWidget* parent, const char* name, Qt::WFlags fl)
           this, SLOT(openContextMenu(int, int, const QPoint&)));
   connect(this, SIGNAL(zoomToBox(const gstBBox&)),
           GfxView::instance, SLOT(zoomToBox(const gstBBox&)));
-  toggle = true;
 }
 
 void SelectionView::configure(gstSelector* selector) {
@@ -337,6 +337,8 @@ void SelectionView::ExportSelectedFeatures() {
   }
 }
 
+SelectionView* sv = nullptr;
+
 SelectionViewDocker::SelectionViewDocker(Place p, QWidget* parent,
                                          const char* n, Qt::WFlags f, bool)
     : QDockWindow(p, parent, n, f) {
@@ -345,10 +347,19 @@ SelectionViewDocker::SelectionViewDocker(Place p, QWidget* parent,
   setCaption(n);
 
   selection_view_ = new SelectionView(this);
+  static bool once = true;
+  if (once)
+  {
+    sv = selection_view_;
+    once = false;
+  }
+
   setWidget(selection_view_);
+  std::cout << "how many copies of this exist?" << std::endl;
 }
 
 
 SelectionViewDocker::~SelectionViewDocker() {
   delete selection_view_;
+  sv = nullptr;
 }

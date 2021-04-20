@@ -25,7 +25,7 @@
 #include <Qt/qglobal.h>
 #include <Qt/qobject.h>
 #include <Qt/qaction.h>
-
+#include <memory>
 #include "mainwindowbase.h"
 
 class QLabel;
@@ -118,6 +118,8 @@ class MainWindow : public MainWindowBase {
 
   void show();
 
+
+
  private:
   void saveScreenLayout();
   QString getManualPath();
@@ -131,8 +133,8 @@ class MainWindow : public MainWindowBase {
   FeatureEditor* feature_editor_;
 
   SystemManager* system_manager_;
+  std::shared_ptr<SelectionViewDocker> selection_view_docker_;
 
-  SelectionViewDocker* selection_view_docker_;
 
   QLabel* lat_lon_;
   QLabel* draw_stats_;

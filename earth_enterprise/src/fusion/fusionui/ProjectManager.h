@@ -25,14 +25,14 @@
 #include <Qt/qcoreevent.h>
 #include <Qt/qlabel.h>
 #include <vector>
-
+#include <memory>
 #include <limits.h>
 #include <notify.h>
 #include <khArray.h>
 #include <gstBBox.h>
 #include <gstTypes.h>
 #include <gstGeode.h>
-
+#include "SelectionView.h"
 #include "AssetWidgetBase.h"
 #include <autoingest/.idl/storage/LayerConfig.h>
 
@@ -74,6 +74,9 @@ using QCheckListItem = Q3CheckListItem;
 
 class ProjectManager;
 class LayerItem;
+class SelectionView;
+
+extern SelectionView* sv;
 
 
 // -----------------------------------------------------------------------------

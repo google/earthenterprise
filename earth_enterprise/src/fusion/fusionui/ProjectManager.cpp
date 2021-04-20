@@ -1590,7 +1590,7 @@ void ProjectManager::AddAssetLayer(const char* assetname) {
       gstLayer* layer = CreateNewLayer(layername,
                                        newsource, 0 /* src layer num */,
                                        asset->GetRef());
-      if (!layer) {
+      if (layer == nullptr) {
         // will already have reported error
         newsource->unref();    // cleanup before leaving
         return;
@@ -1634,7 +1634,7 @@ gstLayer* ProjectManager::CreateNewLayer(const QString& origLayername,
                                          gstSource* src, int lnum,
                                          const std::string &assetRef) {
   assert(src);
-  ClearSelection();
+  //ClearSelection();
 
   // Just in case this layer name contains invalid characters
   QString layername = CleanInvalidLayerName(origLayername);
@@ -2150,6 +2150,11 @@ void ProjectManager::contentsMousePressEvent(QMouseEvent* e) {
   if (e->button() == Qt::LeftButton) {
     QPoint p(contentsToViewport(e->pos()));
     Q3ListViewItem* i = itemAt(p);
+    gstSelector* gstS = nullptr;
+    if (sv != nullptr)
+    {
+        gstS = sv->getSelector();
+    }
     if (i) {
       auto rtti = i->rtti();
       if (rtti == LAYER || rtti == GROUP) {
