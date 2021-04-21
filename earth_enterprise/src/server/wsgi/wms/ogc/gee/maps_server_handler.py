@@ -220,17 +220,17 @@ def _GetServerVars(target_url):
 
   # Clean up the JS -> JSON
   # leading line
-  p = re.compile(b"var geeServerDefs =")
+  p = re.compile(r"var geeServerDefs =")
   result = p.sub("", result)
 
   # final line
-  p = re.compile(b";\s*$")
-  result = p.sub(b"", result)
+  p = re.compile(r";\s*$")
+  result = p.sub("", result)
 
   # Adds quotes to bare keywords, changing from JavaScript to
   # actual JSON. (\s* absorbs newlines, & all keys are on their own lines.)
-  p = re.compile(b"([\[\{,])\s*(\w+)\s*:")
-  result = p.sub(b'\g<1>"\g<2>":', result)
+  p = re.compile(r"([\[\{,])\s*(\w+)\s*:")
+  result = p.sub(r'\g<1>"\g<2>":', result)
 
   return json.loads(result)
 
