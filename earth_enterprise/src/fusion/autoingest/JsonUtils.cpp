@@ -297,8 +297,7 @@ std::string JsonUtils::LookAtJson(const std::string& lookAtSpec) {
 
   std::map<std::string, std::string> field_map;
 
-  if (tokens.size() >= 3)
-  {
+  if (tokens.size() >= 3) {
     double altitude = strtod(tokens[2].c_str(), NULL);
     int zoomLevel = AltitudeToZoomLevel(altitude);
 
@@ -307,9 +306,7 @@ std::string JsonUtils::LookAtJson(const std::string& lookAtSpec) {
     field_map["lng"] = tokens[0];
     field_map["zoom"] = Itoa(zoomLevel);
     field_map["altitude"] = DoubleToString(altitude);
-  }
-  else
-  {
+  } else {
     int zoomLevel = AltitudeToZoomLevel(0);
     field_map["lat"] = "0";
     field_map["lng"] = "0";

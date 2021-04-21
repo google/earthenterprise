@@ -233,6 +233,10 @@ env.test('JsUtils_unittest',
          'JsUtils_unittest.cpp',
          LIBS=['geautoingest', 'gemiscconfig', 'gtest'])
 
+env.test('JsonUtils_unittest',
+         'JsonUtils_unittest.cpp',
+         LIBS=['geautoingest', 'gemiscconfig', 'gtest'])
+
 env.test('StorageManager_unittest',
          'StorageManager_unittest.cpp',
          LIBS=['gecommon', 'gemiscconfig', 'gtest', 'QtCore', 'QtGui', 'xerces-c', 'gexml'])

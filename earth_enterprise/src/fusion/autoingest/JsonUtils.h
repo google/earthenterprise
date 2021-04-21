@@ -31,8 +31,6 @@ class QString;
 // JsonUtils is a static utility class for formatting JSON text for
 // Earth and Maps databases.
 class JsonUtils {
- private:
-  JsonUtils() {}  // Static class. Do not allow construction.
 
  public:
   // Create the JSON buffer for a Google Earth Database.
@@ -70,6 +68,10 @@ class JsonUtils {
     const std::string& locale);
 
  protected:
+  //this was private because the class was intended to be 
+  //"static" but made protected to allow for unit testing
+  JsonUtils() {}  
+
   // Create a JSON string for a set of search tabs.
   // search_tabs: the list of search tab definitions
   // return: the JSON string for the search tabs
