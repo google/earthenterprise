@@ -1,4 +1,4 @@
-// Copyright 2018 the Open GEE Contributors
+// Copyright 2021 the Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,36 +21,14 @@
 
 namespace {
 
-class JsonUtilsAccessor : public JsonUtils {
-  public:
-    std::string RunJsonBool(bool value) {
-      return JsonBool(value);
-    }
-  
-    std::string RunLookAtJson(const std::string& lookAtSpec){
-      return LookAtJson(lookAtSpec);
-    }
-
-    std::string RunJsonObject(const std::map<std::string, std::string>& field_map){
-      return JsonObject(field_map);
-    }
-
-    std::string RunJsonArray(const std::vector<std::string>& array_values){
-      return JsonArray(array_values);
-    }
-};
-
-
 class JsonUnitTest : public testing::Test, public JsonUtils {
-  public:
-    JsonUtilsAccessor jsonUtils;
 };
 
 // Testing the JsonBool function
 TEST_F(JsonUnitTest, JsonBoolTrue) {
     const bool trueBool = true;
     const std::string expectedTrue= "true";
-    std::string result = jsonUtils.RunJsonBool(trueBool);
+    std::string result = JsonBool(trueBool);
 
     EXPECT_EQ(expectedTrue, result);
 }
@@ -58,7 +36,7 @@ TEST_F(JsonUnitTest, JsonBoolTrue) {
 TEST_F(JsonUnitTest, JsonBoolFalse) {
     const bool falseBool = false;
     const std::string expectedFalse= "false";
-    std::string result = jsonUtils.RunJsonBool(falseBool);
+    std::string result = JsonBool(falseBool);
 
     EXPECT_EQ(expectedFalse, result);
 }
@@ -66,7 +44,7 @@ TEST_F(JsonUnitTest, JsonBoolFalse) {
 TEST_F(JsonUnitTest, LookAtValid) {
     const std::string lookAtString = "-93.02119299429238|38.88758732203867|4963567.527932385|0.4781091614682265|6.862074527538373";
     const std::string expectedJson= "{\naltitude : 4.96357e+06,\nlat : 38.88758732203867,\nlng : -93.02119299429238,\nzoom : 3\n}\n";
-    std::string result = jsonUtils.RunLookAtJson(lookAtString);
+    std::string result = LookAtJson(lookAtString);
 
     EXPECT_EQ(expectedJson, result);
 }
@@ -74,7 +52,7 @@ TEST_F(JsonUnitTest, LookAtValid) {
 TEST_F(JsonUnitTest, LookAtInvalid) {
     const std::string lookAtString = "-93.02119299429238|38.88758732203867";
     const std::string expectedJson= "{\naltitude : 0,\nlat : 0,\nlng : 0,\nzoom : 1\n}\n";
-    std::string result = jsonUtils.RunLookAtJson(lookAtString);
+    std::string result = LookAtJson(lookAtString);
 
     EXPECT_EQ(expectedJson, result);
 }
@@ -84,7 +62,7 @@ TEST_F(JsonUnitTest, BasicJsonObject) {
     field_map["foo"] = "bar";
     field_map["bar"] = "baz";
     const std::string expectedJson= "{\nbar : baz,\nfoo : bar\n}\n";
-    std::string result = jsonUtils.RunJsonObject(field_map);
+    std::string result = JsonObject(field_map);
 
     EXPECT_EQ(expectedJson, result);
 }
@@ -95,7 +73,7 @@ TEST_F(JsonUnitTest, BasicJsonArray) {
     array_values.push_back("bar");
     array_values.push_back("baz");
     const std::string expectedJson="\n[\nfoo,\nbar,\nbaz\n]\n";
-    std::string result = jsonUtils.RunJsonArray(array_values);
+    std::string result = JsonArray(array_values);
 
     EXPECT_EQ(expectedJson, result);
 }
