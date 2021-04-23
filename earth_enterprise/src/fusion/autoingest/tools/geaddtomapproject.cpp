@@ -131,6 +131,9 @@ main(int argc, char *argv[]) {
       std::string this_layer(arg);
       std::vector<std::string> tokens;
       TokenizeString(this_layer, tokens, " \f\n\r\v");
+      if (tokens.size() == 0) {
+        usage(progname, "<layername> cannot be an empty string");
+      }
       std::string lref = AssetDefs::NormalizeAssetName(
           tokens[0], AssetDefs::Map, kLayer);
       MapProjectConfig::LayerItem item(lref);

@@ -295,15 +295,24 @@ std::string JsonUtils::LookAtJson(const std::string& lookAtSpec) {
   std::vector<std::string> tokens;
   TokenizeString(lookAtSpec, tokens, "|");
 
-  double altitude = strtod(tokens[2].c_str(), NULL);
-  int zoomLevel = AltitudeToZoomLevel(altitude);
-
-  // Create the map of field name-value pairs for the output JSON.
   std::map<std::string, std::string> field_map;
-  field_map["lat"] = tokens[1];
-  field_map["lng"] = tokens[0];
-  field_map["zoom"] = Itoa(zoomLevel);
-  field_map["altitude"] = DoubleToString(altitude);
+
+  if (tokens.size() >= 3) {
+    double altitude = strtod(tokens[2].c_str(), NULL);
+    int zoomLevel = AltitudeToZoomLevel(altitude);
+
+    // Create the map of field name-value pairs for the output JSON.
+    field_map["lat"] = tokens[1];
+    field_map["lng"] = tokens[0];
+    field_map["zoom"] = Itoa(zoomLevel);
+    field_map["altitude"] = DoubleToString(altitude);
+  } else {
+    int zoomLevel = AltitudeToZoomLevel(0);
+    field_map["lat"] = "0";
+    field_map["lng"] = "0";
+    field_map["zoom"] = Itoa(zoomLevel);
+    field_map["altitude"] = "0";
+  }
   return JsonObject(field_map);
 }
 
