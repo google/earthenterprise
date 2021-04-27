@@ -27,10 +27,10 @@ import os
 import sys
 
 sys.path.insert(1, os.path.join(
-    os.path.dirname(os.path.realpath(__file__)), "../../wsgi-bin/common"))
+    os.path.dirname(os.path.realpath(__file__)), "../../wsgi-bin/"))
 
-import postgres_manager
-import postgres_properties
+import common.postgres_manager
+import common.postgres_properties
 
 
 class PostgresManagerWrap(object):
