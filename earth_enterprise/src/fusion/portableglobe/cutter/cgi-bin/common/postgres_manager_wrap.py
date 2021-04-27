@@ -25,13 +25,21 @@ to put postgres_manager in common place.
 import logging
 import os
 import sys
+import importlib.util
 
-sys.path.insert(1, os.path.join(
-    os.path.dirname(os.path.realpath(__file__)), "../../wsgi-bin/"))
+'''
+In order to import code from wsgi-bin/common, we need to circumvent the normal import process. Python 3 does not like relative imports, 
+especially not those that overlap names with other in-use packages. In order to get around this issue, we import the module manually
+under a different name (in this case wsgi_common) so that there is no overlap.
+'''
+wsgi_common_spec = importlib.util.spec_from_file_location('wsgi_common', os.path.join(os.path.dirname(os.path.realpath(__file__)), 
+                                                                                      '../../wsgi-bin/common/__init__.pyc'))
+wsgi_common_module = importlib.util.module_from_spec(wsgi_common_spec)
+sys.modules[wsgi_common_spec.name] = wsgi_common_module
+wsgi_common_spec.loader.exec_module(wsgi_common_module)
 
-import common.postgres_manager
-import common.postgres_properties
-
+from wsgi_common import postgres_manager
+from wsgi_common import postgres_propertie
 
 class PostgresManagerWrap(object):
   DB_PORT = postgres_properties.PostgresProperties().GetPortNumber()
