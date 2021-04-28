@@ -39,7 +39,7 @@ sys.modules[wsgi_common_spec.name] = wsgi_common_module
 wsgi_common_spec.loader.exec_module(wsgi_common_module)
 
 from wsgi_common import postgres_manager
-from wsgi_common import postgres_propertie
+from wsgi_common import postgres_properties
 
 class PostgresManagerWrap(object):
   DB_PORT = postgres_properties.PostgresProperties().GetPortNumber()
