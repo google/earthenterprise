@@ -216,7 +216,7 @@ class GlobeBuilder(object):
           ns = contents.tag[1:len(contents.tag)-4]  
         etree2.register_namespace('', ns)
         xml = etree2.ElementTree(contents)
-        xml.write(fp, xml_declaration=True, encoding='UTF-8')
+        xml.write(fp, xml_declaration=True, encoding='unicode')
         self.Status("Saved polygon to %s" % self.polygon_file)
       else:
         self.Status("Created empty polygon file %s" % self.polygon_file)
@@ -412,6 +412,7 @@ class GlobeBuilder(object):
     self.Status("Rewrite JSON from: %s to: %s" % (url, json_file))
 
     json, code = self.HttpGet(url)
+    json = json.decode()
     if (code != 200):
       raise Exception("GET {0} failed with {1}".format(url, code))
 

@@ -553,7 +553,7 @@ class GlcAssembler(object):
       utils.PrintAndLog("Checking polygon")
       xml = etree2.ElementTree(etree.fromstring(str(polygon)))
       utils.PrintAndLog("Writing polygon")
-      xml.write(fp, xml_declaration=True, encoding='UTF-8')
+      xml.write(fp, xml_declaration=True, encoding='unicode')
       utils.PrintAndLog("SUCCESS", logger, None)
 
   def AssembleGlc(self, form_):
