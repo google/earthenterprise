@@ -211,7 +211,7 @@ def _GetServerVars(target_url):
 
   logger.debug("Fetching server definitions over http")
 
-  target_url = urllib.parse.urljoin(target_url, _SERVER_DEF_URL)
+  target_url = urllib.parse.urljoin(target_url, _SERVER_DEF_URL).decode()
 
   result = wms_connection.HandleConnection(target_url)
 
