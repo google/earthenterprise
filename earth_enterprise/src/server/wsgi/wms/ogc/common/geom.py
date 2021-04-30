@@ -44,6 +44,12 @@ class Pair(object):
       return Pair(self.x / b.x, self.y / b.y)
     else:
       return Pair(self.x / b, self.y / b)
+  
+  def __truediv__(self, b):
+    if isinstance(b, Pair):
+      return Pair(self.x / b.x, self.y / b.y)
+    else:
+      return Pair(self.x / b, self.y / b)
 
   def __mul__(self, b):
     if isinstance(b, Pair):
