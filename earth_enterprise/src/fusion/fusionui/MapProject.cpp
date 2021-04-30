@@ -77,19 +77,21 @@ MapLayerItem::MapLayerItem(Q3ListView* parent,
 
 void MapLayerItem::Init() {
   MapLayerAsset layer_asset(layer_item_config_.assetRef);
+  std::string san;
   if (layer_asset) {
     if (layer_item_config_.legend.UseDefault()) {
       setText(0, layer_asset->config.legend.defaultLocale.name + "<DEFAULT>");
     } else {
       setText(0, layer_item_config_.legend.GetValue().defaultLocale.name);
     }
-
-    setText(1, shortAssetName(layer_item_config_.assetRef));
+    san = shortAssetName(layer_item_config_.assetRef);
+    setText(1, san.c_str());
     AssetDisplayHelper a(layer_asset->type, layer_asset->subtype);
     setPixmap(1, a.GetPixmap());
   } else {
     setText(0, "<INVALID>");
-    setText(1, shortAssetName(layer_item_config_.assetRef));
+    san = shortAssetName(layer_item_config_.assetRef);
+    setText(1, san.c_str());
     setPixmap(1, AssetDisplayHelper::Pixmap(AssetDisplayHelper::Key_Unknown));
   }
 }

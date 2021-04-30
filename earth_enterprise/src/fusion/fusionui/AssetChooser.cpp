@@ -59,7 +59,8 @@ class FolderItem : public QIconViewItem {
 
 FolderItem::FolderItem(QIconView* parent, const gstAssetFolder& f)
     : QIconViewItem(parent), folder(f) {
-  setText(shortAssetName(f.name()));
+  std::string san = shortAssetName(f.name());
+  setText(san.c_str());
   AssetDisplayHelper a(AssetDefs::Invalid, std::string());
   setPixmap(a.GetPixmap());
   setKey(QString("0" + text()));
@@ -82,7 +83,7 @@ AssetItem::AssetItem(QIconView* parent, gstAssetHandle handle)
     : QIconViewItem(parent), assetHandle(handle) {
 
   auto saname = shortAssetName(handle->getName());
-  setText(saname);
+  setText(saname.c_str());
 
   Asset asset = handle->getAsset();
   AssetDisplayHelper a(asset->type, asset->subtype);
@@ -308,7 +309,7 @@ void AssetChooser::accept() {
     AssetItem* assetItem = dynamic_cast<AssetItem*>(item);
     if (assetItem != NULL) {
       auto saname = shortAssetName(assetItem->getAssetHandle()->getName());
-      nameEdit->setText(saname);
+      nameEdit->setText(saname.c_str());
       gstAssetHandle asset_handle = assetItem->getAssetHandle();
       Asset asset = asset_handle->getAsset();
       type_ = asset->type;
@@ -427,8 +428,9 @@ void AssetChooser::nameChanged(const QString& str) {
     if (item != NULL) {
        // If name doesn't match with current item, then clear selection.
       AssetItem* assetItem = dynamic_cast<AssetItem*>(item);
+      std::string san = shortAssetName(assetItem->getAssetHandle()->getName().toStdString().c_str());
       if (assetItem != NULL &&
-          getName() != shortAssetName(assetItem->getAssetHandle()->getName().toUtf8().constData())) {
+          getName() != san.c_str()) {
         iconView->clearSelection();
       }
     }

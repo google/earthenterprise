@@ -70,7 +70,8 @@ AssetProperties::AssetProperties( QWidget* parent, const gstAssetHandle &handle 
   versionsList->setSorting( 0, false );
 
   Asset asset = handle->getAsset();
-  nameLabel->setText( shortAssetName( handle->getName()) );
+  std::string san = shortAssetName( handle->getName());
+  nameLabel->setText( san.c_str() );
   typeLabel->setText( ToString( asset->type ).c_str() );
   subTypeLabel->setText( asset->PrettySubtype().c_str() );
 
