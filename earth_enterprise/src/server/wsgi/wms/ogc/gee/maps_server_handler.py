@@ -211,9 +211,9 @@ def _GetServerVars(target_url):
 
   logger.debug("Fetching server definitions over http")
 
-  target_url = urllib.parse.urljoin(target_url, _SERVER_DEF_URL).decode()
+  target_url = urllib.parse.urljoin(target_url, _SERVER_DEF_URL)
 
-  result = wms_connection.HandleConnection(target_url)
+  result = wms_connection.HandleConnection(target_url).decode()
 
   logger.debug("Server definitions data read, start regex")
   logger.debug("JSON vars: %s", result)
