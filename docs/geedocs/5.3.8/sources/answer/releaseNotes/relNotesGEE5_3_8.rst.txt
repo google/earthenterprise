@@ -1,16 +1,6 @@
 
 Release notes: Open GEE 5.3.8
 
--[ New Features ]-
-
-New feature here
-
-. New feature description goes here.
-
-A paragraph or two to describe...
-
--[ Supported Platforms ]-
-
 The Open GEE 5.3.8 release is supported on 64-bit versions of the
 following operating systems:
 
@@ -32,7 +22,20 @@ new PostgreSQL version used by Open GEE 5.3.8.
 
 -[ Resolved Issues ]-
 
-      Number  Description  Resolution  9999  text of summary  resolved
+      Number  Description  Resolution  1946  Cannot create databases
+from Fusion UI  resolved  1927  Segmentation fault can occur when
+accessing transparent tiles  resolved  1925  Fusion cannot process
+very high level images  resolved  1913  Fix user home directory
+permissions  resolved  1912  RPMs can install in the wrong order when
+they are installed in a single transaction  resolved  1910  Slow
+publish root configuration during upgrades  resolved  1905  Improperly
+formatted icon requests to portables can crash the server  resolved
+1903  Enable unit tests disabled during Qt4 upgrade  resolved  1902
+Fix issues with applications using Fusion Maps API when they aren't
+hosted on the GEE Server  resolved  1891  Update libcurl to latest
+version (>=7.74)  resolved  1885  Upgrade to Apache 2.4.46  resolved
+1674  Error importing vector resources with full path right after
+install  resolved
 
 -[ Known Issues ]-
 
