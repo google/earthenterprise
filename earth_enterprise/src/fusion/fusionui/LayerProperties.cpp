@@ -54,7 +54,8 @@ LayerProperties::LayerProperties(QWidget* parent, const LayerConfig& config,
   layer_config_.AssignUuidIfEmpty();
 
   uuidEdit->setText(layer_config_.asset_uuid_.c_str());
-  assetNameLabel->setText(shortAssetName(layer_config_.assetRef));
+  std::string san = shortAssetName(layer_config_.assetRef);
+  assetNameLabel->setText(san.c_str());
   preserveTextSpin->setValue(layer_config_.preserveTextLevel);
   isVisibleCheck->setChecked(layer_config_.isVisible);
 
