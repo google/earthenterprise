@@ -57,9 +57,14 @@ class WMS(object):
       response_headers.append(content_type)
 
     response_body = output
+    try:
+      response_body = response_body.encode('ascii')
+    except (UnicodeDecodeError, AttributeError):
+      pass
+
     start_response(status, response_headers)
 
-    return [response_body.encode('ascii')]
+    return [response_body]
 
 application = WMS()
 

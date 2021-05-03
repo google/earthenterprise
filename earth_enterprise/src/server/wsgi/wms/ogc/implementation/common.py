@@ -125,7 +125,7 @@ class WmsGetMapRequest(object):
         else:
           logger.debug( "Adding layer %s to composite image...", layer_name)
           composite_image.paste(im_user, (0, 0), im_user)
-        buf = io.StringIO()
+        buf = io.BytesIO()
         output_format = image_spec.pil_format
         composite_image.save(buf, image_spec.pil_format, **im_user.info)
     headers = [("Content-Type", image_spec.content_type)]
