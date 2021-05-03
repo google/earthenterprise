@@ -118,8 +118,13 @@ class WmsGetMapRequest(object):
             # it was our calculations, it's likely the error would be most
             # extreme for a large final image, and few tiles.
             self.user_log_rect,
-            self.user_width, self.user_height)            
-        im_user = im_user.convert("RGBA")
+            self.user_width, self.user_height)
+
+        if image_spec.pil_format == 'PNG':
+          im_user = im_user.convert("RGBA")
+        else:
+          im_user = im_user.convert("RGB")
+
         if composite_image is None:
           composite_image = im_user
         else:
