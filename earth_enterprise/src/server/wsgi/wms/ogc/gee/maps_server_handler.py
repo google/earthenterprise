@@ -1,7 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
-# Copyright 2019 Open GEE Contributors
+# Copyright 2019-2021 Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import logging
 import re
 import ssl
 from socket import gethostname
-import urlparse
+import urllib.parse
 from pprint import pformat
 
 import wms.ogc.common.wms_connection as wms_connection
@@ -139,7 +139,7 @@ class WmsLayer(object):
     """
 
     # 'layer_ns' is namespace to distinguish layers of the same target path.
-    target_path = urlparse.urlsplit(target_url).path[1:]
+    target_path = urllib.parse.urlsplit(target_url).path[1:]
     layer_ns = "[%s]:%s" %(target_path, str(server_layer_def["id"]))
 
     if server_layer_def["projection"] == "mercator":
@@ -211,7 +211,7 @@ def _GetServerVars(target_url):
 
   logger.debug("Fetching server definitions over http")
 
-  target_url = urlparse.urljoin(target_url, _SERVER_DEF_URL)
+  target_url = urllib.parse.urljoin(target_url, _SERVER_DEF_URL)
 
   result = wms_connection.HandleConnection(target_url)
 
@@ -252,17 +252,17 @@ def _LayersFromServerVars(target_url):
   # A check for server_vars being empty ({}) is not required here
   # for the same reason.
 
-  if not server_vars.has_key("dbType"):
+  if "dbType" not in server_vars:
     # Old databases do not have the "dbType" parameter in geeServerDefs.
     # Detect type of db based on the projection field for old databases.
     # gedb has no projection specified,
-    if server_vars.has_key("projection"):
+    if "projection" in server_vars:
       server_vars["dbType"] = "gemap"
     else:
       server_vars["dbType"] = "gedb"
 
   # No explicit projection, then it is gedb, default to 'flat'.
-  if not server_vars.has_key("projection"):
+  if "projection" not in server_vars:
     server_vars["projection"] = "flat"
 
   logger.debug("Servers projection: %s", server_vars["projection"])
@@ -316,12 +316,12 @@ class GEELayer(object):
     Returns:
         The layers from the server definitions.
     """
-    target_url = urlparse.urljoin(server_url, target_path)
+    target_url = urllib.parse.urljoin(server_url, target_path)
     logger.debug("Fetching layer information for target url '%s'", target_url)
 
     layers_by_name = _LayersFromServerVars(target_url)
 
-    for layer_name in layers_by_name.keys():
+    for layer_name in list(layers_by_name.keys()):
       # Ignore Vector layers  from 3d types.
       if layers_by_name[layer_name].db_type in ("gedb", "glb"):
         if layers_by_name[layer_name].label != "Imagery":
@@ -340,7 +340,7 @@ def main():
   server_url = "http://%s.xxx.xxx.com" % hostname
   results = obj.GetLayers(server_url, target_path)
 
-  print results
+  print(results)
 
 if __name__ == "__main__":
   main()

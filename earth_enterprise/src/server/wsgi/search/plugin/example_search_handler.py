@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -191,7 +192,7 @@ class ExampleSearch(object):
     total_example_results = len(query_results)
 
     if query_status:
-      for entry in xrange(total_example_results):
+      for entry in range(total_example_results):
         results = {}
 
         name = query_results[entry][4]

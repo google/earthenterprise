@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -249,7 +250,7 @@ _STRINGENTRYPROTO = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='string_value', full_name='StringEntryProto.string_value', index=1,
       number=2, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -284,7 +285,7 @@ _STRINGIDORVALUEPROTO = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='value', full_name='StringIdOrValueProto.value', index=1,
       number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -459,7 +460,7 @@ _STYLEATTRIBUTEPROTO = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='style_id', full_name='StyleAttributeProto.style_id', index=0,
       number=1, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -782,35 +783,35 @@ _REQUIREMENTPROTO = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='required_vram', full_name='RequirementProto.required_vram', index=0,
       number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
       name='required_client_ver', full_name='RequirementProto.required_client_ver', index=1,
       number=4, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
       name='probability', full_name='RequirementProto.probability', index=2,
       number=5, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
       name='required_user_agent', full_name='RequirementProto.required_user_agent', index=3,
       number=6, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
       name='required_client_capabilities', full_name='RequirementProto.required_client_capabilities', index=4,
       number=7, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -908,7 +909,7 @@ _NESTEDFEATUREPROTO = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='database_url', full_name='NestedFeatureProto.database_url', index=2,
       number=21, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -971,7 +972,7 @@ _NESTEDFEATUREPROTO = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='layer_menu_icon_path', full_name='NestedFeatureProto.layer_menu_icon_path', index=11,
       number=11, type=9, cpp_type=9, label=1,
-      has_default_value=True, default_value=unicode("icons/773_l.png", "utf-8"),
+      has_default_value=True, default_value=str("icons/773_l.png"),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -992,7 +993,7 @@ _NESTEDFEATUREPROTO = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='asset_uuid', full_name='NestedFeatureProto.asset_uuid', index=14,
       number=15, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -1013,7 +1014,7 @@ _NESTEDFEATUREPROTO = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='client_config_script_name', full_name='NestedFeatureProto.client_config_script_name', index=17,
       number=18, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -1056,14 +1057,14 @@ _MFEDOMAINFEATURESPROTO = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='country_code', full_name='MfeDomainFeaturesProto.country_code', index=0,
       number=1, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
       name='domain_name', full_name='MfeDomainFeaturesProto.domain_name', index=1,
       number=2, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -1183,7 +1184,7 @@ _CLIENTOPTIONSPROTO_PRECIPITATIONSOPTIONS = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='image_url', full_name='ClientOptionsProto.PrecipitationsOptions.image_url', index=0,
       number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -1218,7 +1219,7 @@ _CLIENTOPTIONSPROTO_PRECIPITATIONSOPTIONS = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='clouds_layer_url', full_name='ClientOptionsProto.PrecipitationsOptions.clouds_layer_url', index=5,
       number=6, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -1376,7 +1377,7 @@ _CLIENTOPTIONSPROTO = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='shader_file_prefix', full_name='ClientOptionsProto.shader_file_prefix', index=4,
       number=5, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -1425,14 +1426,14 @@ _CLIENTOPTIONSPROTO = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='internal_browser_blacklist', full_name='ClientOptionsProto.internal_browser_blacklist', index=11,
       number=12, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
       name='internal_browser_origin_whitelist', full_name='ClientOptionsProto.internal_browser_origin_whitelist', index=12,
       number=13, type=9, cpp_type=9, label=1,
-      has_default_value=True, default_value=unicode("*", "utf-8"),
+      has_default_value=True, default_value=str("*"),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -1446,7 +1447,7 @@ _CLIENTOPTIONSPROTO = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='js_bridge_request_whitelist', full_name='ClientOptionsProto.js_bridge_request_whitelist', index=14,
       number=15, type=9, cpp_type=9, label=1,
-      has_default_value=True, default_value=unicode("http://*.google.com/*", "utf-8"),
+      has_default_value=True, default_value=str("http://*.google.com/*"),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -1572,14 +1573,14 @@ _FETCHINGOPTIONSPROTO = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='domains_for_https', full_name='FetchingOptionsProto.domains_for_https', index=13,
       number=14, type=9, cpp_type=9, label=1,
-      has_default_value=True, default_value=unicode("google.com gstatic.com", "utf-8"),
+      has_default_value=True, default_value=str("google.com gstatic.com"),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
       name='hosts_for_http', full_name='FetchingOptionsProto.hosts_for_http', index=14,
       number=15, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -1607,7 +1608,7 @@ _TIMEMACHINEOPTIONSPROTO = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='server_url', full_name='TimeMachineOptionsProto.server_url', index=0,
       number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -1656,21 +1657,21 @@ _AUTOPIAOPTIONSPROTO = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='metadata_server_url', full_name='AutopiaOptionsProto.metadata_server_url', index=0,
       number=1, type=9, cpp_type=9, label=1,
-      has_default_value=True, default_value=unicode("http://cbk0.google.com/cbk", "utf-8"),
+      has_default_value=True, default_value=str("http://cbk0.google.com/cbk"),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
       name='depthmap_server_url', full_name='AutopiaOptionsProto.depthmap_server_url', index=1,
       number=2, type=9, cpp_type=9, label=1,
-      has_default_value=True, default_value=unicode("http://cbk0.google.com/cbk", "utf-8"),
+      has_default_value=True, default_value=str("http://cbk0.google.com/cbk"),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
       name='coverage_overlay_url', full_name='AutopiaOptionsProto.coverage_overlay_url', index=2,
       number=3, type=9, cpp_type=9, label=1,
-      has_default_value=True, default_value=unicode("", "utf-8"),
+      has_default_value=True, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -1719,7 +1720,7 @@ _CSIOPTIONSPROTO = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='experiment_id', full_name='CSIOptionsProto.experiment_id', index=1,
       number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -1754,14 +1755,14 @@ _SEARCHTABPROTO_INPUTBOXINFO = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='query_verb', full_name='SearchTabProto.InputBoxInfo.query_verb', index=1,
       number=2, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
       name='query_prepend', full_name='SearchTabProto.InputBoxInfo.query_prepend', index=2,
       number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -1802,14 +1803,14 @@ _SEARCHTABPROTO = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='base_url', full_name='SearchTabProto.base_url', index=2,
       number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
       name='viewport_prefix', full_name='SearchTabProto.viewport_prefix', index=3,
       number=4, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -1885,7 +1886,7 @@ _COBRANDPROTO = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='logo_url', full_name='CobrandProto.logo_url', index=0,
       number=1, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -1949,7 +1950,7 @@ _DATABASEDESCRIPTIONPROTO = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='database_url', full_name='DatabaseDescriptionProto.database_url', index=1,
       number=2, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -1977,14 +1978,14 @@ _CONFIGSCRIPTPROTO = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='script_name', full_name='ConfigScriptProto.script_name', index=0,
       number=1, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
       name='script_data', full_name='ConfigScriptProto.script_data', index=1,
       number=2, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -2435,14 +2436,14 @@ _ENDSNIPPETPROTO_SEARCHINFOPROTO = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='default_url', full_name='EndSnippetProto.SearchInfoProto.default_url', index=0,
       number=1, type=9, cpp_type=9, label=1,
-      has_default_value=True, default_value=unicode("http://maps.google.com/maps", "utf-8"),
+      has_default_value=True, default_value=str("http://maps.google.com/maps"),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
       name='geocode_param', full_name='EndSnippetProto.SearchInfoProto.geocode_param', index=1,
       number=2, type=9, cpp_type=9, label=1,
-      has_default_value=True, default_value=unicode("q", "utf-8"),
+      has_default_value=True, default_value=str("q"),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -2503,7 +2504,7 @@ _ENDSNIPPETPROTO_FILMSTRIPCONFIGPROTO_ALLEYCATIMAGERYTYPEPROTO = descriptor.Desc
     descriptor.FieldDescriptor(
       name='imagery_type_label', full_name='EndSnippetProto.FilmstripConfigProto.AlleycatImageryTypeProto.imagery_type_label', index=1,
       number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -2696,14 +2697,14 @@ _ENDSNIPPETPROTO = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='mfe_lang_param', full_name='EndSnippetProto.mfe_lang_param', index=4,
       number=5, type=9, cpp_type=9, label=1,
-      has_default_value=True, default_value=unicode("hl=$[hl]", "utf-8"),
+      has_default_value=True, default_value=str("hl=$[hl]"),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
       name='ads_url_patterns', full_name='EndSnippetProto.ads_url_patterns', index=5,
       number=6, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -3039,7 +3040,7 @@ _ENDSNIPPETPROTO = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='elevation_service_base_url', full_name='EndSnippetProto.elevation_service_base_url', index=53,
       number=46, type=9, cpp_type=9, label=1,
-      has_default_value=True, default_value=unicode("http://maps.google.com/maps/api/elevation/", "utf-8"),
+      has_default_value=True, default_value=str("http://maps.google.com/maps/api/elevation/"),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -3165,7 +3166,7 @@ _DBROOTREFPROTO = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='url', full_name='DbRootRefProto.url', index=0,
       number=2, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      has_default_value=False, default_value=str(""),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -3305,7 +3306,7 @@ _DBROOTPROTO = descriptor.Descriptor(
     descriptor.FieldDescriptor(
       name='language', full_name='DbRootProto.language', index=10,
       number=9, type=9, cpp_type=9, label=1,
-      has_default_value=True, default_value=unicode("en", "utf-8"),
+      has_default_value=True, default_value=str("en"),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -3588,104 +3589,84 @@ DESCRIPTOR.message_types_by_name['DatabaseVersionProto'] = _DATABASEVERSIONPROTO
 DESCRIPTOR.message_types_by_name['DbRootProto'] = _DBROOTPROTO
 DESCRIPTOR.message_types_by_name['EncryptedDbRootProto'] = _ENCRYPTEDDBROOTPROTO
 
-class StringEntryProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class StringEntryProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _STRINGENTRYPROTO
   
   # @@protoc_insertion_point(class_scope:StringEntryProto)
 
-class StringIdOrValueProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class StringIdOrValueProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _STRINGIDORVALUEPROTO
   
   # @@protoc_insertion_point(class_scope:StringIdOrValueProto)
 
-class PlanetModelProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class PlanetModelProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _PLANETMODELPROTO
   
   # @@protoc_insertion_point(class_scope:PlanetModelProto)
 
-class ProviderInfoProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class ProviderInfoProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _PROVIDERINFOPROTO
   
   # @@protoc_insertion_point(class_scope:ProviderInfoProto)
 
-class PopUpProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class PopUpProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _POPUPPROTO
   
   # @@protoc_insertion_point(class_scope:PopUpProto)
 
-class StyleAttributeProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class StyleAttributeProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _STYLEATTRIBUTEPROTO
   
   # @@protoc_insertion_point(class_scope:StyleAttributeProto)
 
-class StyleMapProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class StyleMapProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _STYLEMAPPROTO
   
   # @@protoc_insertion_point(class_scope:StyleMapProto)
 
-class ZoomRangeProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class ZoomRangeProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _ZOOMRANGEPROTO
   
   # @@protoc_insertion_point(class_scope:ZoomRangeProto)
 
-class DrawFlagProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class DrawFlagProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _DRAWFLAGPROTO
   
   # @@protoc_insertion_point(class_scope:DrawFlagProto)
 
-class LayerProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class LayerProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _LAYERPROTO
   
   # @@protoc_insertion_point(class_scope:LayerProto)
 
-class FolderProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class FolderProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _FOLDERPROTO
   
   # @@protoc_insertion_point(class_scope:FolderProto)
 
-class RequirementProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class RequirementProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _REQUIREMENTPROTO
   
   # @@protoc_insertion_point(class_scope:RequirementProto)
 
-class LookAtProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class LookAtProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _LOOKATPROTO
   
   # @@protoc_insertion_point(class_scope:LookAtProto)
 
-class NestedFeatureProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class NestedFeatureProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _NESTEDFEATUREPROTO
   
   # @@protoc_insertion_point(class_scope:NestedFeatureProto)
 
-class MfeDomainFeaturesProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class MfeDomainFeaturesProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _MFEDOMAINFEATURESPROTO
   
   # @@protoc_insertion_point(class_scope:MfeDomainFeaturesProto)
 
-class ClientOptionsProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
-  
-  class PrecipitationsOptions(message.Message):
-    __metaclass__ = reflection.GeneratedProtocolMessageType
-    
-    class WeatherMapping(message.Message):
-      __metaclass__ = reflection.GeneratedProtocolMessageType
+class ClientOptionsProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
+  class PrecipitationsOptions(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
+    class WeatherMapping(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
       DESCRIPTOR = _CLIENTOPTIONSPROTO_PRECIPITATIONSOPTIONS_WEATHERMAPPING
       
       # @@protoc_insertion_point(class_scope:ClientOptionsProto.PrecipitationsOptions.WeatherMapping)
@@ -3693,14 +3674,12 @@ class ClientOptionsProto(message.Message):
     
     # @@protoc_insertion_point(class_scope:ClientOptionsProto.PrecipitationsOptions)
   
-  class CaptureOptions(message.Message):
-    __metaclass__ = reflection.GeneratedProtocolMessageType
+  class CaptureOptions(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
     DESCRIPTOR = _CLIENTOPTIONSPROTO_CAPTUREOPTIONS
     
     # @@protoc_insertion_point(class_scope:ClientOptionsProto.CaptureOptions)
   
-  class MapsOptions(message.Message):
-    __metaclass__ = reflection.GeneratedProtocolMessageType
+  class MapsOptions(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
     DESCRIPTOR = _CLIENTOPTIONSPROTO_MAPSOPTIONS
     
     # @@protoc_insertion_point(class_scope:ClientOptionsProto.MapsOptions)
@@ -3708,35 +3687,28 @@ class ClientOptionsProto(message.Message):
   
   # @@protoc_insertion_point(class_scope:ClientOptionsProto)
 
-class FetchingOptionsProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class FetchingOptionsProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _FETCHINGOPTIONSPROTO
   
   # @@protoc_insertion_point(class_scope:FetchingOptionsProto)
 
-class TimeMachineOptionsProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class TimeMachineOptionsProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _TIMEMACHINEOPTIONSPROTO
   
   # @@protoc_insertion_point(class_scope:TimeMachineOptionsProto)
 
-class AutopiaOptionsProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class AutopiaOptionsProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _AUTOPIAOPTIONSPROTO
   
   # @@protoc_insertion_point(class_scope:AutopiaOptionsProto)
 
-class CSIOptionsProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class CSIOptionsProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _CSIOPTIONSPROTO
   
   # @@protoc_insertion_point(class_scope:CSIOptionsProto)
 
-class SearchTabProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
-  
-  class InputBoxInfo(message.Message):
-    __metaclass__ = reflection.GeneratedProtocolMessageType
+class SearchTabProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
+  class InputBoxInfo(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
     DESCRIPTOR = _SEARCHTABPROTO_INPUTBOXINFO
     
     # @@protoc_insertion_point(class_scope:SearchTabProto.InputBoxInfo)
@@ -3744,11 +3716,8 @@ class SearchTabProto(message.Message):
   
   # @@protoc_insertion_point(class_scope:SearchTabProto)
 
-class CobrandProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
-  
-  class Coord(message.Message):
-    __metaclass__ = reflection.GeneratedProtocolMessageType
+class CobrandProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
+  class Coord(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
     DESCRIPTOR = _COBRANDPROTO_COORD
     
     # @@protoc_insertion_point(class_scope:CobrandProto.Coord)
@@ -3756,59 +3725,45 @@ class CobrandProto(message.Message):
   
   # @@protoc_insertion_point(class_scope:CobrandProto)
 
-class DatabaseDescriptionProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class DatabaseDescriptionProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _DATABASEDESCRIPTIONPROTO
   
   # @@protoc_insertion_point(class_scope:DatabaseDescriptionProto)
 
-class ConfigScriptProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class ConfigScriptProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _CONFIGSCRIPTPROTO
   
   # @@protoc_insertion_point(class_scope:ConfigScriptProto)
 
-class SwoopParamsProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class SwoopParamsProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _SWOOPPARAMSPROTO
   
   # @@protoc_insertion_point(class_scope:SwoopParamsProto)
 
-class PostingServerProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class PostingServerProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _POSTINGSERVERPROTO
   
   # @@protoc_insertion_point(class_scope:PostingServerProto)
 
-class PlanetaryDatabaseProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class PlanetaryDatabaseProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _PLANETARYDATABASEPROTO
   
   # @@protoc_insertion_point(class_scope:PlanetaryDatabaseProto)
 
-class LogServerProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class LogServerProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _LOGSERVERPROTO
   
   # @@protoc_insertion_point(class_scope:LogServerProto)
 
-class EndSnippetProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
-  
-  class SearchConfigProto(message.Message):
-    __metaclass__ = reflection.GeneratedProtocolMessageType
-    
-    class SearchServer(message.Message):
-      __metaclass__ = reflection.GeneratedProtocolMessageType
-      
-      class SupplementalUi(message.Message):
-        __metaclass__ = reflection.GeneratedProtocolMessageType
+class EndSnippetProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
+  class SearchConfigProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
+    class SearchServer(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
+      class SupplementalUi(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
         DESCRIPTOR = _ENDSNIPPETPROTO_SEARCHCONFIGPROTO_SEARCHSERVER_SUPPLEMENTALUI
         
         # @@protoc_insertion_point(class_scope:EndSnippetProto.SearchConfigProto.SearchServer.SupplementalUi)
       
-      class SearchletProto(message.Message):
-        __metaclass__ = reflection.GeneratedProtocolMessageType
+      class SearchletProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
         DESCRIPTOR = _ENDSNIPPETPROTO_SEARCHCONFIGPROTO_SEARCHSERVER_SEARCHLETPROTO
         
         # @@protoc_insertion_point(class_scope:EndSnippetProto.SearchConfigProto.SearchServer.SearchletProto)
@@ -3816,8 +3771,7 @@ class EndSnippetProto(message.Message):
       
       # @@protoc_insertion_point(class_scope:EndSnippetProto.SearchConfigProto.SearchServer)
     
-    class OneboxServiceProto(message.Message):
-      __metaclass__ = reflection.GeneratedProtocolMessageType
+    class OneboxServiceProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
       DESCRIPTOR = _ENDSNIPPETPROTO_SEARCHCONFIGPROTO_ONEBOXSERVICEPROTO
       
       # @@protoc_insertion_point(class_scope:EndSnippetProto.SearchConfigProto.OneboxServiceProto)
@@ -3825,23 +3779,18 @@ class EndSnippetProto(message.Message):
     
     # @@protoc_insertion_point(class_scope:EndSnippetProto.SearchConfigProto)
   
-  class SearchInfoProto(message.Message):
-    __metaclass__ = reflection.GeneratedProtocolMessageType
+  class SearchInfoProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
     DESCRIPTOR = _ENDSNIPPETPROTO_SEARCHINFOPROTO
     
     # @@protoc_insertion_point(class_scope:EndSnippetProto.SearchInfoProto)
   
-  class RockTreeDataProto(message.Message):
-    __metaclass__ = reflection.GeneratedProtocolMessageType
+  class RockTreeDataProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
     DESCRIPTOR = _ENDSNIPPETPROTO_ROCKTREEDATAPROTO
     
     # @@protoc_insertion_point(class_scope:EndSnippetProto.RockTreeDataProto)
   
-  class FilmstripConfigProto(message.Message):
-    __metaclass__ = reflection.GeneratedProtocolMessageType
-    
-    class AlleycatImageryTypeProto(message.Message):
-      __metaclass__ = reflection.GeneratedProtocolMessageType
+  class FilmstripConfigProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
+    class AlleycatImageryTypeProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
       DESCRIPTOR = _ENDSNIPPETPROTO_FILMSTRIPCONFIGPROTO_ALLEYCATIMAGERYTYPEPROTO
       
       # @@protoc_insertion_point(class_scope:EndSnippetProto.FilmstripConfigProto.AlleycatImageryTypeProto)
@@ -3849,8 +3798,7 @@ class EndSnippetProto(message.Message):
     
     # @@protoc_insertion_point(class_scope:EndSnippetProto.FilmstripConfigProto)
   
-  class StarDataProto(message.Message):
-    __metaclass__ = reflection.GeneratedProtocolMessageType
+  class StarDataProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
     DESCRIPTOR = _ENDSNIPPETPROTO_STARDATAPROTO
     
     # @@protoc_insertion_point(class_scope:EndSnippetProto.StarDataProto)
@@ -3858,26 +3806,22 @@ class EndSnippetProto(message.Message):
   
   # @@protoc_insertion_point(class_scope:EndSnippetProto)
 
-class DbRootRefProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class DbRootRefProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _DBROOTREFPROTO
   
   # @@protoc_insertion_point(class_scope:DbRootRefProto)
 
-class DatabaseVersionProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class DatabaseVersionProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _DATABASEVERSIONPROTO
   
   # @@protoc_insertion_point(class_scope:DatabaseVersionProto)
 
-class DbRootProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class DbRootProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _DBROOTPROTO
   
   # @@protoc_insertion_point(class_scope:DbRootProto)
 
-class EncryptedDbRootProto(message.Message):
-  __metaclass__ = reflection.GeneratedProtocolMessageType
+class EncryptedDbRootProto(message.Message, metaclass=reflection.GeneratedProtocolMessageType):
   DESCRIPTOR = _ENCRYPTEDDBROOTPROTO
   
   # @@protoc_insertion_point(class_scope:EncryptedDbRootProto)

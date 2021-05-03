@@ -682,7 +682,7 @@ def ProtocolBufferGenerator(source, target, env, for_signature):
 
   # Must run the protocol buffer compiler from the source directory!
   command = ('cd ${SOURCES.dir}; '
-             '${TOOLS_BIN.abspath}/${PROTOBUF_COMPILER} '
+             '${PROTOBUF_COMPILER} '
              '--cpp_out $PROTOBUF_OUT_ROOT ${SOURCES.file}')
 
   return [command]
@@ -739,7 +739,6 @@ def DefineProtocolBufferBuilder(env):
   )
 
   # Set tool based on local platform
-  env['TOOLS_BIN'] = env.fs.Dir('../tools/bin/')
   env['PROTOBUF_COMPILER'] = 'protoc'
 
   # Add protocol buffer builder

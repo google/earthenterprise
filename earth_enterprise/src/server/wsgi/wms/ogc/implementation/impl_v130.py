@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,7 @@
 
 """Implementation of everything that's particular to version 1.3.0."""
 import logging
-import StringIO
+import io
 
 import wms.ogc.common.image_specs as image_specs
 import wms.ogc.common.utils as utils
@@ -69,7 +70,7 @@ class ServiceException(Exception):
     Returns:
         The XML response.
     """
-    xml_text = StringIO.StringIO()
+    xml_text = io.StringIO()
     xml_text.write(_XML_HEADER)
 
     service_exception = exceptions_wms.ServiceExceptionType(
@@ -137,7 +138,7 @@ class GetCapabilitiesRequest(object):
 
   def GetMap(self):
     formats = [spec.content_type
-               for spec in image_specs.IMAGE_SPECS.values()]
+               for spec in list(image_specs.IMAGE_SPECS.values())]
 
     dcptype_info = self.GetDCPTypeInfo()
 
@@ -211,7 +212,7 @@ class GetCapabilitiesRequest(object):
       # Raise ServiceException here.
       raise ServiceException(None, "Database type is not supported.")
 
-    for layer_name, server_layer in server_layers_by_name.iteritems():
+    for layer_name, server_layer in server_layers_by_name.items():
       proj = server_layer.projection
       wms_layer = capabilities_wms.Layer(
           # 7.2.4.7.4 - Even for vector maps we always get data from
@@ -264,7 +265,7 @@ class GetCapabilitiesRequest(object):
     """
     logger.debug("Begin XML response for GetCapabilities for WMS v1.3.0")
 
-    xml_text = StringIO.StringIO()
+    xml_text = io.StringIO()
     xml_text.write(_XML_HEADER)
 
     self.capabilities_xml = capabilities_wms.WMS_Capabilities(
@@ -305,7 +306,7 @@ class GetCapabilitiesRequest(object):
              'inline; filename="wmsCapabilities-%s-google.xml"' % _WMS_VERSION),
             ("Content-Type", _XML_CONTENT_TYPE)]
         response = self._Xml()
-      except ServiceException, e:
+      except ServiceException as e:
         headers = _HEADERS_EXCEPTION
         return headers, e.Xml()
 
@@ -355,7 +356,7 @@ class GetMapRequest(common.WmsGetMapRequest):
     else:
       try:
         self._ProcessResponse()
-      except ServiceException, e:
+      except ServiceException as e:
         headers = _HEADERS_EXCEPTION
         return headers, e.Xml()
 
@@ -391,7 +392,7 @@ def main():
   obj = BadWmsRequest("Not Valid Format")
   output = obj.GenerateOutput()
 
-  print output
+  print(output)
 
 
 if __name__ == "__main__":

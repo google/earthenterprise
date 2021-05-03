@@ -40,7 +40,7 @@ class geEarthImageryPacket {
 
   // Computes the serialized size of the EarthImageryPacket message.
   inline int ByteSize() const {
-    return packet_.ByteSize();
+    return packet_.ByteSizeLong();
   }
 
   // Gets message cached size.

@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -312,11 +313,9 @@ def JsonToObj(json_str):
 
   def HToO(x):
     if isinstance(x, dict):
-      return type("jo", (), dict((k, HToO(v)) for (k, v) in x.iteritems()))
+      return type("jo", (), dict((k, HToO(v)) for (k, v) in x.items()))
     elif isinstance(x, list):
       return [HToO(v) for v in x]
-    elif isinstance(x, unicode):
-      return string_utils.SanitizeText(x.encode("ascii"))
     elif isinstance(x, str):
       return string_utils.SanitizeText(x)
     else:

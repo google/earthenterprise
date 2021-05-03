@@ -22,6 +22,7 @@ package keyhole;
 
 message DioramaMetadata {
   enum ObjectFlags {
+    option allow_alias = true;
     IS_GEOMETRY = 4;          // 1 = geometry object; 0 = texture object
     NORTH = 0;
     SOUTH = 1;

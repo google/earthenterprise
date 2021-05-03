@@ -30,7 +30,7 @@ gepackgen = env.executable('gepackgen',
                            ],
                            LIBS=['geautoingest', 'khrasterffio', 'gegdal',
                                  'geraster', 'khffio', 'gefconfigutil',
-                                 'geutil', 'gecommon', 'geprotobuf',
+                                 'geutil', 'gecommon', 'protobuf',
                                  'QtCore','QtGui', 'geos'])
 
 pyr_info = env.executable('pyr_info', ['pyrinfo.cpp', '../tools/geImageWriter.o'],

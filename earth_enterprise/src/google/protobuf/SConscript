@@ -71,6 +71,6 @@ stub_files = [
 
 # Compile the cc files and add them to the "proto.a" lib.
 geprotobuf = local_env.sharedLib('geprotobuf', cpp_files
-                    + ['io/' + f for f in io_files]
-                    + ['stubs/' + f for f in stub_files])
+                    + map(lambda f: 'io/' + f, io_files)
+                    + map(lambda f: 'stubs/' + f, stub_files))
 env.install('common_lib', [geprotobuf])

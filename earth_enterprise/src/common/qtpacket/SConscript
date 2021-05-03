@@ -26,7 +26,7 @@ sources = [ 'tree_utils.cpp',
             ]
 
 geqtpacket = env.sharedLib('geqtpacket', sources,
-                           LIBS=['keyholeutils', 'geprotobuf',
+                           LIBS=['keyholeutils', 'protobuf',
                                  'geprotos', 'gecommon', env['png_ver']])
 
 env.install('common_lib', [geqtpacket])
@@ -43,4 +43,4 @@ env.test('quadtree_utils_unittest',
 
 env.test('quadtree_builder_test',
                'quadtree_builder_test.cpp',
-               LIBS=['geqtpacket', 'getests', 'geutil', 'gecommon', 'geprotobuf', env['png_ver']])
+               LIBS=['geqtpacket', 'getests', 'geutil', 'gecommon', 'protobuf', env['png_ver']])

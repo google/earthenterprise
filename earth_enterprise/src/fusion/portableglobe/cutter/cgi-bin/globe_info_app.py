@@ -1,6 +1,7 @@
 #!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -170,7 +171,7 @@ def main():
       common.utils.WriteHeader("text/plain")
 
       globe_info_list = []
-      for globe_key in globe_dir.globes_.iterkeys():
+      for globe_key in globe_dir.globes_.keys():
         globe = globe_dir.globes_[globe_key]
         if globe["is_gee"]:
           globe_info_list.append(GLOBE_INFO_OBJ_TEMPLATE % (
@@ -196,7 +197,7 @@ def main():
     else:
       common.utils.WriteHeader("text/plain")
       logger.Log("Unknown command: %s" % cmd)
-      print("Unknown command:", cmd)
+      print(("Unknown command:", cmd))
 
   except Exception as e:
     common.utils.WriteHeader("text/html")

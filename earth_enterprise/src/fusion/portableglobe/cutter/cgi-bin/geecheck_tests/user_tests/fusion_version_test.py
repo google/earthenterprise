@@ -14,12 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Need to use unittest2 for Python 2.6.
-try:
-  import unittest2 as unittest
-except ImportError:
-  import unittest
-
+import unittest
 from geecheck_tests import common
 
 
