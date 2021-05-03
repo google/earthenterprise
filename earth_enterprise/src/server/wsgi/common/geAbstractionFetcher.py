@@ -1,6 +1,6 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
-# Copyright 2019 OpenGEE Contributors
+# Copyright 2019-2021 OpenGEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -49,7 +49,7 @@ def GetHostName(useFqdn=False):
 
 def Usage(cmd):
   """Show proper usage for this command."""
-  print "usage: %s [hostname [-f]]" % cmd
+  print("usage: %s [hostname [-f]]" % cmd)
   exit(1)
 
 
@@ -61,7 +61,7 @@ def main(args):
     useFqdn = False
     if len(args) > 2:
       useFqdn = args[2] == "-f"
-    print GetHostName(useFqdn)
+    print(GetHostName(useFqdn))
   else:
     Usage(args[0])
 

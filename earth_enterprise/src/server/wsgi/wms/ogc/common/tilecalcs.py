@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,9 +21,9 @@
 import logging
 import math
 
-import geom
-import utils
-import xform
+from . import geom
+from . import utils
+from . import xform
 
 _MAX_ZOOM = 23
 _TILE_PIXEL_SIZE = 256
@@ -185,7 +186,7 @@ def CalcTileRects(proj, bbox, zoom_level):
 
 def main():
   total = TotalTilepixelExtent(15)
-  print total
+  print(total)
 
 if __name__ == "__main__":
   main()

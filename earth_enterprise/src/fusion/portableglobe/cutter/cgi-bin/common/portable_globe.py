@@ -1,6 +1,7 @@
 #!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,7 +23,7 @@ Adapted from module of same name used in Portable Server.
 import os
 import re
 
-import portable_exceptions
+from . import portable_exceptions
 import glc_unpacker
 
 NON_COMPOSITE_LAYER = 0
@@ -116,7 +117,7 @@ class Globe(object):
   def _GetData(self):
     """Returns package or file content currently pointed to by unpacker."""
     assert self.unpacker_
-    offset = 0L + (self.file_loc_.HighOffset() & 0xffffffff) << 32
+    offset = 0 + (self.file_loc_.HighOffset() & 0xffffffff) << 32
     offset += (self.file_loc_.LowOffset() & 0xffffffff)
     fp = open(self.GlobePath(), "rb")
     fp.seek(offset)
@@ -128,7 +129,7 @@ class Globe(object):
 
   def GetVersion(self):
     """Returns format version of the globe."""
-    offset = (0L + os.path.getsize(self.GlobePath())
+    offset = (0 + os.path.getsize(self.GlobePath())
               - glc_unpacker.Package.kVersionOffset)
     fp = open(self.GlobePath(), "rb")
     fp.seek(offset)
@@ -138,7 +139,7 @@ class Globe(object):
 
   def GetCrc(self):
     """Returns crc of the globe."""
-    offset = (0L + os.path.getsize(self.GlobePath())
+    offset = (0 + os.path.getsize(self.GlobePath())
               - glc_unpacker.Package.kCrcOffset)
     fp = open(self.GlobePath(), "rb")
     fp.seek(offset)
@@ -149,7 +150,7 @@ class Globe(object):
 
   def CalculateCrc(self):
     """Returns calculated crc for the globe."""
-    size = ((os.path.getsize(self.GlobePath())
+    size = int((os.path.getsize(self.GlobePath())
              - glc_unpacker.Package.kCrcOffset)
             / glc_unpacker.Package.kCrcSize)
     fp = open(self.GlobePath(), "rb")

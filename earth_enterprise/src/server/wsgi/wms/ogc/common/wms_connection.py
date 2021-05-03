@@ -1,6 +1,6 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
-# Copyright 2019 Open GEE Contributors
+# Copyright 2019-2021 Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,10 +17,10 @@
 """Handle connections to WMS API"""
 
 import ssl
-import urllib2
-import urlparse
+import urllib.request, urllib.error, urllib.parse
+import urllib.parse
 import logging
-import configs
+from . import configs
 
 CONFIG_FILE = "/opt/google/gehttpd/wsgi-bin/wms/ogc/wms.cfg"
 CONFIGS = configs.Configs(CONFIG_FILE)
@@ -31,7 +31,7 @@ def HandleConnection(url):
   logger.debug("Opening url: [%s]", url)
 
   if CONFIGS.GetStr("DATABASE_HOST") != "":
-    url = CONFIGS.GetStr("DATABASE_HOST") + urlparse.urlsplit(url)[2:]
+    url = CONFIGS.GetStr("DATABASE_HOST") + urllib.parse.urlsplit(url)[2:]
 
   fp = None
   try:
@@ -46,9 +46,9 @@ def HandleConnection(url):
       context.check_hostname = False
       context.verify_mode = ssl.CERT_NONE
 
-    fp = urllib2.urlopen(url, context=context)
+    fp = urllib.request.urlopen(url, context=context)
     response = fp.read()
-  except urllib2.HTTPError, e:
+  except urllib.error.HTTPError as e:
     logger.warning("Server definitions didn't return any results %s.", e)
     return {}
   finally:

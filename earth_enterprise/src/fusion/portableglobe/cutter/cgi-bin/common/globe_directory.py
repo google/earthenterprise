@@ -1,6 +1,7 @@
 #!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,8 +23,8 @@ each one, such as the description and the polygon used to cut it.
 """
 
 import os
-import portable_globe
-import utils
+from . import portable_globe
+from . import utils
 
 # Minimum size before considered an actual globe (MB).
 # Helps prevent listing of globes that have been reserved but
@@ -90,7 +91,7 @@ class GlobeDirectory(object):
 
   def GlobeNames(self):
     """Returns a list of short names of available globes."""
-    return self.globes_.keys()
+    return list(self.globes_.keys())
 
   def _GetShortNameList(self):
     """Creates a list of short names of available globes."""

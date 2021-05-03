@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,7 +21,7 @@ import json
 import logging
 import logging.config
 from string import Template
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 from xml.etree.cElementTree import SubElement, tostring
 import defusedxml.cElementTree as ET
 from search.common import exceptions
@@ -255,7 +256,7 @@ class CustomPOISearch(object):
       # For the sake of simplicity, we presently look for
       # "name", "geometry", "icon", "vicinity" tags only in the
       # results and ignore the others.
-      for key in result.keys():
+      for key in list(result.keys()):
         if key not in self._reqd_tags:
           result.pop(key)
           continue
@@ -271,9 +272,9 @@ class CustomPOISearch(object):
       # Rename "vicinity" and "icon" tags to
       # "description" and "snippet" as per naming convention
       # being followed in existing search services.
-      if result.has_key("vicinity"):
+      if "vicinity" in result:
         result["description"] = result.pop("vicinity")
-      if result.has_key("icon"):
+      if "icon" in result:
         result["snippet"] = result.pop("icon")
 
     json_response = self._json_template.substitute(
@@ -319,7 +320,7 @@ class CustomPOISearch(object):
       url = self._places_api_url % (output_type, location, radius, server_key)
       self.logger.debug("Google Places database URL is %s.", url)
 
-      url_fetch = urllib2.urlopen(url)
+      url_fetch = urllib.request.urlopen(url)
 
       if response_type == "KML":
         return self.FormatKMLResponse(url_fetch)
@@ -345,7 +346,7 @@ def main():
   # https://developers.google.com/places/documentation/
   server_key = "<your_key_here>"
 
-  url_fetch = urllib2.urlopen(url %("xml", "-33.8670522,151.1957362",
+  url_fetch = urllib.request.urlopen(url %("xml", "-33.8670522,151.1957362",
                                     "10", server_key))
   cpoiobj.FormatXMLResponse(url_fetch)
 

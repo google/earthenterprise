@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -122,7 +123,7 @@ def _LoadPathValuesFromDict(snippets, log):
       A dict, of value, by fieldpath.
   """
   hardwired_values = {}
-  for mangled_path, value in snippets.iteritems():
+  for mangled_path, value in snippets.items():
     # Allow for value being multi-word. <path> of course is 'abstract',
     # ie looks like 'a.b.c', no [] or indices.
     log.debug("field:[%s], value:[%s]", mangled_path, str(value))
@@ -192,7 +193,7 @@ def ForceFields(store, log):
   path_values = ForcedFieldValues(log)
   # JGD arg; need to gussy up these abstract paths with repeated markers.
   log.debug("have %d fields to force", len(path_values))
-  for abstract_path, value in path_values.iteritems():
+  for abstract_path, value in path_values.items():
     log.debug("finding concrete paths for: %s", abstract_path)
     # Just changing the form for the next call.
     empty_concrete_path = proto_reflection.EmptyConcretizeFieldPath(
@@ -219,7 +220,7 @@ def NerfUnwantedExposedDefaults(store, log):
   # plain path -> value, not sparse
   path_values = NerfedDefaultFieldValues(log)
   log.debug("... pathes loaded.")
-  for path, value in path_values.iteritems():
+  for path, value in path_values.items():
     log.debug("..has?" + path)
     if not sparse_tree.HasAbstractFieldPath(path, store):
       log.debug("..set?" + path)

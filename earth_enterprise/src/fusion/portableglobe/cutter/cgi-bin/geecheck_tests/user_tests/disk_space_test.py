@@ -18,12 +18,7 @@
 import os
 import xml.etree.ElementTree as ET
 from geecheck_tests import common
-
-# Need to use unittest2 for Python 2.6.
-try:
-  import unittest2 as unittest
-except ImportError:
-  import unittest
+import unittest
 
 
 

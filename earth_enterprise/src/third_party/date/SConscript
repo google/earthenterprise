@@ -1,6 +1,6 @@
 #-*- Python -*-
 #
-# Copyright 2018 the Open GEE Authors
+# Copyright 2018-2021 the Open GEE Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,11 +21,11 @@ import os.path
 Import('env')
 Import('third_party_env')
 
-date_version = '2.4.1'
+date_version = '3.0.0'
 
 
 date_source = File(
-    '#/../../earth_enterprise/third_party/date/v{0}.tar.gz'.format(
+    '#/../../earth_enterprise/third_party/date/date-{0}.tar.gz'.format(
         date_version)).abspath
 current_dir = Dir('.').abspath
 build_root = os.path.join(current_dir, 'date-{0}'.format(date_version))

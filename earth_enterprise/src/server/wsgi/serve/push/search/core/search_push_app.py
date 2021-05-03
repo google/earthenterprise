@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,7 +23,7 @@ import cgi
 import cgitb
 import logging
 import logging.config
-from StringIO import StringIO
+from io import StringIO
 import sys
 
 from serve import constants
@@ -67,7 +68,7 @@ class SearchPushApp(object):
 
     # Get parameters from HTTP request.
     request = http_io.Request()
-    for key in form.keys():
+    for key in list(form.keys()):
       request.SetParameter(key, form.getvalue(key, ""))
 
     response = http_io.Response()
@@ -83,7 +84,7 @@ class SearchPushApp(object):
                              constants.STATUS_FAILURE)
     try:
       start_response(SearchPushApp.STATUS_OK, SearchPushApp.RESPONSE_HEADERS)
-      return response.body
+      return [x.encode('ascii') for x in response.body]
     except Exception:
       exc_info = sys.exc_info()
       start_response(SearchPushApp.STATUS_ERROR,

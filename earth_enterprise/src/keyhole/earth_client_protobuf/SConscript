@@ -44,4 +44,4 @@ for gen_pb_file in proto_inputs:
   env.Depends(proto_out_basename+'.os', proto_out_basename+'.cc')
 
 env.test('protobuf_unittest', 'protobuf_unittest.cpp',
-         LIBS=[geprotos, 'geprotobuf'])
+         LIBS=[geprotos, 'protobuf'])

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,11 +16,7 @@
 # limitations under the License.
 
 
-try:
-  import unittest2 as unittest
-except ImportError:
-  import unittest
-
+import unittest
 from geecheck_tests import common
 
 
@@ -41,7 +38,7 @@ class TestOS(unittest.TestCase):
 
     error_msg = ('The Linux distribution "%s" is not supported. These are the '
                  'supported distributions: %s.'
-                 % (distro, ', '.join(common.SUPPORTED_OS_LIST.keys())))
+                 % (distro, ', '.join(list(common.SUPPORTED_OS_LIST.keys()))))
     self.assertIn(distro, common.SUPPORTED_OS_LIST, msg=error_msg)
 
     if not(release >= common.SUPPORTED_OS_LIST[distro]['min_release'] and

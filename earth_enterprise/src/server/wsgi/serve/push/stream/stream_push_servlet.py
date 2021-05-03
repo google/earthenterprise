@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -42,16 +43,16 @@ class StreamPushServlet(object):
 
     except exceptions.StreamPushServeException as e:
       self._stream_push_manager = None
-      logger.error(e)
+      logger.error(e, exc_info=True, stack_info=True)
     except psycopg2.Warning as w:
       self._stream_push_manager = None
       logger.error(w)
     except psycopg2.Error as e:
       self._stream_push_manager = None
-      logger.error(e)
+      logger.error(e, exc_info=True, stack_info=True)
     except Exception as e:
       self._stream_push_manager = None
-      logger.error(e)
+      logger.error(e, exc_info=True, stack_info=True)
 
   def DoGet(self, request, response):
     """Handles GET request by delegating it to stream push manager.
@@ -116,7 +117,7 @@ class StreamPushServlet(object):
             "Internal Error - Invalid Request Command: %s." % cmd)
       return
     except exceptions.StreamPushServeException as e:
-      logger.error(e)
+      logger.error(e, exc_info=True, stack_info=True)
       http_io.ResponseWriter.AddBodyElement(response,
                                             constants.HDR_STATUS_MESSAGE,
                                             e)
@@ -126,12 +127,12 @@ class StreamPushServlet(object):
                                             constants.HDR_STATUS_MESSAGE,
                                             w)
     except psycopg2.Error as e:
-      logger.error(e)
+      logger.error(e, exc_info=True, stack_info=True)
       http_io.ResponseWriter.AddBodyElement(response,
                                             constants.HDR_STATUS_MESSAGE,
                                             e)
     except Exception as e:
-      logger.error(e)
+      logger.error(e, exc_info=True, stack_info=True)
       http_io.ResponseWriter.AddBodyElement(response,
                                             constants.HDR_STATUS_MESSAGE,
                                             "Server-side Internal Error")

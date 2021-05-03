@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -36,7 +37,7 @@ def _ModifyThreaded(semaphore, connection_pool, sql, logger):
     try:
       logger.info("Thread executing: %s", sql)
       cursor.execute(sql)
-    except psycopg2.ProgrammingError, err:
+    except psycopg2.ProgrammingError as err:
       logger.error("Execute Error: %s", err)
     connection.commit()
     connection_pool.putconn(connection)

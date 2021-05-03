@@ -1,6 +1,7 @@
 #-*- Python -*-
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -65,9 +66,9 @@ if third_party_env['bundle_3rd_libs']:
       'pyyaml',
       'defusedxml',
       'swig',
-      'python_2',
       'python_3',
-      'qt4'
+      'qt4',
+      'protobuf'
   ]
 elif third_party_env['portable_3rd_libs']:
   third_party_libs = [
@@ -96,8 +97,8 @@ else:
       'pyyaml',
       'defusedxml',
       'swig',
-      'python_2',
-      'python_3'
+      'python_3',
+      'protobuf'
   ]
   if qt4_native == 0:
     third_party_libs.append('qt4')

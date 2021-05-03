@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,13 +24,13 @@ import json
 import logging
 import os
 import time
-import urlparse
+import urllib.parse
 
 
 from common import exceptions
 from common import utils
 
-import libgepublishmanagerhelper
+from . import libgepublishmanagerhelper
 
 from serve import basic_types
 from serve import constants
@@ -375,7 +376,7 @@ class PublishManager(object):
             server_url, target_path, db_type, target_gedb_path)
       except exceptions.PublishServeException as e:
         # Unpublish the target path if registering for serving has failed.
-        logger.error(e)
+        logger.error(e, exc_info=True, stack_info=True)
         self._publish_helper.DoUnpublish(target_path)
 
     # Update .htaccess file.
@@ -521,7 +522,7 @@ class PublishManager(object):
     # Build stream URL based on Virtual Host URL.
     vh_url, vh_ssl = self._publish_helper.QueryVh(publish_def.virtual_host_name)
     vh_base_url = self._publish_helper.GetVhBaseUrl(vh_url, vh_ssl)
-    stream_url = urlparse.urljoin(vh_base_url, publish_def.target_path)
+    stream_url = urllib.parse.urljoin(vh_base_url, publish_def.target_path)
 
     logger.debug("Stream URL: %s", stream_url)
 
@@ -930,7 +931,7 @@ class PublishManager(object):
             "HandleRepublishRequest: Make sure the target path %s "
             "exists and is currently published." % target_path)
 
-      if "publishcontext" not in target_details.keys():
+      if "publishcontext" not in list(target_details.keys()):
         raise exceptions.PublishServeException(
             "Republish is not supported for targets "
             "published using GEE version 5.1.2 or earlier.")

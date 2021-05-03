@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,9 +23,9 @@ Module contains common utils.
 import logging
 import re
 import socket
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 from xml.sax.saxutils import escape
-from geAbstractionFetcher import GetHostName
+from .geAbstractionFetcher import GetHostName
 
 GEHTTPD_CONF_PATH = "/opt/google/gehttpd/conf/gehttpd.conf"
 POSTGRES_PROPERTIES_PATH = (
@@ -40,8 +41,8 @@ class UrlOpener(object):
 
   def __init__(self):
     """Creates URL opener."""
-    proxy_handler = urllib2.ProxyHandler({})
-    self._opener = urllib2.build_opener(proxy_handler)
+    proxy_handler = urllib.request.ProxyHandler({})
+    self._opener = urllib.request.build_opener(proxy_handler)
 
   def Open(self, url):
     """Opens the URL url.

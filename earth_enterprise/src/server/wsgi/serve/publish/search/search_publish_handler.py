@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -40,7 +41,7 @@ class SearchPublishHandler(object):
           search_publish_manager.SearchPublishManager())
     except exceptions.Error as e:
       self._search_publish_manager = None
-      logger.error(e)
+      logger.error(e, exc_info=True, stack_info=True)
 
   def DoRequest(self, request, response):
     """Handles request by delegating it to search publish manager."""
@@ -74,12 +75,12 @@ class SearchPublishHandler(object):
         raise exceptions.SearchPublishServeException(
             "Internal Error - Invalid Request Command: %s." % cmd)
     except exceptions.SearchPublishServeException as e:
-      logger.error(e)
+      logger.error(e, exc_info=True, stack_info=True)
       http_io.ResponseWriter.AddJsonFailureBody(response, str(e))
     except (psycopg2.Warning, psycopg2.Error) as e:
-      logger.error(e)
+      logger.error(e, exc_info=True, stack_info=True)
       http_io.ResponseWriter.AddJsonFailureBody(response, str(e))
     except Exception as e:
-      logger.error(e)
+      logger.error(e, exc_info=True, stack_info=True)
       http_io.ResponseWriter.AddJsonFailureBody(
           response, "Server-side Internal Error: {0}".format(e))

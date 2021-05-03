@@ -31,8 +31,8 @@ import shutil
 import sys
 import time
 import ssl
-import urllib
-import urllib2
+import urllib.request, urllib.parse, urllib.error
+import urllib.request, urllib.error, urllib.parse
 from contextlib import closing
 
 import defusedxml.ElementTree as etree
@@ -371,7 +371,7 @@ class GlobeBuilder(object):
       # TODO: When Python 2.7 is used on Centos6, this if version<=2.6 block can be removed
       # and the 'else' ssl.SSLContext based block can be used instead.
       if sys.version_info[0] == 2 and sys.version_info[1] <= 6:
-        with closing(urllib2.urlopen(url)) as fp:
+        with closing(urllib.request.urlopen(url)) as fp:
           http_status_code = fp.getcode()
           response_data = fp.read()
       else:
@@ -385,7 +385,7 @@ class GlobeBuilder(object):
           context = ssl.create_default_context()
           context.check_hostname = False
           context.verify_mode = ssl.CERT_NONE
-        with closing(urllib2.urlopen(url, context=context)) as fp:
+        with closing(urllib.request.urlopen(url, context=context)) as fp:
           http_status_code = fp.getcode()
           response_data = fp.read()
 
@@ -486,7 +486,7 @@ class GlobeBuilder(object):
                              json, 0):
       icons[match.groups()[0]] = True
 
-    for icon in icons.iterkeys():
+    for icon in icons.keys():
       # Get JSON from the server.
       url = "%s/query?request=Icon&icon_path=icons/%s" % (source, icon)
       try:
@@ -553,7 +553,7 @@ class GlobeBuilder(object):
       # Quote polygon parameter for URI.
       polygon_quoted = ""
       if polygon:
-        polygon_quoted = urllib.quote(polygon)
+        polygon_quoted = urllib.parse.quote(polygon)
 
       poi_ids = poi_list.split(" ")
       for poi_id in poi_ids:
@@ -733,7 +733,7 @@ class GlobeBuilder(object):
   def CancelCut(self, save_temp):
     """Kill processes referencing the temp directory of a cut in progress."""
     for proc_info in self.CutProcesses():
-      print("Killing: (%d) %s " % (proc_info[0], proc_info[1]))
+      print("Killing: ({0}) {1} ".format((proc_info[0], proc_info[1])))
       os.kill(proc_info[0], 1)
     self.CleanUp(save_temp)
 
@@ -759,7 +759,7 @@ class GlobeBuilder(object):
     server_entries = []
     for line in fp:
       match = vss_regex.match(line)
-      if match and match.group(1) in servers.keys():
+      if match and match.group(1) in list(servers.keys()):
         server = "{"
         server += '"name": "%s", ' % match.group(1)
         server += '"url": "%s", ' % servers[match.group(1)][0]
@@ -827,7 +827,7 @@ class GlobeBuilder(object):
         self.metadata_file = METADATA_FILE_TEMPLATE % (value, uid, value)
         self.logger = common.utils.Log(LOG_FILE % (value, uid))
 
-        form_keys = form_.keys()
+        form_keys = list(form_.keys())
         if PORTABLE_PREFIX_PARAM in form_keys:
           self.portable_prefix = form_.getvalue(PORTABLE_PREFIX_PARAM)
         else:
@@ -972,12 +972,12 @@ if __name__ == "__main__":
       globe_name = FORM.getvalue_filename("globe_name")
       is_2d = FORM.getvalue("is_2d")
       if is_2d == "t":
-        print("<hr>Your map is available at <a href=\"%s/%s.glm\">%s</a>." %
-               (WEB_URL_BASE, globe_name, globe_name))
+        print("<hr>Your map is available at <a href=\"{0}/{1}.glm\">{2}</a>.".
+             format(WEB_URL_BASE, globe_name, globe_name))
         globe_size = common.utils.FileSizeAsString(globe_builder.map_file)
       else:
-        print("<hr>Your globe is available at <a href=\"%s/%s.glb\">%s</a>." %
-               (WEB_URL_BASE, globe_name, globe_name))
+        print("<hr>Your globe is available at <a href=\"{0}/{1}.glb\">{2}</a>.".
+              format(WEB_URL_BASE, globe_name, globe_name))
         globe_size = common.utils.FileSizeAsString(globe_builder.globe_file)
       print("<br> Size: %s" % globe_size)
       globe_builder.AppendInfoFile(globe_size)

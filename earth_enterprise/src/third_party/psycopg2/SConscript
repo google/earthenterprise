@@ -18,7 +18,7 @@
 
 Import('third_party_env')
 
-psycopg2_version='psycopg2-2.4.6'
+psycopg2_version='psycopg2-2.8.6'
 psycopg2_ge_version = psycopg2_version.replace('psycopg2', 'psycopg2-ge')
 
 current_dir = Dir('.').abspath
@@ -73,7 +73,7 @@ psycopg2_install = psycopg2_env.Command(
         'cd %s' % build_root,
         'rm -rf %s %s' % (install_root_lib, install_root_doc),
         'mkdir -p %s' % install_root_doc,
-        'cp -pr README LICENSE ChangeLog %s' % install_root_doc,
+        'cp -pr README.rst LICENSE NEWS %s' % install_root_doc,
         'mkdir -p %s' % install_root_lib,
         'rsync -pvr --exclude psycopg2/tests build/lib.linux-x86_64-%s/ %s' % (
             psycopg2_env['python_major_version'], install_root_lib),
