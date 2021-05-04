@@ -47,9 +47,9 @@ class Pair(object):
   
   def __truediv__(self, b):
     if isinstance(b, Pair):
-      return Pair(self.x / b.x, self.y / b.y)
+      return Pair(self.x // b.x, self.y // b.y)
     else:
-      return Pair(self.x / b, self.y / b)
+      return Pair(self.x // b, self.y // b)
 
   def __mul__(self, b):
     if isinstance(b, Pair):
@@ -188,7 +188,7 @@ class Rect(object):
     return Rect(self.x0 / b, self.y0 / b, self.x1 / b, self.y1 / b)
   
   def __truediv__(self, b):
-    return Rect(self.x0 / b, self.y0 / b, self.x1 / b, self.y1 / b)
+    return Rect(self.x0 // b, self.y0 // b, self.x1 // b, self.y1 // b)
 
   def AsInts(self):
     return Rect(int(self.x0), int(self.y0), int(self.x1), int(self.y1))
