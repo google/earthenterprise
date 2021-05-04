@@ -64,7 +64,7 @@ postgresql_configure = postgresql_env.Command(
          'export LD_LIBRARY_PATH={build_lib_dir_escaped}\n'
          '{env_opt} ./configure --prefix=/opt/google --mandir=/opt/google/share/man '
             '--disable-rpath --enable-thread-safety --with-openssl --with-python '
-            '--without-perl --without-readline --without-pam --without-krb5 {config_opt}'
+            '--without-perl --without-readline --without-pam --without-krb5 {config_opt} '
             'PYTHON={python_bin}\n'
          'touch {postgresql_target_escaped}'
         ).format(

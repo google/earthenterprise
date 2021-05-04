@@ -78,7 +78,7 @@ Imaging_install = Imaging_env.Command(
         'mkdir -p %s' % install_root_doc,
         'rsync -pvr build/lib.linux-x86_64-%s/ %s' % (
             Imaging_env['python_major_version'], install_root_lib),
-        'cp -pr README CHANGES %s' % install_root_doc,
+        'cp -pr README.md CHANGES.rst LICENSE %s' % install_root_doc,
         'touch %s' % Imaging_target]))])
 
 # [4] Install these into various directories as required for build.
