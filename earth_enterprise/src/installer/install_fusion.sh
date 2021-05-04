@@ -253,7 +253,7 @@ check_prereq_software()
 		check_prereq_software_retval=1
 	fi
 
-	if ! software_check "$script_name" "python3.8" "python3*-3.8.*"; then
+	if ! type python3.8 > /dev/null; then
 		check_prereq_software_retval=1
 	fi
 
