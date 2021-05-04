@@ -64,7 +64,7 @@ class WMS(object):
 
     start_response(status, response_headers)
 
-    return [response_body.encode('ascii')]
+    return [response_body]
 
 application = WMS()
 
