@@ -428,10 +428,12 @@ void AssetChooser::nameChanged(const QString& str) {
     if (item != NULL) {
        // If name doesn't match with current item, then clear selection.
       AssetItem* assetItem = dynamic_cast<AssetItem*>(item);
-      std::string san = shortAssetName(assetItem->getAssetHandle()->getName().toStdString().c_str());
-      if (assetItem != NULL &&
-          getName() != san.c_str()) {
-        iconView->clearSelection();
+
+      if (assetItem != NULL) {
+          std::string san = shortAssetName(assetItem->getAssetHandle()->getName());
+          if (getName().toStdString() != san) {
+              iconView->clearSelection();
+          }
       }
     }
     ok_btn->setEnabled(true);
