@@ -29,6 +29,7 @@ current_dir = Dir('.').abspath
 build_root = '%s/%s' % (current_dir, postgresql_version)
 
 postgresql_env = third_party_env.DeepCopy()
+postgresql_env['CPPFLAGS'] += ['-I%s' % postgresql_env['python_include']]
 
 # [1] Extract
 postgresql_target = '%s/.extract' % current_dir
