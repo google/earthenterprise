@@ -288,17 +288,17 @@ void AssetChooser::accept() {
         // pointer to initiate searching of item by name below.
         auto gname = getName();
         std::string san1 { shortAssetName(assetItem->getAssetHandle()
-                                          ->getName().toUtf8().constData()) } ,
-          san2 { shortAssetName(assetItem->getAssetHandle()
-                                ->getName().toStdString().c_str()) };
+                                          ->getName().toUtf8().constData()) };
+        std::strng san2 { shortAssetName(assetItem->getAssetHandle()
+                                         ->getName().toStdString().c_str()) };
 
-          if (san1 == san2) {
-            gname.clear();
-            gname = QString(san2.c_str());
-          }
-          if (gname != san2.c_str()) {
-            item = NULL;
-          }
+        if (san1 == san2) {
+          gname.clear();
+          gname = QString(san2.c_str());
+        }
+        if (gname != san2.c_str()) {
+          item = NULL;
+        }
       }
     }
 
