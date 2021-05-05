@@ -296,7 +296,7 @@ void AssetChooser::accept() {
             gname.clear();
             gname = QString(san2.c_str());
           }
-          if (assetItem != NULL && gname != san2.c_str()) {
+          if (gname != san2.c_str()) {
             item = NULL;
           }
       }
