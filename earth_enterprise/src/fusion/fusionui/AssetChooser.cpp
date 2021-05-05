@@ -281,23 +281,24 @@ void AssetChooser::accept() {
     // whether it has been edited.
     QIconViewItem* item = iconView->currentItem();
     if (item != NULL) {
+
       AssetItem* assetItem = dynamic_cast<AssetItem*>(item);
-      // If name doesn't match with current item name, then reset item
-      // pointer to initiate searching of item by name below.
-      auto gname = getName();
-      std::string san1 { shortAssetName(assetItem->getAssetHandle()
-                         ->getName().toUtf8().constData()) } ,
-                  san2 { shortAssetName(assetItem->getAssetHandle()
-                         ->getName().toStdString().c_str()) };
+      if (assetItem != NULL) {
+        // If name doesn't match with current item name, then reset item
+        // pointer to initiate searching of item by name below.
+        auto gname = getName();
+        std::string san1 { shortAssetName(assetItem->getAssetHandle()
+                                          ->getName().toUtf8().constData()) } ,
+          san2 { shortAssetName(assetItem->getAssetHandle()
+                                ->getName().toStdString().c_str()) };
 
-      if (san1 == san2)
-      {
-          gname.clear();
-          gname = QString(san2.c_str());
-      }
-      if (assetItem != NULL && gname != san2.c_str()) {
-
-        item = NULL;
+          if (san1 == san2) {
+            gname.clear();
+            gname = QString(san2.c_str());
+          }
+          if (assetItem != NULL && gname != san2.c_str()) {
+            item = NULL;
+          }
       }
     }
 
