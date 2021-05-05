@@ -289,7 +289,7 @@ void AssetChooser::accept() {
         auto gname = getName();
         std::string san1 { shortAssetName(assetItem->getAssetHandle()
                                           ->getName().toUtf8().constData()) };
-        std::strng san2 { shortAssetName(assetItem->getAssetHandle()
+        std::string san2 { shortAssetName(assetItem->getAssetHandle()
                                          ->getName().toStdString().c_str()) };
 
         if (san1 == san2) {
