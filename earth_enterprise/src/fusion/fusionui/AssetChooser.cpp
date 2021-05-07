@@ -281,23 +281,24 @@ void AssetChooser::accept() {
     // whether it has been edited.
     QIconViewItem* item = iconView->currentItem();
     if (item != NULL) {
-      AssetItem* assetItem = dynamic_cast<AssetItem*>(item);
-      // If name doesn't match with current item name, then reset item
-      // pointer to initiate searching of item by name below.
-      auto gname = getName();
-      std::string san1 { shortAssetName(assetItem->getAssetHandle()
-                         ->getName().toUtf8().constData()) } ,
-                  san2 { shortAssetName(assetItem->getAssetHandle()
-                         ->getName().toStdString().c_str()) };
 
-      if (san1 == san2)
-      {
+      AssetItem* assetItem = dynamic_cast<AssetItem*>(item);
+      if (assetItem != NULL) {
+        // If name doesn't match with current item name, then reset item
+        // pointer to initiate searching of item by name below.
+        auto gname = getName();
+        std::string san1 { shortAssetName(assetItem->getAssetHandle()
+                                          ->getName().toUtf8().constData()) };
+        std::string san2 { shortAssetName(assetItem->getAssetHandle()
+                                         ->getName().toStdString().c_str()) };
+
+        if (san1 == san2) {
           gname.clear();
           gname = QString(san2.c_str());
-      }
-      if (assetItem != NULL && gname != san2.c_str()) {
-
-        item = NULL;
+        }
+        if (gname != san2.c_str()) {
+          item = NULL;
+        }
       }
     }
 
@@ -428,10 +429,12 @@ void AssetChooser::nameChanged(const QString& str) {
     if (item != NULL) {
        // If name doesn't match with current item, then clear selection.
       AssetItem* assetItem = dynamic_cast<AssetItem*>(item);
-      std::string san = shortAssetName(assetItem->getAssetHandle()->getName().toStdString().c_str());
-      if (assetItem != NULL &&
-          getName() != san.c_str()) {
-        iconView->clearSelection();
+
+      if (assetItem != NULL) {
+          std::string san = shortAssetName(assetItem->getAssetHandle()->getName());
+          if (getName().toStdString() != san) {
+              iconView->clearSelection();
+          }
       }
     }
     ok_btn->setEnabled(true);
