@@ -1,6 +1,7 @@
 #-*- Python -*-
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +18,7 @@
 
 Import('third_party_env')
 
-mod_wsgi_version='mod_wsgi-4.5.14'
+mod_wsgi_version='mod_wsgi-4.7.1'
 mod_wsgi_ge_version = mod_wsgi_version.replace('mod_wsgi', 'mod_wsgi-ge')
 
 num_cpu = GetOption('num_jobs')
@@ -90,10 +91,10 @@ else:
   else:
     configure_cmd = (
       'cd %s\n'
-      '%s%s ./configure %s --with-apxs=%s/bin/apxs '
+      '%s%s ./configure %s --with-apxs=%s/bin/apxs --with-python=%s CFLAGS="-I%s"'
       'touch %s' % (build_root,
                     mod_wsgi_env['ENV']['mod_env'], env_opt, config_opt, root_dir,
-                    mod_wsgi_target))
+                    mod_wsgi_env['python_bin'], mod_wsgi_env['python_include'], mod_wsgi_target))
 
 
 

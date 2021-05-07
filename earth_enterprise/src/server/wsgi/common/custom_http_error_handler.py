@@ -1,6 +1,6 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
-# Copyright 2020 the Open GEE Contributors
+# Copyright 2020-2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -46,14 +46,14 @@ class ErrorHandler(object):
     status = environ.get("REDIRECT_STATUS")
     output = io.BytesIO()
 
-    output.write("<html>")
-    output.write("<head>")
-    output.write("<title>%s error found</title>" % status)
-    output.write("</head>")
-    output.write("<body>")
-    output.write("<h2>Status: %s Condition Intercepted\n</h2>" % status)
-    output.write("</body>")
-    output.write("</html>")
+    output.write(b"<html>")
+    output.write(b"<head>")
+    output.write(b"<title>%s error found</title>" % status.encode('ascii'))
+    output.write(b"</head>")
+    output.write(b"<body>")
+    output.write(b"<h2>Status: %s Condition Intercepted\n</h2>" % status.encode('ascii'))
+    output.write(b"</body>")
+    output.write(b"</html>")
 
     response_headers = [('Content-type', 'text/html'),
                         ('Content-Length', str(len(output.getvalue())))]

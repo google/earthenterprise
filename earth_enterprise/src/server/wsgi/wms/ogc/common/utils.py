@@ -1,7 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
-# Copyright 2019-2020 Open GEE Contributors
+# Copyright 2019-2021 Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import cgi
 import logging
 import sys
 import traceback
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 # Get logger
 logger = logging.getLogger("wms_maps")
@@ -45,7 +45,7 @@ def GetValue(dictionary, key_no_case):
   """
   key = key_no_case.lower()
 
-  if dictionary.has_key(key):
+  if key in dictionary:
     return dictionary[key]
 
   return None
@@ -59,14 +59,14 @@ def DumpParms(params, msg=None):
       params: params to be dumped.
       msg: what to log along with the params.
   """
-  if isinstance(params, basestring):
+  if isinstance(params, str):
     logger.debug(msg + " " + params)
   elif isinstance(params, list):
     logger.debug(msg + " ")
     for entry in params:
       logger.debug(str(entry))
   else:
-    for key, value in params.iteritems():
+    for key, value in params.items():
       text = ((msg if msg is not None else "") + " " + "%s=%s"
               % (str(key), str(value)))
       logger.debug(text)
@@ -81,7 +81,7 @@ def Assert(hopefully_true, msg=None):
   """
   if not hopefully_true:
     prt_msg = msg if msg else ""
-    print >> sys.stderr, "ASSERTION FAILED", prt_msg
+    print("ASSERTION FAILED", prt_msg, file=sys.stderr)
     logger.debug("ASSERTION FAILED: " + prt_msg)
     # goes to stderr => Apache error_log
     traceback.print_stack(sys.stderr)
@@ -99,7 +99,7 @@ def GetParameters(environ):
   parameters = {}
   form = cgi.FieldStorage(fp=environ["wsgi.input"], environ=environ)
 
-  for key in form.keys():
+  for key in list(form.keys()):
     parameters[key.lower()] = form.getvalue(key)
 
   # Examples for "this-endpoint" would be 'http://localhost/<target_path>/wms'
@@ -139,8 +139,8 @@ def GetServerURL(environ):
 
   complete_url = server_url
 
-  complete_url += urllib.quote(environ.get("REDIRECT_URL", ""))
-  complete_url += urllib.quote(environ.get("PATH_INFO", ""))
+  complete_url += urllib.parse.quote(environ.get("REDIRECT_URL", ""))
+  complete_url += urllib.parse.quote(environ.get("PATH_INFO", ""))
 
   if environ.get("HTTP_X_FORWARDED_HOST"):
     proxy_scheme = environ["wsgi.url_scheme"]
@@ -148,8 +148,8 @@ def GetServerURL(environ):
       proxy_scheme = environ["HTTP_X_FORWARDED_PROTO"]
 
     proxy_url = proxy_scheme + "://" + environ["HTTP_X_FORWARDED_HOST"]
-    proxy_url += urllib.quote(environ.get("REDIRECT_URL", ""))
-    proxy_url += urllib.quote(environ.get("PATH_INFO", ""))
+    proxy_url += urllib.parse.quote(environ.get("REDIRECT_URL", ""))
+    proxy_url += urllib.parse.quote(environ.get("PATH_INFO", ""))
   else:
     proxy_url = None
 
@@ -160,7 +160,7 @@ def main():
   data = {"service": "WMS", "request": "GetMap"}
   val = GetValue(data, "request")
 
-  print val
+  print(val)
 
 if __name__ == "__main__":
   main()

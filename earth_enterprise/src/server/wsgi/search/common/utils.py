@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +18,7 @@
 """Utils Module for common utils used across all the search functionality."""
 
 import cgi
-import ConfigParser
+import configparser
 import logging
 import logging.config
 import re
@@ -284,7 +285,7 @@ class SearchUtils(object):
     parameters = {}
     form = cgi.FieldStorage(fp=environ["wsgi.input"], environ=environ)
 
-    for key in form.keys():
+    for key in list(form.keys()):
       parameters[key.lower()] = form.getvalue(key)
 
     return parameters
@@ -302,7 +303,7 @@ class SearchUtils(object):
     """
     key = key_no_case.lower()
 
-    if dictionary.has_key(key):
+    if key in dictionary:
       return dictionary[key]
 
     return None
@@ -335,7 +336,7 @@ class SearchUtils(object):
       Range in meters.
     """
 
-    if geom_type in self.lookat_range.keys():
+    if geom_type in list(self.lookat_range.keys()):
       return self.lookat_range[geom_type]
     else:
       return self.lookat_range["ANY"]
@@ -391,7 +392,7 @@ class SearchUtils(object):
     try:
       search_query = search_query.encode("ascii")
       return "cities"
-    except UnicodeDecodeError, unused_e:
+    except UnicodeDecodeError as unused_e:
       return "cities_utf8"
 
   def SearchTokensFromString(self, tokens_string, delimiter=","):
@@ -500,7 +501,7 @@ class SearchUtils(object):
     defaults = geconstants.Constants().defaults
 
     # Create a ConfigParser() object and read the config file.
-    config_parser = ConfigParser.ConfigParser()
+    config_parser = configparser.ConfigParser()
     config_parser.read(config_file)
 
     # create a dict of config parameters and values.
@@ -508,9 +509,9 @@ class SearchUtils(object):
 
     # If configs_from_file has parameters without any value specified,
     # then pick it from the defaults.
-    for param, value in configs_from_file.iteritems():
+    for param, value in configs_from_file.items():
       if not value:
-        configs_from_file[param] = (defaults[param] if defaults.has_key(param)
+        configs_from_file[param] = (defaults[param] if param in defaults
                                     else None)
     return configs_from_file
 

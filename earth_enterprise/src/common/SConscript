@@ -102,7 +102,7 @@ env = conf.Finish()
 
 # TODO: consider to move geGdalUtils to khgdal?!
 gecommon = env.sharedLib('gecommon', commonsources,
-                         LIBS = ['keyholeutils', 'geprotobuf', 'z', 'jpeg', env['png_ver'], 'gdal', 'libdl', 'boost_filesystem', 'boost_system'])
+                         LIBS = ['keyholeutils', 'protobuf', 'z', 'jpeg', env['png_ver'], 'gdal', 'libdl', 'boost_filesystem', 'boost_system'])
 
 utilsources = [
     'ff.cpp',

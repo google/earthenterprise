@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,11 +23,11 @@ enabled/disabled, but that the mod_fdb Apache module is updated to match
 the Cutter state.
 """
 
-import httplib
+import http.client
 import os
 import stat
 import sys
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 
 bin_path = os.path.dirname(__file__)
 opt_google_path = os.path.dirname(bin_path)
@@ -49,58 +50,58 @@ def DisableCutter(server_url):
   """Disables Cutter and updates mod_fdb in Earth Server."""
   os.system("sudo %s/geserveradmin --disable_cutter" % bin_path)
   if not IsExecutable(geportableglobebuilder_path):
-    print "Cutter disabled."
+    print("Cutter disabled.")
     try:
       url_opener = utils.UrlOpener()
       results = url_opener.Open("{0}/fdb/disable_cut".format(server_url))
-    except urllib2.URLError as e:
+    except urllib.error.URLError as e:
       if hasattr(e, "code"):  # HTTPError
-        print "Failed to block server from cutting."
-        print "Error: {0}".format(httplib.responses[e.code])
+        print("Failed to block server from cutting.")
+        print(("Error: {0}".format(http.client.responses[e.code])))
       elif hasattr(e, "reason"):  # URLError
-        print "Failed to reach server blocking from cutting."
-        print "Reason: {0}".format(e.reason)
+        print("Failed to reach server blocking from cutting.")
+        print(("Reason: {0}".format(e.reason)))
     else:
-      if "cutting disabled" in results:
-        print "Server blocked from cutting."
+      if "cutting disabled" in results.decode():
+        print("Server blocked from cutting.")
       else:
-        print "** WARNING ** Unable to block server from cutting."
-        print "If server is not running, Cutter should be disabled when "
-        print "it is started."
+        print("** WARNING ** Unable to block server from cutting.")
+        print("If server is not running, Cutter should be disabled when ")
+        print("it is started.")
   else:
-    print "** ERROR ** Unable to disable Cutter."
+    print("** ERROR ** Unable to disable Cutter.")
 
 
 def EnableCutter(server_url):
   """Enables Cutter and updates mod_fdb in Earth Server."""
   os.system("sudo %s/geserveradmin --enable_cutter" % bin_path)
   if IsExecutable(geportableglobebuilder_path):
-    print "Cutter enabled."
+    print("Cutter enabled.")
     try:
       url_opener = utils.UrlOpener()
       results = url_opener.Open("{0}/fdb/enable_cut".format(server_url))
-    except urllib2.URLError as e:
+    except urllib.error.URLError as e:
       if hasattr(e, "code"):  # HTTPError
-        print "Failed to update server for cutting."
-        print "Error: {0}".format(httplib.responses[e.code])
+        print("Failed to update server for cutting.")
+        print(("Error: {0}".format(http.client.responses[e.code])))
       elif hasattr(e, "reason"):  # URLError
-        print "Failed to reach server updating for cutting."
-        print "Reason: {0}".format(e.reason)
+        print("Failed to reach server updating for cutting.")
+        print(("Reason: {0}".format(e.reason)))
     else:
-      if "cutting enabled" in results:
-        print "Server updated for cutting."
+      if "cutting enabled" in results.decode():
+        print("Server updated for cutting.")
       else:
-        print "** WARNING ** Unable to update server for cutting."
-        print "If server is not running, Cutter should be enabled when "
-        print "it is started."
+        print("** WARNING ** Unable to update server for cutting.")
+        print("If server is not running, Cutter should be enabled when ")
+        print("it is started.")
 
   else:
-    print "** ERROR ** Unable to enable Cutter."
+    print("** ERROR ** Unable to enable Cutter.")
 
 
 def Usage(cmd):
   """Show proper usage for this command."""
-  print "usage: %s enable/disable" % cmd
+  print(("usage: %s enable/disable" % cmd))
   exit(1)
 
 
@@ -110,7 +111,7 @@ def main(args):
 
   server_url = utils.BuildServerUrl("localhost")
   if not server_url:
-    print "** ERROR ** Couldn't get self-referential server URL."
+    print("** ERROR ** Couldn't get self-referential server URL.")
     return
 
   if args[1] == "enable":

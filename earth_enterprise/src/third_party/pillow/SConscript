@@ -1,0 +1,109 @@
+#-*- Python -*-
+#
+# Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+
+Import('third_party_env')
+
+Imaging_version='Pillow-8.1.0'
+Imaging_ge_version = Imaging_version.replace('Pillow', 'Pillow-ge')
+
+current_dir = Dir('.').abspath
+build_root = '%s/%s' % (current_dir, Imaging_version)
+install_root = '%s/install' % current_dir
+install_root_opt = '%s/opt/google' % install_root
+
+Imaging_source = File('#/../../earth_enterprise/third_party/pillow/%s.tar.gz' %
+                       Imaging_version).abspath
+
+Imaging_env = third_party_env.DeepCopy()
+
+root_dir = Dir(Imaging_env.exportdirs['root']).abspath
+
+# [1] Extract Imaging.
+Imaging_target = '%s/.extract' % current_dir
+Imaging_extract = Imaging_env.Command(
+    Imaging_target, Imaging_source,
+    [Imaging_env.MultiCommand(
+        'mkdir -p %s\n'
+        'cd %s\n'
+        'tar xzf %s\n'
+        'touch %s' % (current_dir, current_dir, Imaging_source,
+                      Imaging_target))])
+
+if third_party_env['is_min_ubuntu'] and not third_party_env['native_cc']:
+  env_opt = 'ac_cv_prog_cc_c99=no'
+else:
+  env_opt = ''
+
+# [2] Build Imaging.
+python_cmd = Imaging_env['python_bin']
+Imaging_target = '%s/.build' % current_dir
+Imaging_build = Imaging_env.Command(
+    Imaging_target, Imaging_extract,
+    [Imaging_env.MultiCommand(
+        'cd %s\n'
+        '%s%s %s setup.py build\n'
+        'touch %s' % (build_root, Imaging_env['ENV']['mod_env'],
+                      env_opt, python_cmd, Imaging_target))])
+
+# [3] Create Imaging master installer.
+install_root_lib = '%s/lib/python%s/site-packages/PIL' % (
+    install_root, Imaging_env['python_major_version'])
+install_root_doc = '%s/share/doc/packages/%s' % (
+    install_root_opt, Imaging_ge_version)
+
+Imaging_target = '%s/.install' % current_dir
+Imaging_install = Imaging_env.Command(
+    Imaging_target, Imaging_build,
+    [Imaging_env.MultiCommand('\n'.join([
+        'cd %s' % build_root,
+        'rm -rf %s' % install_root_lib,
+        'rm -rf %s' % install_root_doc,
+        'mkdir -p %s' % install_root_lib,
+        'mkdir -p %s' % install_root_doc,
+        'rsync -pvr build/lib.linux-x86_64-%s/ %s' % (
+            Imaging_env['python_major_version'], install_root_lib),
+        'cp -pr README CHANGES %s' % install_root_doc,
+        'touch %s' % Imaging_target]))])
+
+# [4] Install these into various directories as required for build.
+Imaging_target = '%s/.install_for_build' % current_dir
+Imaging_install_build = Imaging_env.Command(
+    Imaging_target, Imaging_install,
+    [Imaging_env.rsync_cmd % (
+        '%s' % install_root_lib,
+        '%s/lib/python%s' % (root_dir, Imaging_env['python_major_version'])),
+        Touch('$TARGET')])
+
+
+Default(Imaging_install_build)
+Imaging_env.ExecuteOnClean('rm -rf %s' % current_dir)
+
+if 'install' in COMMAND_LINE_TARGETS:
+  Imaging_env.InstallFileOrDir(
+      '%s/lib' % install_root,
+      '%s/opt/google/gepython/Python-%s' % (
+          Imaging_env.installdirs['common_root'], Imaging_env['python_version']),
+       Imaging_install, 'install')
+  Imaging_env.InstallFileOrDir(
+      '%s/opt/google/share/' % install_root,
+      '%s/opt/google/share/' % Dir(
+          Imaging_env.installdirs['common_root']).abspath,
+      Imaging_install, 'install')
+
+Return('Imaging_extract Imaging_install_build')

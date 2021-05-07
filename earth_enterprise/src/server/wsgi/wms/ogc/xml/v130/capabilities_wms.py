@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,15 +31,8 @@
 import sys
 import getopt
 import re as re_
+import defusedxml.ElementTree as etree_
 
-etree_ = None
-Verbose_import_ = False
-try:
-    import defusedxml.ElementTree as etree_
-    if Verbose_import_:
-        print("running with defusedxml.ElementTree")
-except ImportError:
-    raise ImportError("Failed to import defusedxml.ElementTree")
 
 def parsexml_(*args, **kwargs):
     doc = etree_.parse(*args, **kwargs)
@@ -53,7 +47,7 @@ def parsexml_(*args, **kwargs):
 
 try:
     from generatedssuper import GeneratedsSuper
-except ImportError, exp:
+except ImportError as exp:
 
     class GeneratedsSuper(object):
         def gds_format_string(self, input_data, input_name=''):
@@ -71,7 +65,7 @@ except ImportError, exp:
             for value in values:
                 try:
                     fvalue = float(value)
-                except (TypeError, ValueError), exp:
+                except (TypeError, ValueError) as exp:
                     raise_parse_error(node, 'Requires sequence of integers')
             return input_data
         def gds_format_float(self, input_data, input_name=''):
@@ -87,7 +81,7 @@ except ImportError, exp:
             for value in values:
                 try:
                     fvalue = float(value)
-                except (TypeError, ValueError), exp:
+                except (TypeError, ValueError) as exp:
                     raise_parse_error(node, 'Requires sequence of floats')
             return input_data
         def gds_format_double(self, input_data, input_name=''):
@@ -103,7 +97,7 @@ except ImportError, exp:
             for value in values:
                 try:
                     fvalue = float(value)
-                except (TypeError, ValueError), exp:
+                except (TypeError, ValueError) as exp:
                     raise_parse_error(node, 'Requires sequence of doubles')
             return input_data
         def gds_format_boolean(self, input_data, input_name=''):
@@ -186,7 +180,7 @@ def showIndent(outfile, level, pretty_print=True):
 def quote_xml(inStr):
     if not inStr:
         return ''
-    s1 = (isinstance(inStr, basestring) and inStr or
+    s1 = (isinstance(inStr, str) and inStr or
           '%s' % inStr)
     s1 = s1.replace('&', '&amp;')
     s1 = s1.replace('<', '&lt;')
@@ -194,7 +188,7 @@ def quote_xml(inStr):
     return s1
 
 def quote_attrib(inStr):
-    s1 = (isinstance(inStr, basestring) and inStr or
+    s1 = (isinstance(inStr, str) and inStr or
           '%s' % inStr)
     s1 = s1.replace('&', '&amp;')
     s1 = s1.replace('<', '&lt;')
@@ -997,7 +991,7 @@ class Service(GeneratedsSuper):
             sval_ = child_.text
             try:
                 ival_ = int(sval_)
-            except (TypeError, ValueError), exp:
+            except (TypeError, ValueError) as exp:
                 raise_parse_error(child_, 'requires integer: %s' % exp)
             if ival_ <= 0:
                 raise_parse_error(child_, 'requires positiveInteger')
@@ -1007,7 +1001,7 @@ class Service(GeneratedsSuper):
             sval_ = child_.text
             try:
                 ival_ = int(sval_)
-            except (TypeError, ValueError), exp:
+            except (TypeError, ValueError) as exp:
                 raise_parse_error(child_, 'requires integer: %s' % exp)
             if ival_ <= 0:
                 raise_parse_error(child_, 'requires positiveInteger')
@@ -1017,7 +1011,7 @@ class Service(GeneratedsSuper):
             sval_ = child_.text
             try:
                 ival_ = int(sval_)
-            except (TypeError, ValueError), exp:
+            except (TypeError, ValueError) as exp:
                 raise_parse_error(child_, 'requires integer: %s' % exp)
             if ival_ <= 0:
                 raise_parse_error(child_, 'requires positiveInteger')
@@ -2773,7 +2767,7 @@ class Layer(GeneratedsSuper):
             already_processed.append('cascaded')
             try:
                 self.cascaded = int(value)
-            except ValueError, exp:
+            except ValueError as exp:
                 raise_parse_error(node, 'Bad integer attribute: %s' % exp)
             if self.cascaded < 0:
                 raise_parse_error(node, 'Invalid NonNegativeInteger')
@@ -2782,7 +2776,7 @@ class Layer(GeneratedsSuper):
             already_processed.append('fixedHeight')
             try:
                 self.fixedHeight = int(value)
-            except ValueError, exp:
+            except ValueError as exp:
                 raise_parse_error(node, 'Bad integer attribute: %s' % exp)
             if self.fixedHeight < 0:
                 raise_parse_error(node, 'Invalid NonNegativeInteger')
@@ -2791,7 +2785,7 @@ class Layer(GeneratedsSuper):
             already_processed.append('fixedWidth')
             try:
                 self.fixedWidth = int(value)
-            except ValueError, exp:
+            except ValueError as exp:
                 raise_parse_error(node, 'Bad integer attribute: %s' % exp)
             if self.fixedWidth < 0:
                 raise_parse_error(node, 'Invalid NonNegativeInteger')
@@ -2879,7 +2873,7 @@ class Layer(GeneratedsSuper):
             sval_ = child_.text
             try:
                 fval_ = float(sval_)
-            except (TypeError, ValueError), exp:
+            except (TypeError, ValueError) as exp:
                 raise_parse_error(child_, 'requires float or double: %s' % exp)
             fval_ = self.gds_validate_float(fval_, node, 'MinScaleDenominator')
             self.MinScaleDenominator = fval_
@@ -2887,7 +2881,7 @@ class Layer(GeneratedsSuper):
             sval_ = child_.text
             try:
                 fval_ = float(sval_)
-            except (TypeError, ValueError), exp:
+            except (TypeError, ValueError) as exp:
                 raise_parse_error(child_, 'requires float or double: %s' % exp)
             fval_ = self.gds_validate_float(fval_, node, 'MaxScaleDenominator')
             self.MaxScaleDenominator = fval_
@@ -3009,7 +3003,7 @@ class EX_GeographicBoundingBox(GeneratedsSuper):
             sval_ = child_.text
             try:
                 fval_ = float(sval_)
-            except (TypeError, ValueError), exp:
+            except (TypeError, ValueError) as exp:
                 raise_parse_error(child_, 'requires float or double: %s' % exp)
             fval_ = self.gds_validate_float(fval_, node, 'westBoundLongitude')
             self.westBoundLongitude = fval_
@@ -3018,7 +3012,7 @@ class EX_GeographicBoundingBox(GeneratedsSuper):
             sval_ = child_.text
             try:
                 fval_ = float(sval_)
-            except (TypeError, ValueError), exp:
+            except (TypeError, ValueError) as exp:
                 raise_parse_error(child_, 'requires float or double: %s' % exp)
             fval_ = self.gds_validate_float(fval_, node, 'eastBoundLongitude')
             self.eastBoundLongitude = fval_
@@ -3027,7 +3021,7 @@ class EX_GeographicBoundingBox(GeneratedsSuper):
             sval_ = child_.text
             try:
                 fval_ = float(sval_)
-            except (TypeError, ValueError), exp:
+            except (TypeError, ValueError) as exp:
                 raise_parse_error(child_, 'requires float or double: %s' % exp)
             fval_ = self.gds_validate_float(fval_, node, 'southBoundLatitude')
             self.southBoundLatitude = fval_
@@ -3036,7 +3030,7 @@ class EX_GeographicBoundingBox(GeneratedsSuper):
             sval_ = child_.text
             try:
                 fval_ = float(sval_)
-            except (TypeError, ValueError), exp:
+            except (TypeError, ValueError) as exp:
                 raise_parse_error(child_, 'requires float or double: %s' % exp)
             fval_ = self.gds_validate_float(fval_, node, 'northBoundLatitude')
             self.northBoundLatitude = fval_
@@ -3175,42 +3169,42 @@ class BoundingBox(GeneratedsSuper):
             already_processed.append('maxx')
             try:
                 self.maxx = float(value)
-            except ValueError, exp:
+            except ValueError as exp:
                 raise ValueError('Bad float/double attribute (maxx): %s' % exp)
         value = find_attr_value_('maxy', node)
         if value is not None and 'maxy' not in already_processed:
             already_processed.append('maxy')
             try:
                 self.maxy = float(value)
-            except ValueError, exp:
+            except ValueError as exp:
                 raise ValueError('Bad float/double attribute (maxy): %s' % exp)
         value = find_attr_value_('resx', node)
         if value is not None and 'resx' not in already_processed:
             already_processed.append('resx')
             try:
                 self.resx = float(value)
-            except ValueError, exp:
+            except ValueError as exp:
                 raise ValueError('Bad float/double attribute (resx): %s' % exp)
         value = find_attr_value_('minx', node)
         if value is not None and 'minx' not in already_processed:
             already_processed.append('minx')
             try:
                 self.minx = float(value)
-            except ValueError, exp:
+            except ValueError as exp:
                 raise ValueError('Bad float/double attribute (minx): %s' % exp)
         value = find_attr_value_('miny', node)
         if value is not None and 'miny' not in already_processed:
             already_processed.append('miny')
             try:
                 self.miny = float(value)
-            except ValueError, exp:
+            except ValueError as exp:
                 raise ValueError('Bad float/double attribute (miny): %s' % exp)
         value = find_attr_value_('resy', node)
         if value is not None and 'resy' not in already_processed:
             already_processed.append('resy')
             try:
                 self.resy = float(value)
-            except ValueError, exp:
+            except ValueError as exp:
                 raise ValueError('Bad float/double attribute (resy): %s' % exp)
     def buildChildren(self, child_, node, nodeName_, fromsubclass_=False):
         pass
@@ -3602,7 +3596,7 @@ class LogoURL(GeneratedsSuper):
             already_processed.append('width')
             try:
                 self.width = int(value)
-            except ValueError, exp:
+            except ValueError as exp:
                 raise_parse_error(node, 'Bad integer attribute: %s' % exp)
             if self.width <= 0:
                 raise_parse_error(node, 'Invalid PositiveInteger')
@@ -3611,7 +3605,7 @@ class LogoURL(GeneratedsSuper):
             already_processed.append('height')
             try:
                 self.height = int(value)
-            except ValueError, exp:
+            except ValueError as exp:
                 raise_parse_error(node, 'Bad integer attribute: %s' % exp)
             if self.height <= 0:
                 raise_parse_error(node, 'Invalid PositiveInteger')
@@ -4348,7 +4342,7 @@ class LegendURL(GeneratedsSuper):
             already_processed.append('width')
             try:
                 self.width = int(value)
-            except ValueError, exp:
+            except ValueError as exp:
                 raise_parse_error(node, 'Bad integer attribute: %s' % exp)
             if self.width <= 0:
                 raise_parse_error(node, 'Invalid PositiveInteger')
@@ -4357,7 +4351,7 @@ class LegendURL(GeneratedsSuper):
             already_processed.append('height')
             try:
                 self.height = int(value)
-            except ValueError, exp:
+            except ValueError as exp:
                 raise_parse_error(node, 'Bad integer attribute: %s' % exp)
             if self.height <= 0:
                 raise_parse_error(node, 'Invalid PositiveInteger')
@@ -5679,7 +5673,7 @@ Usage: python <Parser>.py [ -s ] <in_xml_file>
 """
 
 def usage():
-    print USAGE_TEXT
+    print(USAGE_TEXT)
     sys.exit(1)
 
 
@@ -5708,7 +5702,7 @@ def parse(inFileName):
 
 
 def parseString(inString):
-    from StringIO import StringIO
+    from io import StringIO
     doc = parsexml_(StringIO(inString))
     rootNode = doc.getroot()
     rootTag, rootClass = get_root_tag(rootNode)

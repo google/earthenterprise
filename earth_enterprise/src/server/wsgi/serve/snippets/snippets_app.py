@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,7 +24,7 @@ import cgi
 import logging
 import logging.config
 import sys
-import urlparse
+import urllib.parse
 
 from common import exceptions
 from serve import constants
@@ -73,14 +74,14 @@ class SnippetsApp(object):
       form = cgi.FieldStorage(fp=environ["wsgi.input"],
                               environ=environ)
 
-      for key in form.keys():
+      for key in list(form.keys()):
         request.SetParameter(key, form.getvalue(key, ""))
     else:
       try:
         request_body_size = int(environ.get("CONTENT_LENGTH", 0))
       except ValueError:
         request_body_size = 0
-      post_input = environ["wsgi.input"].read(request_body_size)
+      post_input = environ["wsgi.input"].read(request_body_size).decode()
       logger.debug("POST request body: %s", post_input)
       self.__ParsePostInput(post_input, request)
 
@@ -95,7 +96,7 @@ class SnippetsApp(object):
     try:
       start_response(SnippetsApp.STATUS_OK,
                      SnippetsApp.RESPONSE_HEADERS)
-      return response.body
+      return [x.encode('ascii') for x in response.body]
     except Exception:
       exc_info = sys.exc_info()
       start_response(SnippetsApp.STATUS_ERROR,
@@ -111,7 +112,7 @@ class SnippetsApp(object):
     Raises:
       SnippetsServeException.
     """
-    post_dct = urlparse.parse_qs(post_input)
+    post_dct = urllib.parse.parse_qs(post_input)
     cmd = post_dct.get(constants.CMD, [""])[0]
     if not cmd:
       return

@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -39,7 +40,7 @@ class SearchPushServlet(object):
       self._search_push_manager = search_push_manager.SearchPushManager()
     except exceptions.Error as e:
       self._search_push_manager = None
-      logger.error(e)
+      logger.error(e, exc_info=True, stack_info=True)
 
   def DoGet(self, request, response):
     """Handles request by delegating it to search push manager."""
@@ -95,15 +96,15 @@ class SearchPushServlet(object):
             "Internal Error - Invalid Request Command: %s." % cmd)
       return
     except exceptions.SearchPushServeException as e:
-      logger.error(e)
+      logger.error(e, exc_info=True, stack_info=True)
       http_io.ResponseWriter.AddBodyElement(
           response, constants.HDR_STATUS_MESSAGE, e)
     except (psycopg2.Warning, psycopg2.Error) as e:
-      logger.error(e)
+      logger.error(e, exc_info=True, stack_info=True)
       http_io.ResponseWriter.AddBodyElement(
           response, constants.HDR_STATUS_MESSAGE, e)
     except Exception as e:
-      logger.error(e)
+      logger.error(e, exc_info=True, stack_info=True)
       http_io.ResponseWriter.AddBodyElement(
           response, constants.HDR_STATUS_MESSAGE, "Server-side Internal Error")
 

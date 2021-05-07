@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -36,13 +37,13 @@ PYTHON_TYPE_BY_PROTOBUF_TYPE = {
     google.protobuf.descriptor.FieldDescriptor.TYPE_FLOAT:
         float,
     google.protobuf.descriptor.FieldDescriptor.TYPE_INT64:
-        long,
+        int,
     google.protobuf.descriptor.FieldDescriptor.TYPE_UINT64:
-        long,
+        int,
     google.protobuf.descriptor.FieldDescriptor.TYPE_INT32:
         int,
     google.protobuf.descriptor.FieldDescriptor.TYPE_FIXED64:
-        long,
+        int,
     google.protobuf.descriptor.FieldDescriptor.TYPE_FIXED32:
         int,
     google.protobuf.descriptor.FieldDescriptor.TYPE_BOOL:
@@ -64,11 +65,11 @@ PYTHON_TYPE_BY_PROTOBUF_TYPE = {
     google.protobuf.descriptor.FieldDescriptor.TYPE_SFIXED32:
         int,
     google.protobuf.descriptor.FieldDescriptor.TYPE_SFIXED64:
-        long,
+        int,
     google.protobuf.descriptor.FieldDescriptor.TYPE_SINT32:
         int,
     google.protobuf.descriptor.FieldDescriptor.TYPE_SINT64:
-        long
+        int
 }
 
 
@@ -141,7 +142,7 @@ def _NavigateToField(protobuf, field_path, log=None):
       repeated = getattr(protobuf, field_elt.name)
       # TODO: This is a bit rough and will get us
       # into trouble someday.
-      if field_elt.index < 0:
+      if field_elt.index is None or field_elt.index < 0:
         field_elt.index = 0
       # no more than 1 above the len
       if field_elt.index == len(getattr(protobuf, field_elt.name)):
@@ -177,7 +178,7 @@ def SetValueAtFieldPath(protobuf, field_path, maybe_text_value, log):
     log: Python logging object
   """
   value = maybe_text_value
-  if isinstance(value, basestring):
+  if isinstance(value, str):
     typ = TypeAtFieldPath(protobuf, field_path, log)
     if (not value and
         (typ != google.protobuf.descriptor.FieldDescriptor.TYPE_STRING and

@@ -18,20 +18,15 @@
 import json
 import re
 import sys
-import StringIO
+import io
 import time
 import traceback
 import os
-
-# Need to use unittest2 for Python 2.6.
-try:
-  import unittest2 as unittest
-except ImportError:
-  import unittest
+import unittest
 
 # Capture the error and out streams for use in test reports.
-gee_err_stream = StringIO.StringIO()
-gee_out_stream = StringIO.StringIO()
+gee_err_stream = io.StringIO()
+gee_out_stream = io.StringIO()
 
 # Maximum number of lines in a traceback report.
 MAX_TRACEBACK_SIZE = 5
@@ -84,7 +79,7 @@ class GeeTestResult(unittest.TestResult):
   def _AddErrorToResult(self, error, result):
     (error_type, error_value, error_traceback) = error
     result["error_type"] = error_type.__name__
-    result["error_msg"] = error_value.message
+    result["error_msg"] = str(error_value)
     traceback_list = traceback.extract_tb(error_traceback, MAX_TRACEBACK_SIZE)
     result["error_traceback"] = "".join(traceback.format_list(traceback_list))
 
@@ -115,7 +110,8 @@ def PrintTextSuiteResults(results,
   num_errors = 0
   num_skipped = 0
   for result in results["test_results"]:
-    print("-- ({0}) {1} {2}".format(result["module"], result["test"], result["status"]))
+    print("-- ({0}) {1} {2}".
+          format(result["module"], result["test"], result["status"]))
     if result["status"] == "SUCCESS":
       num_successes += 1
     else:
@@ -131,7 +127,7 @@ def PrintTextSuiteResults(results,
         num_skipped += 1
         print("  %s" % (result["skip_reason"]))
       else:
-        print("Unknown status:", result["status"])
+        print("Unknown status: {0}".format(result["status"]))
         break
     num_tests += 1
 
@@ -139,8 +135,8 @@ def PrintTextSuiteResults(results,
     print("Test messages:")
     for line in results["stdout"]:
       print(line.strip())
-  print("Summary: {0} tests  {1} successes  {2} errors  {3} failures {4} skipped".format(
-      num_tests, num_successes, num_errors, num_failures, num_skipped))
+  print("Summary: {0} tests  {1} successes  {2} errors  {3} failures {4} skipped".
+       format(num_tests, num_successes, num_errors, num_failures, num_skipped))
 
 
 def PrintTextResults(results):
@@ -199,7 +195,7 @@ def main(argv):
                        "--no_server_tests",
                        "json",
                        "text"]:
-      print("Unknown parameter:", argv[i])
+      print("Unknown parameter: {0}".format(argv[i]))
       Usage(argv[0])
 
   test_runner = GeeTestRunner()

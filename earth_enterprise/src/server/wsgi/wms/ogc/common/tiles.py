@@ -1,7 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
-# Copyright 2019-2020 Open GEE Contributors
+# Copyright 2019-2021 Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,14 +20,14 @@
 
 import logging
 import os
-import StringIO
+import io
 import tempfile
-import wms_connection
+from . import wms_connection
 
-import geom
-import images
+from . import geom
+from . import images
 import PIL.Image as Image
-import tilecalcs
+from . import tilecalcs
 
 logger = logging.getLogger("wms_maps")
 _TILE_PIXEL_SIZE = 256
@@ -298,8 +298,8 @@ def _SetTransPixelToBgcolor(tile, bgcolor):
     return tile
 
   pixdata = tile.load()
-  for row in xrange(tile.size[0]):
-    for col in xrange(tile.size[1]):
+  for row in range(tile.size[0]):
+    for col in range(tile.size[1]):
       # If pixel alpha < threshold, make it opaque and fill it with bgcolor.
       if pixdata[row, col][3] <= _ALPHA_THRESHOLD:
         pixdata[row, col] = bgcolor + _OPAQUE_ALPHA
@@ -321,10 +321,10 @@ def _FetchMapTile(url):
       The tile bitmap.
   """
   try:
-    f = StringIO.StringIO(wms_connection.HandleConnection(url))
+    f = io.StringIO(wms_connection.HandleConnection(url))
     im_tile = Image.open(f)
     im_tile.load()
-  except IOError, e:
+  except IOError as e:
     im_tile = None
     logger.error("Failed to fetch tile:%s", e)
 
@@ -345,7 +345,7 @@ def _SaveImage(image, fname, image_spec):
     # image.info is necessary to get transparency.
     image.save(t_path, image_spec.pil_format, **image.info)
     os.chmod(t_path, 777)
-  except IOError, e:
+  except IOError as e:
     logger.error("Failed to save:%s", str(e.args[0]))
     raise
 
@@ -360,7 +360,7 @@ def _PasteTile(im_dest, im_src, box):
   """
   try:
     im_dest.paste(im_src, box)
-  except ValueError, e:
+  except ValueError as e:
     logger.error("Failed to paste:%s", str(e.args[0]))
     logger.debug("Size %s vs %s", str(im_src.size), str(im_dest.size))
     logger.debug("Mode %s vs %s", str(im_src.mode), str(im_dest.mode))
@@ -371,7 +371,7 @@ def main():
   map_url = ("http://localhost/ca_maps/query?request=ImageryMaps&"
              "channel=1002&version=1&x=1&y=0&z=1")
   im = _FetchMapTile(map_url)
-  print im
+  print(im)
 
 if __name__ == "__main__":
   main()

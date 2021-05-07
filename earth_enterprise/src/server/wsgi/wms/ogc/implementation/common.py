@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.8
 #
 # Copyright 2017 Google Inc.
+# Copyright 2021 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +18,7 @@
 """Contains WmsGetMapRequest."""
 
 import logging
-import StringIO
+import io
 
 import wms.ogc.common.geom as geom
 import wms.ogc.common.image_specs as image_specs
@@ -124,7 +125,7 @@ class WmsGetMapRequest(object):
         else:
           logger.debug( "Adding layer %s to composite image...", layer_name)
           composite_image.paste(im_user, (0, 0), im_user)
-        buf = StringIO.StringIO()
+        buf = io.StringIO()
         output_format = image_spec.pil_format
         composite_image.save(buf, image_spec.pil_format, **im_user.info)
     headers = [("Content-Type", image_spec.content_type)]
@@ -168,7 +169,7 @@ class WmsGetMapRequest(object):
         "format": self._CheckFormat
         }
 
-    for name, checker in lite_checkers.iteritems():
+    for name, checker in list(lite_checkers.items()):
       parameter_value = utils.GetValue(self.parameters, name)
       checker(parameter_value)
 
@@ -311,7 +312,7 @@ class WmsGetMapRequest(object):
 def main():
   map_req_obj = WmsGetMapRequest({"format": "image/jpeg"}, ["format"], [])
   is_valid_format = map_req_obj.GenerateOutputCommon()
-  print is_valid_format
+  print(is_valid_format)
 
 if __name__ == "__main__":
   main()

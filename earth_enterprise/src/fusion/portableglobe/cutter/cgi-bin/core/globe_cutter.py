@@ -20,7 +20,7 @@
 
 import json
 import ssl
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 
 from core import search_tab_template
 
@@ -44,7 +44,7 @@ class GlobeCutter(object):
     search_tabs = ""
     url = "%s/search_json" % source
     try:
-      fp = urllib2.urlopen(url, context=ssl._create_unverified_context())
+      fp = urllib.request.urlopen(url, context=ssl._create_unverified_context())
       if fp.getcode() == 200:
           search_tabs = fp.read()
       fp.close()

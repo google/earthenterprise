@@ -105,6 +105,7 @@ message QuadtreeNode {
   // 6: imagery data present in this node.
   // 7: terrain data present in this node.
   enum NodeFlags {
+    option allow_alias = true;
     NODE_FLAGS_CHILD_COUNT = 4;   // interior node indication of child presence
     NODE_FLAGS_CACHE_BIT = 4;     // there's data below leaf nodes
     NODE_FLAGS_DRAWABLE_BIT = 5;  // there's vector data in this node
