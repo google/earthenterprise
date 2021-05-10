@@ -45,7 +45,7 @@ class Pair(object):
     else:
       return Pair(self.x / b, self.y / b)
   
-  # No error is done because inputs should be valiated elsewhere, and
+  # No error checking is done because inputs should be valiated elsewhere, and
   # we want to propogate errors up.
   def __truediv__(self, b):
     if isinstance(b, Pair):
@@ -189,7 +189,7 @@ class Rect(object):
   def __div__(self, b):
     return Rect(self.x0 / b, self.y0 / b, self.x1 / b, self.y1 / b)
   
-  # No error is done because inputs should be valiated elsewhere, and
+  # No error checking is done because inputs should be valiated elsewhere, and
   # we want to propogate errors up.
   def __truediv__(self, b):
     return Rect(self.x0 / b, self.y0 / b, self.x1 / b, self.y1 / b)
