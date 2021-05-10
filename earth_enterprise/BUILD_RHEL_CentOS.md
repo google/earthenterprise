@@ -228,7 +228,7 @@ If you do not have access, Python 3.8 can be built and installed by running the 
 
 ### All distros
 
-The following script will build and install Python 3.8 from source if it are needed. From `earthenterprise` run:
+The following script will build and install Python 3.8 from source if it is needed. From `earthenterprise` run:
 
 ```bash
 sudo ./scripts/install_python.sh
