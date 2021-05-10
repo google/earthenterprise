@@ -170,7 +170,7 @@ def CalcTileRects(proj, bbox, zoom_level):
 
   # A pixel will land somewhere within /some/ tile, and that's
   # the tile we want.
-  rect_of_tiles = tilepixel_rect / _TILE_PIXEL_SIZE
+  rect_of_tiles = (tilepixel_rect / _TILE_PIXEL_SIZE).AsInts()
 
   logger.debug("rect_of_tiles %s", str(rect_of_tiles))
 

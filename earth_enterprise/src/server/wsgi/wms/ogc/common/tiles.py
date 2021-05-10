@@ -321,7 +321,7 @@ def _FetchMapTile(url):
       The tile bitmap.
   """
   try:
-    f = io.StringIO(wms_connection.HandleConnection(url))
+    f = io.BytesIO(wms_connection.HandleConnection(url))
     im_tile = Image.open(f)
     im_tile.load()
   except IOError as e:
