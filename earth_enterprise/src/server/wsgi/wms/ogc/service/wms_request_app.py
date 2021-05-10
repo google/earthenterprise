@@ -57,9 +57,20 @@ class WMS(object):
       response_headers.append(content_type)
 
     response_body = output
+    
+    '''
+    This try catch block is used to allow the handling of both string content (XML/JSON) that needs encoded
+    and byte strings that contain images that cannot be encoded. Essentially, we attempt to encode, and if it
+    fails with errors indicative of attempting to encode something that cannot be, we simply don't encode.
+    '''
+    try:
+      response_body = response_body.encode('ascii')
+    except (UnicodeDecodeError, AttributeError):
+      pass
+
     start_response(status, response_headers)
 
-    return [response_body.encode('ascii')]
+    return [response_body]
 
 application = WMS()
 

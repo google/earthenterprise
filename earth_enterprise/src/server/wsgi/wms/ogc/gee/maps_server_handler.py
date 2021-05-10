@@ -213,7 +213,7 @@ def _GetServerVars(target_url):
 
   target_url = urllib.parse.urljoin(target_url, _SERVER_DEF_URL)
 
-  result = wms_connection.HandleConnection(target_url)
+  result = wms_connection.HandleConnection(target_url).decode()
 
   logger.debug("Server definitions data read, start regex")
   logger.debug("JSON vars: %s", result)

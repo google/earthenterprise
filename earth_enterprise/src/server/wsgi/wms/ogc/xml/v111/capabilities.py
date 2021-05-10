@@ -138,7 +138,6 @@ except ImportError as exp:
 # Globals
 #
 
-ExternalEncoding = 'utf8'
 Tag_pattern_ = re_.compile(r'({.*})?(.*)')
 STRING_CLEANUP_PAT = re_.compile(r"[\n\r\s]+")
 
@@ -153,16 +152,14 @@ def showIndent(outfile, level):
 def quote_xml(inStr):
   if not inStr:
     return ''
-  s1 = (isinstance(inStr, str) and inStr or
-        '%s' % inStr)
+  s1 = ((isinstance(inStr, str) and inStr) or (isinstance(inStr, bytes) and inStr.decode()) or '%s' % inStr)
   s1 = s1.replace('&', '&amp;')
   s1 = s1.replace('<', '&lt;')
   s1 = s1.replace('>', '&gt;')
   return s1
 
 def quote_attrib(inStr):
-  s1 = (isinstance(inStr, str) and inStr or
-        '%s' % inStr)
+  s1 = ((isinstance(inStr, str) and inStr) or (isinstance(inStr, bytes) and inStr.decode()) or '%s' % inStr)
   s1 = s1.replace('&', '&amp;')
   s1 = s1.replace('<', '&lt;')
   s1 = s1.replace('>', '&gt;')
@@ -176,7 +173,7 @@ def quote_attrib(inStr):
   return s1
 
 def quote_python(inStr):
-  s1 = inStr
+  s1 = ((isinstance(inStr, str) and inStr) or (isinstance(inStr, bytes) and inStr.decode()) or '%s' % inStr)
   if s1.find("'") == -1:
     if s1.find('\n') == -1:
       return "'%s'" % s1
@@ -353,10 +350,10 @@ class WMT_MS_Capabilities(GeneratedsSuper):
   def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='WMT_MS_Capabilities'):
     if self.updateSequence is not None and 'updateSequence' not in already_processed:
       already_processed.append('updateSequence')
-      outfile.write(' updateSequence=%s' % (self.gds_format_string(quote_attrib(self.updateSequence).encode(ExternalEncoding), input_name='updateSequence'), ))
+      outfile.write(' updateSequence=%s' % (self.gds_format_string(quote_attrib(self.updateSequence), input_name='updateSequence'), ))
     if self.version is not None and 'version' not in already_processed:
       already_processed.append('version')
-      outfile.write(' version=%s' % (self.gds_format_string(quote_attrib(self.version).encode(ExternalEncoding), input_name='version'), ))
+      outfile.write(' version=%s' % (self.gds_format_string(quote_attrib(self.version), input_name='version'), ))
   def exportChildren(self, outfile, level, namespace_='', name_='WMT_MS_Capabilities', fromsubclass_=False):
     if self.Service:
       self.Service.export(outfile, level, namespace_, name_='Service', )
@@ -527,7 +524,7 @@ class Title(GeneratedsSuper):
   def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='Title'):
     pass
   def exportChildren(self, outfile, level, namespace_='', name_='Title', fromsubclass_=False):
-    outfile.write(self.gds_format_string(quote_xml(self.valueOf_).encode(ExternalEncoding)))
+    outfile.write(self.gds_format_string(quote_xml(self.valueOf_)))
   def hasContent_(self):
     if (
         self.valueOf_
@@ -667,7 +664,7 @@ class OnlineResource(GeneratedsSuper):
     self.exportAttributes(outfile, level, [], namespace_, name_='OnlineResource')
     if self.hasContent_():
       outfile.write('>')
-      outfile.write(self.valueOf_.encode(ExternalEncoding))
+      outfile.write(self.valueOf_)
       self.exportChildren(outfile, level + 1, namespace_, name_)
       outfile.write('</%s%s>\n' % (namespace_, name_))
     else:
@@ -675,13 +672,13 @@ class OnlineResource(GeneratedsSuper):
   def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='OnlineResource'):
     if self.xmlns_xlink is not None and 'xmlns_xlink' not in already_processed:
       already_processed.append('xmlns_xlink')
-      outfile.write(' xmlns:xlink=%s' % (self.gds_format_string(quote_attrib(self.xmlns_xlink).encode(ExternalEncoding), input_name='xmlns:xlink'), ))
+      outfile.write(' xmlns:xlink=%s' % (self.gds_format_string(quote_attrib(self.xmlns_xlink), input_name='xmlns:xlink'), ))
     if self.xlink_type is not None and 'xlink_type' not in already_processed:
       already_processed.append('xlink_type')
-      outfile.write(' xlink:type=%s' % (self.gds_format_string(quote_attrib(self.xlink_type).encode(ExternalEncoding), input_name='xlink:type'), ))
+      outfile.write(' xlink:type=%s' % (self.gds_format_string(quote_attrib(self.xlink_type), input_name='xlink:type'), ))
     if self.xlink_href is not None and 'xlink_href' not in already_processed:
       already_processed.append('xlink_href')
-      outfile.write(' xlink:href=%s' % (self.gds_format_string(quote_attrib(self.xlink_href).encode(ExternalEncoding), input_name='xlink:href'), ))
+      outfile.write(' xlink:href=%s' % (self.gds_format_string(quote_attrib(self.xlink_href), input_name='xlink:href'), ))
   def exportChildren(self, outfile, level, namespace_='', name_='OnlineResource', fromsubclass_=False):
     pass
   def hasContent_(self):
@@ -769,7 +766,7 @@ class Format(GeneratedsSuper):
   def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='Format'):
     pass
   def exportChildren(self, outfile, level, namespace_='', name_='Format', fromsubclass_=False):
-    outfile.write(self.gds_format_string(quote_xml(self.valueOf_).encode(ExternalEncoding)))
+    outfile.write(self.gds_format_string(quote_xml(self.valueOf_)))
   def hasContent_(self):
     if (
         self.valueOf_
@@ -859,7 +856,7 @@ class Service(GeneratedsSuper):
   def exportChildren(self, outfile, level, namespace_='', name_='Service', fromsubclass_=False):
     if self.Name is not None:
       showIndent(outfile, level)
-      outfile.write('<%sName>%s</%sName>\n' % (namespace_, self.gds_format_string(quote_xml(self.Name).encode(ExternalEncoding), input_name='Name'), namespace_))
+      outfile.write('<%sName>%s</%sName>\n' % (namespace_, self.gds_format_string(quote_xml(self.Name), input_name='Name'), namespace_))
     if self.Title:
       self.Title.export(outfile, level, namespace_, name_='Title', )
     if self.Abstract:
@@ -898,7 +895,7 @@ class Service(GeneratedsSuper):
   def exportLiteralChildren(self, outfile, level, name_):
     if self.Name is not None:
       showIndent(outfile, level)
-      outfile.write('Name=%s,\n' % quote_python(self.Name).encode(ExternalEncoding))
+      outfile.write('Name=%s,\n' % quote_python(self.Name))
     if self.Title is not None:
       showIndent(outfile, level)
       outfile.write('Title=model_.Title(\n')
@@ -2556,7 +2553,7 @@ class Capability(GeneratedsSuper):
       self.Exception.export(outfile, level, namespace_, name_='Exception', )
     if self.VendorSpecificCapabilities is not None:
       showIndent(outfile, level)
-      outfile.write('<%sVendorSpecificCapabilities>%s</%sVendorSpecificCapabilities>\n' % (namespace_, self.gds_format_string(quote_xml(self.VendorSpecificCapabilities).encode(ExternalEncoding), input_name='VendorSpecificCapabilities'), namespace_))
+      outfile.write('<%sVendorSpecificCapabilities>%s</%sVendorSpecificCapabilities>\n' % (namespace_, self.gds_format_string(quote_xml(self.VendorSpecificCapabilities), input_name='VendorSpecificCapabilities'), namespace_))
     if self.UserDefinedSymbolization:
       self.UserDefinedSymbolization.export(outfile, level, namespace_, name_='UserDefinedSymbolization')
     if self.Layer:
@@ -2594,7 +2591,7 @@ class Capability(GeneratedsSuper):
       outfile.write('),\n')
     if self.VendorSpecificCapabilities is not None:
       showIndent(outfile, level)
-      outfile.write('VendorSpecificCapabilities=%s,\n' % quote_python(self.VendorSpecificCapabilities).encode(ExternalEncoding))
+      outfile.write('VendorSpecificCapabilities=%s,\n' % quote_python(self.VendorSpecificCapabilities))
     if self.UserDefinedSymbolization is not None:
       showIndent(outfile, level)
       outfile.write('UserDefinedSymbolization=model_.UserDefinedSymbolization(\n')
@@ -3925,7 +3922,7 @@ class UserDefinedSymbolization(GeneratedsSuper):
     self.exportAttributes(outfile, level, [], namespace_, name_='UserDefinedSymbolization')
     if self.hasContent_():
       outfile.write('>')
-      outfile.write(self.valueOf_.encode(ExternalEncoding))
+      outfile.write(self.valueOf_)
       self.exportChildren(outfile, level + 1, namespace_, name_)
       outfile.write('</%s%s>\n' % (namespace_, name_))
     else:
@@ -3933,16 +3930,16 @@ class UserDefinedSymbolization(GeneratedsSuper):
   def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='UserDefinedSymbolization'):
     if self.RemoteWFS is not None and 'RemoteWFS' not in already_processed:
       already_processed.append('RemoteWFS')
-      outfile.write(' RemoteWFS=%s' % (self.gds_format_string(quote_attrib(self.RemoteWFS).encode(ExternalEncoding), input_name='RemoteWFS'), ))
+      outfile.write(' RemoteWFS=%s' % (self.gds_format_string(quote_attrib(self.RemoteWFS), input_name='RemoteWFS'), ))
     if self.UserLayer is not None and 'UserLayer' not in already_processed:
       already_processed.append('UserLayer')
-      outfile.write(' UserLayer=%s' % (self.gds_format_string(quote_attrib(self.UserLayer).encode(ExternalEncoding), input_name='UserLayer'), ))
+      outfile.write(' UserLayer=%s' % (self.gds_format_string(quote_attrib(self.UserLayer), input_name='UserLayer'), ))
     if self.SupportSLD is not None and 'SupportSLD' not in already_processed:
       already_processed.append('SupportSLD')
-      outfile.write(' SupportSLD=%s' % (self.gds_format_string(quote_attrib(self.SupportSLD).encode(ExternalEncoding), input_name='SupportSLD'), ))
+      outfile.write(' SupportSLD=%s' % (self.gds_format_string(quote_attrib(self.SupportSLD), input_name='SupportSLD'), ))
     if self.UserStyle is not None and 'UserStyle' not in already_processed:
       already_processed.append('UserStyle')
-      outfile.write(' UserStyle=%s' % (self.gds_format_string(quote_attrib(self.UserStyle).encode(ExternalEncoding), input_name='UserStyle'), ))
+      outfile.write(' UserStyle=%s' % (self.gds_format_string(quote_attrib(self.UserStyle), input_name='UserStyle'), ))
   def exportChildren(self, outfile, level, namespace_='', name_='UserDefinedSymbolization', fromsubclass_=False):
     pass
   def hasContent_(self):
@@ -4157,26 +4154,26 @@ class Layer(GeneratedsSuper):
   def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='Layer'):
     if self.opaque is not None and 'opaque' not in already_processed:
       already_processed.append('opaque')
-      outfile.write(' opaque=%s' % (self.gds_format_string(quote_attrib(self.opaque).encode(ExternalEncoding), input_name='opaque'), ))
+      outfile.write(' opaque=%s' % (self.gds_format_string(quote_attrib(self.opaque), input_name='opaque'), ))
     if self.cascaded is not None and 'cascaded' not in already_processed:
       already_processed.append('cascaded')
-      outfile.write(' cascaded=%s' % (self.gds_format_string(quote_attrib(self.cascaded).encode(ExternalEncoding), input_name='cascaded'), ))
+      outfile.write(' cascaded=%s' % (self.gds_format_string(quote_attrib(self.cascaded), input_name='cascaded'), ))
     if self.fixedHeight is not None and 'fixedHeight' not in already_processed:
       already_processed.append('fixedHeight')
-      outfile.write(' fixedHeight=%s' % (self.gds_format_string(quote_attrib(self.fixedHeight).encode(ExternalEncoding), input_name='fixedHeight'), ))
+      outfile.write(' fixedHeight=%s' % (self.gds_format_string(quote_attrib(self.fixedHeight), input_name='fixedHeight'), ))
     if self.fixedWidth is not None and 'fixedWidth' not in already_processed:
       already_processed.append('fixedWidth')
-      outfile.write(' fixedWidth=%s' % (self.gds_format_string(quote_attrib(self.fixedWidth).encode(ExternalEncoding), input_name='fixedWidth'), ))
+      outfile.write(' fixedWidth=%s' % (self.gds_format_string(quote_attrib(self.fixedWidth), input_name='fixedWidth'), ))
     if self.noSubsets is not None and 'noSubsets' not in already_processed:
       already_processed.append('noSubsets')
-      outfile.write(' noSubsets=%s' % (self.gds_format_string(quote_attrib(self.noSubsets).encode(ExternalEncoding), input_name='noSubsets'), ))
+      outfile.write(' noSubsets=%s' % (self.gds_format_string(quote_attrib(self.noSubsets), input_name='noSubsets'), ))
     if self.queryable is not None and 'queryable' not in already_processed:
       already_processed.append('queryable')
-      outfile.write(' queryable=%s' % (self.gds_format_string(quote_attrib(self.queryable).encode(ExternalEncoding), input_name='queryable'), ))
+      outfile.write(' queryable=%s' % (self.gds_format_string(quote_attrib(self.queryable), input_name='queryable'), ))
   def exportChildren(self, outfile, level, namespace_='', name_='Layer', fromsubclass_=False):
     if self.Name is not None:
       showIndent(outfile, level)
-      outfile.write('<%sName>%s</%sName>\n' % (namespace_, self.gds_format_string(quote_xml(self.Name).encode(ExternalEncoding), input_name='Name'), namespace_))
+      outfile.write('<%sName>%s</%sName>\n' % (namespace_, self.gds_format_string(quote_xml(self.Name), input_name='Name'), namespace_))
     if self.Title:
       self.Title.export(outfile, level, namespace_, name_='Title', )
     if self.Abstract:
@@ -4268,7 +4265,7 @@ class Layer(GeneratedsSuper):
   def exportLiteralChildren(self, outfile, level, name_):
     if self.Name is not None:
       showIndent(outfile, level)
-      outfile.write('Name=%s,\n' % quote_python(self.Name).encode(ExternalEncoding))
+      outfile.write('Name=%s,\n' % quote_python(self.Name))
     if self.Title is not None:
       showIndent(outfile, level)
       outfile.write('Title=model_.Title(\n')
@@ -4575,7 +4572,7 @@ class SRS(GeneratedsSuper):
   def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='SRS'):
     pass
   def exportChildren(self, outfile, level, namespace_='', name_='SRS', fromsubclass_=False):
-    outfile.write(self.gds_format_string(quote_xml(self.valueOf_).encode(ExternalEncoding)))
+    outfile.write(self.gds_format_string(quote_xml(self.valueOf_)))
   def hasContent_(self):
     if (
         self.valueOf_
@@ -4646,7 +4643,7 @@ class LatLonBoundingBox(GeneratedsSuper):
     self.exportAttributes(outfile, level, [], namespace_, name_='LatLonBoundingBox')
     if self.hasContent_():
       outfile.write('>')
-      outfile.write(self.valueOf_.encode(ExternalEncoding))
+      outfile.write(self.valueOf_)
       self.exportChildren(outfile, level + 1, namespace_, name_)
       outfile.write('</%s%s>\n' % (namespace_, name_))
     else:
@@ -4654,16 +4651,16 @@ class LatLonBoundingBox(GeneratedsSuper):
   def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='LatLonBoundingBox'):
     if self.minx is not None and 'minx' not in already_processed:
       already_processed.append('minx')
-      outfile.write(' minx=%s' % (self.gds_format_string(quote_attrib(self.minx).encode(ExternalEncoding), input_name='minx'), ))
+      outfile.write(' minx=%s' % (self.gds_format_string(quote_attrib(self.minx), input_name='minx'), ))
     if self.miny is not None and 'miny' not in already_processed:
       already_processed.append('miny')
-      outfile.write(' miny=%s' % (self.gds_format_string(quote_attrib(self.miny).encode(ExternalEncoding), input_name='miny'), ))
+      outfile.write(' miny=%s' % (self.gds_format_string(quote_attrib(self.miny), input_name='miny'), ))
     if self.maxx is not None and 'maxx' not in already_processed:
       already_processed.append('maxx')
-      outfile.write(' maxx=%s' % (self.gds_format_string(quote_attrib(self.maxx).encode(ExternalEncoding), input_name='maxx'), ))
+      outfile.write(' maxx=%s' % (self.gds_format_string(quote_attrib(self.maxx), input_name='maxx'), ))
     if self.maxy is not None and 'maxy' not in already_processed:
       already_processed.append('maxy')
-      outfile.write(' maxy=%s' % (self.gds_format_string(quote_attrib(self.maxy).encode(ExternalEncoding), input_name='maxy'), ))
+      outfile.write(' maxy=%s' % (self.gds_format_string(quote_attrib(self.maxy), input_name='maxy'), ))
   def exportChildren(self, outfile, level, namespace_='', name_='LatLonBoundingBox', fromsubclass_=False):
     pass
   def hasContent_(self):
@@ -4767,7 +4764,7 @@ class BoundingBox(GeneratedsSuper):
     self.exportAttributes(outfile, level, [], namespace_, name_='BoundingBox')
     if self.hasContent_():
       outfile.write('>')
-      outfile.write(self.valueOf_.encode(ExternalEncoding))
+      outfile.write(self.valueOf_)
       self.exportChildren(outfile, level + 1, namespace_, name_)
       outfile.write('</%s%s>\n' % (namespace_, name_))
     else:
@@ -4775,25 +4772,25 @@ class BoundingBox(GeneratedsSuper):
   def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='BoundingBox'):
     if self.maxx is not None and 'maxx' not in already_processed:
       already_processed.append('maxx')
-      outfile.write(' maxx=%s' % (self.gds_format_string(quote_attrib(self.maxx).encode(ExternalEncoding), input_name='maxx'), ))
+      outfile.write(' maxx=%s' % (self.gds_format_string(quote_attrib(self.maxx), input_name='maxx'), ))
     if self.maxy is not None and 'maxy' not in already_processed:
       already_processed.append('maxy')
-      outfile.write(' maxy=%s' % (self.gds_format_string(quote_attrib(self.maxy).encode(ExternalEncoding), input_name='maxy'), ))
+      outfile.write(' maxy=%s' % (self.gds_format_string(quote_attrib(self.maxy), input_name='maxy'), ))
     if self.miny is not None and 'miny' not in already_processed:
       already_processed.append('miny')
-      outfile.write(' miny=%s' % (self.gds_format_string(quote_attrib(self.miny).encode(ExternalEncoding), input_name='miny'), ))
+      outfile.write(' miny=%s' % (self.gds_format_string(quote_attrib(self.miny), input_name='miny'), ))
     if self.resx is not None and 'resx' not in already_processed:
       already_processed.append('resx')
-      outfile.write(' resx=%s' % (self.gds_format_string(quote_attrib(self.resx).encode(ExternalEncoding), input_name='resx'), ))
+      outfile.write(' resx=%s' % (self.gds_format_string(quote_attrib(self.resx), input_name='resx'), ))
     if self.minx is not None and 'minx' not in already_processed:
       already_processed.append('minx')
-      outfile.write(' minx=%s' % (self.gds_format_string(quote_attrib(self.minx).encode(ExternalEncoding), input_name='minx'), ))
+      outfile.write(' minx=%s' % (self.gds_format_string(quote_attrib(self.minx), input_name='minx'), ))
     if self.SRS is not None and 'SRS' not in already_processed:
       already_processed.append('SRS')
-      outfile.write(' SRS=%s' % (self.gds_format_string(quote_attrib(self.SRS).encode(ExternalEncoding), input_name='SRS'), ))
+      outfile.write(' SRS=%s' % (self.gds_format_string(quote_attrib(self.SRS), input_name='SRS'), ))
     if self.resy is not None and 'resy' not in already_processed:
       already_processed.append('resy')
-      outfile.write(' resy=%s' % (self.gds_format_string(quote_attrib(self.resy).encode(ExternalEncoding), input_name='resy'), ))
+      outfile.write(' resy=%s' % (self.gds_format_string(quote_attrib(self.resy), input_name='resy'), ))
   def exportChildren(self, outfile, level, namespace_='', name_='BoundingBox', fromsubclass_=False):
     pass
   def hasContent_(self):
@@ -4909,7 +4906,7 @@ class Dimension(GeneratedsSuper):
     self.exportAttributes(outfile, level, [], namespace_, name_='Dimension')
     if self.hasContent_():
       outfile.write('>')
-      outfile.write(self.valueOf_.encode(ExternalEncoding))
+      outfile.write(self.valueOf_)
       self.exportChildren(outfile, level + 1, namespace_, name_)
       outfile.write('</%s%s>\n' % (namespace_, name_))
     else:
@@ -4917,13 +4914,13 @@ class Dimension(GeneratedsSuper):
   def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='Dimension'):
     if self.units is not None and 'units' not in already_processed:
       already_processed.append('units')
-      outfile.write(' units=%s' % (self.gds_format_string(quote_attrib(self.units).encode(ExternalEncoding), input_name='units'), ))
+      outfile.write(' units=%s' % (self.gds_format_string(quote_attrib(self.units), input_name='units'), ))
     if self.unitSymbol is not None and 'unitSymbol' not in already_processed:
       already_processed.append('unitSymbol')
-      outfile.write(' unitSymbol=%s' % (self.gds_format_string(quote_attrib(self.unitSymbol).encode(ExternalEncoding), input_name='unitSymbol'), ))
+      outfile.write(' unitSymbol=%s' % (self.gds_format_string(quote_attrib(self.unitSymbol), input_name='unitSymbol'), ))
     if self.name is not None and 'name' not in already_processed:
       already_processed.append('name')
-      outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding), input_name='name'), ))
+      outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name), input_name='name'), ))
   def exportChildren(self, outfile, level, namespace_='', name_='Dimension', fromsubclass_=False):
     pass
   def hasContent_(self):
@@ -5026,19 +5023,19 @@ class Extent(GeneratedsSuper):
   def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='Extent'):
     if self.default is not None and 'default' not in already_processed:
       already_processed.append('default')
-      outfile.write(' default=%s' % (self.gds_format_string(quote_attrib(self.default).encode(ExternalEncoding), input_name='default'), ))
+      outfile.write(' default=%s' % (self.gds_format_string(quote_attrib(self.default), input_name='default'), ))
     if self.multipleValues is not None and 'multipleValues' not in already_processed:
       already_processed.append('multipleValues')
-      outfile.write(' multipleValues=%s' % (self.gds_format_string(quote_attrib(self.multipleValues).encode(ExternalEncoding), input_name='multipleValues'), ))
+      outfile.write(' multipleValues=%s' % (self.gds_format_string(quote_attrib(self.multipleValues), input_name='multipleValues'), ))
     if self.current is not None and 'current' not in already_processed:
       already_processed.append('current')
-      outfile.write(' current=%s' % (self.gds_format_string(quote_attrib(self.current).encode(ExternalEncoding), input_name='current'), ))
+      outfile.write(' current=%s' % (self.gds_format_string(quote_attrib(self.current), input_name='current'), ))
     if self.name is not None and 'name' not in already_processed:
       already_processed.append('name')
-      outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding), input_name='name'), ))
+      outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name), input_name='name'), ))
     if self.nearestValue is not None and 'nearestValue' not in already_processed:
       already_processed.append('nearestValue')
-      outfile.write(' nearestValue=%s' % (self.gds_format_string(quote_attrib(self.nearestValue).encode(ExternalEncoding), input_name='nearestValue'), ))
+      outfile.write(' nearestValue=%s' % (self.gds_format_string(quote_attrib(self.nearestValue), input_name='nearestValue'), ))
   def exportChildren(self, outfile, level, namespace_='', name_='Extent', fromsubclass_=False):
     pass
   def hasContent_(self):
@@ -5251,10 +5248,10 @@ class LogoURL(GeneratedsSuper):
   def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='LogoURL'):
     if self.width is not None and 'width' not in already_processed:
       already_processed.append('width')
-      outfile.write(' width=%s' % (self.gds_format_string(quote_attrib(self.width).encode(ExternalEncoding), input_name='width'), ))
+      outfile.write(' width=%s' % (self.gds_format_string(quote_attrib(self.width), input_name='width'), ))
     if self.height is not None and 'height' not in already_processed:
       already_processed.append('height')
-      outfile.write(' height=%s' % (self.gds_format_string(quote_attrib(self.height).encode(ExternalEncoding), input_name='height'), ))
+      outfile.write(' height=%s' % (self.gds_format_string(quote_attrib(self.height), input_name='height'), ))
   def exportChildren(self, outfile, level, namespace_='', name_='LogoURL', fromsubclass_=False):
     if self.Format:
       self.Format.export(outfile, level, namespace_, name_='Format', )
@@ -5354,7 +5351,7 @@ class MetadataURL(GeneratedsSuper):
   def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='MetadataURL'):
     if self.type_ is not None and 'type_' not in already_processed:
       already_processed.append('type_')
-      outfile.write(' type=%s' % (self.gds_format_string(quote_attrib(self.type_).encode(ExternalEncoding), input_name='type'), ))
+      outfile.write(' type=%s' % (self.gds_format_string(quote_attrib(self.type_), input_name='type'), ))
   def exportChildren(self, outfile, level, namespace_='', name_='MetadataURL', fromsubclass_=False):
     if self.Format:
       self.Format.export(outfile, level, namespace_, name_='Format', )
@@ -5443,7 +5440,7 @@ class AuthorityURL(GeneratedsSuper):
   def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='AuthorityURL'):
     if self.name is not None and 'name' not in already_processed:
       already_processed.append('name')
-      outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name).encode(ExternalEncoding), input_name='name'), ))
+      outfile.write(' name=%s' % (self.gds_format_string(quote_attrib(self.name), input_name='name'), ))
   def exportChildren(self, outfile, level, namespace_='', name_='AuthorityURL', fromsubclass_=False):
     if self.OnlineResource:
       self.OnlineResource.export(outfile, level, namespace_, name_='OnlineResource', )
@@ -5524,7 +5521,7 @@ class Identifier(GeneratedsSuper):
   def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='Identifier'):
     if self.authority is not None and 'authority' not in already_processed:
       already_processed.append('authority')
-      outfile.write(' authority=%s' % (self.gds_format_string(quote_attrib(self.authority).encode(ExternalEncoding), input_name='authority'), ))
+      outfile.write(' authority=%s' % (self.gds_format_string(quote_attrib(self.authority), input_name='authority'), ))
   def exportChildren(self, outfile, level, namespace_='', name_='Identifier', fromsubclass_=False):
     pass
   def hasContent_(self):
@@ -5783,7 +5780,7 @@ class Style(GeneratedsSuper):
   def exportChildren(self, outfile, level, namespace_='', name_='Style', fromsubclass_=False):
     if self.Name is not None:
       showIndent(outfile, level)
-      outfile.write('<%sName>%s</%sName>\n' % (namespace_, self.gds_format_string(quote_xml(self.Name).encode(ExternalEncoding), input_name='Name'), namespace_))
+      outfile.write('<%sName>%s</%sName>\n' % (namespace_, self.gds_format_string(quote_xml(self.Name), input_name='Name'), namespace_))
     if self.Title:
       self.Title.export(outfile, level, namespace_, name_='Title', )
     if self.Abstract:
@@ -5816,7 +5813,7 @@ class Style(GeneratedsSuper):
   def exportLiteralChildren(self, outfile, level, name_):
     if self.Name is not None:
       showIndent(outfile, level)
-      outfile.write('Name=%s,\n' % quote_python(self.Name).encode(ExternalEncoding))
+      outfile.write('Name=%s,\n' % quote_python(self.Name))
     if self.Title is not None:
       showIndent(outfile, level)
       outfile.write('Title=model_.Title(\n')
@@ -5924,10 +5921,10 @@ class LegendURL(GeneratedsSuper):
   def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='LegendURL'):
     if self.width is not None and 'width' not in already_processed:
       already_processed.append('width')
-      outfile.write(' width=%s' % (self.gds_format_string(quote_attrib(self.width).encode(ExternalEncoding), input_name='width'), ))
+      outfile.write(' width=%s' % (self.gds_format_string(quote_attrib(self.width), input_name='width'), ))
     if self.height is not None and 'height' not in already_processed:
       already_processed.append('height')
-      outfile.write(' height=%s' % (self.gds_format_string(quote_attrib(self.height).encode(ExternalEncoding), input_name='height'), ))
+      outfile.write(' height=%s' % (self.gds_format_string(quote_attrib(self.height), input_name='height'), ))
   def exportChildren(self, outfile, level, namespace_='', name_='LegendURL', fromsubclass_=False):
     if self.Format:
       self.Format.export(outfile, level, namespace_, name_='Format', )
@@ -6181,7 +6178,7 @@ class ScaleHint(GeneratedsSuper):
     self.exportAttributes(outfile, level, [], namespace_, name_='ScaleHint')
     if self.hasContent_():
       outfile.write('>')
-      outfile.write(self.valueOf_.encode(ExternalEncoding))
+      outfile.write(self.valueOf_)
       self.exportChildren(outfile, level + 1, namespace_, name_)
       outfile.write('</%s%s>\n' % (namespace_, name_))
     else:
@@ -6189,10 +6186,10 @@ class ScaleHint(GeneratedsSuper):
   def exportAttributes(self, outfile, level, already_processed, namespace_='', name_='ScaleHint'):
     if self.max is not None and 'max' not in already_processed:
       already_processed.append('max')
-      outfile.write(' max=%s' % (self.gds_format_string(quote_attrib(self.max).encode(ExternalEncoding), input_name='max'), ))
+      outfile.write(' max=%s' % (self.gds_format_string(quote_attrib(self.max), input_name='max'), ))
     if self.min is not None and 'min' not in already_processed:
       already_processed.append('min')
-      outfile.write(' min=%s' % (self.gds_format_string(quote_attrib(self.min).encode(ExternalEncoding), input_name='min'), ))
+      outfile.write(' min=%s' % (self.gds_format_string(quote_attrib(self.min), input_name='min'), ))
   def exportChildren(self, outfile, level, namespace_='', name_='ScaleHint', fromsubclass_=False):
     pass
   def hasContent_(self):
