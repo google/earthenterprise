@@ -95,7 +95,7 @@ numpy_env.ExecuteOnClean('rm -rf %s' % current_dir)
 
 
 if 'install' in COMMAND_LINE_TARGETS:
-  # Copies numpy python bindings from ../install/lib/python2.7/site-packages
+  # Copies numpy python bindings from ../install/lib/python3.8/site-packages
   # to ../opt/google/gepython/../site-packages/ folder.
   numpy_env.InstallFileOrDir(
       '%s/' % install_root_lib,

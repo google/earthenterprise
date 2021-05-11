@@ -200,7 +200,7 @@ gdal_install_build = gdal_env.Command(
 Default(gdal_install_build)
 
 if 'install' in COMMAND_LINE_TARGETS:
-  # Copies gdal python bindings from ../install/lib/python2.7/site-packages
+  # Copies gdal python bindings from ../install/lib/python3.8/site-packages
   # to ../opt/google/gepython/../site-packages/ folder.
   gdal_env.InstallFileOrDir(
       '%s/lib/python%s/site-packages/' % (install_root,

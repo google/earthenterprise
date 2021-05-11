@@ -43,13 +43,8 @@ sudo apt-get install \
 ```
 ## Install Python
 
-In order to build OpenGEE, both Python 2.7 and 3.8 are needed (to facilitate transition to 3.8). If you have access to both through public repos, we suggest installing them that way. Python 2.7 is available from the official repos, so we install it from there:
-
-```bash
-sudo apt-get install python2.7 python2.7-dev python-pip
-```
-
-The following script will build and install Python 2.7 and Python 3.8 from source if they are needed. From `earthenterprise` run:
+In order to build OpenGEE, Python 3.8 is needed. If you have access to it through public repos, we suggest installing it that way.
+If you do not have access, Python 3.8 can be built and installed by running the following from `earthenterprise`:
  
 ```bash
 sudo ./scripts/install_python.sh
@@ -58,8 +53,6 @@ sudo ./scripts/install_python.sh
 Additional python packages are needed as well:
 
 ```bash
-sudo python2.7 -m pip install --upgrade pip==19.0
-sudo python2.7 -m pip install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2-binary
 sudo python3.8 -m pip install --upgrade pip
 sudo python3.8 -m pip install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2-binary scons
 ```
