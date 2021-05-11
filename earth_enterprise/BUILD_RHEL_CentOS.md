@@ -223,19 +223,12 @@ shunit2 was installed in a previous step.
 
 ## Install Python
 
-In order to build OpenGEE, both Python 2.7 and 3.8 (and their respective pip installations and dev files) are needed to facilitate transition to python 3.8. If you have access to either through public repos, we suggest installing them that way.
-
-### RHEL 7 and CentOS 7
-
-On RHEL7 and CentOS 7 Python 2.7 is available, and should be installed from the public repos.
-
-```bash
-sudo yum install python python-pip python-devel
-```
+In order to build OpenGEE, Python 3.8 is needed. If you have access to it through public repos, we suggest installing it that way.
+If you do not have access, Python 3.8 can be built and installed by running the following from `earthenterprise`:
 
 ### All distros
 
-The following script will build and install Python 2.7 and Python 3.8 from source if they are needed. From `earthenterprise` run:
+The following script will build and install Python 3.8 from source if it is needed. From `earthenterprise` run:
 
 ```bash
 sudo ./scripts/install_python.sh
@@ -244,8 +237,6 @@ sudo ./scripts/install_python.sh
 Additional python packages are needed as well:
 
 ```bash
-sudo python2.7 -m pip install --upgrade pip==19.0
-sudo python2.7 -m pip install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2-binary
 sudo python3.8 -m pip install --upgrade pip
 sudo python3.8 -m pip install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2-binary scons
 ```

@@ -41,7 +41,7 @@ from the *earth_enterprise* subdirectory.  This can be used after
 This will setup the stage install directory, install Gradle if needed, and then
 use Gradle to generate RPMs.  The RPMs are created in the
 *rpms/build/distributions* subdirectory.  A typical invocation for building
-release RPMs might be ```python2.7 /usr/bin/scons -j8 release=1
+release RPMs might be ```scons -j8 release=1
 package_install```.  All other files related to RPM generation are found in the
 *rpms* sub-directory as well. Scripts for pre/post install operations are found
 under the related package directory in *rpms*, and common templates for package
@@ -66,44 +66,32 @@ libraries, as detailed below:
     and **opengee-extra**
 * **opengee-full-server** - convenience RPM that installs **opengee-server**
     and **opengee-extra**
-* **gee-python-2.7.18** - contains Python 2.7 
 * **gee-python-3.8.6** - contains Python 3.8.6
 
 ## Seting up the Python Environment
 
 If the RPMs are being installed on the machine where they were built, the 
 proper python environment has already been setup during the build phase.
-If not, Python 2.7 and 3.8 (along with their respective versions of pip) 
+If not, Python 3.8 (along with its respective version of pip) 
 need to installed. This can be done either 
-through official channels or by installing our python rpms.
+through official channels or by installing our python rpm.
 
-### RHEL and CentOS 7
+### RHEL and CentOS 6 & 7
 
-Only Python 3.8 is needed:
+To install Python 3.8:
 
 ```bash
 sudo rpm -Uvh python-3*
-sudo python3.8 -m ensurepip
-```
-
-### RHEL and CentOS 6
-
-Both Python 3.8 and Python 2.7 are needed:
-
-```bash
-sudo rpm -Uvh python-2*
-sudo rpm -Uvh python-3*
-sudo python2.7 -m ensurepip
-sudo python3.8 -m ensurepip
+sudo gee-python3.8 -m ensurepip
 ```
 
 ### Ubuntu
 
-Only Python 3.8 is needed:
+To install Python 3.8:
 
 ```bash
 sudo dpkg -i python-3*
-sudo python3.8 -m ensurepip
+sudo gee-python3.8 -m ensurepip
 ```
 
 ### All platforms
@@ -111,8 +99,6 @@ sudo python3.8 -m ensurepip
 Additional python packages are needed as well and can be installed via: 
 
 ```bash
-sudo python2.7 -m pip install --upgrade pip==19.0
-sudo python2.7 -m pip install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2-binary
 sudo python3.8 -m pip install --upgrade pip
 sudo python3.8 -m pip install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2-binary
 ```

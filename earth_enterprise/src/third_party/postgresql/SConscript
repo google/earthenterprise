@@ -29,6 +29,7 @@ current_dir = Dir('.').abspath
 build_root = '%s/%s' % (current_dir, postgresql_version)
 
 postgresql_env = third_party_env.DeepCopy()
+postgresql_env['CPPFLAGS'] += ['-I%s' % postgresql_env['python_include']]
 
 # [1] Extract
 postgresql_target = '%s/.extract' % current_dir
@@ -60,10 +61,11 @@ postgresql_configure = postgresql_env.Command(
     postgresql_target, postgresql_extract,
     [postgresql_env.MultiCommand(
         ('cd {build_root_escaped}\n'
-         'export LD_LIBRARY_PATH={build_lib_dir_escaped}:{python_include}\n'
+         'export LD_LIBRARY_PATH={build_lib_dir_escaped}\n'
          '{env_opt} ./configure --prefix=/opt/google --mandir=/opt/google/share/man '
             '--disable-rpath --enable-thread-safety --with-openssl --with-python '
-            '--without-perl --without-readline --without-pam --without-krb5 {config_opt}\n'
+            '--without-perl --without-readline --without-pam --without-krb5 {config_opt} '
+            'PYTHON={python_bin}\n'
          'touch {postgresql_target_escaped}'
         ).format(
             build_root_escaped = postgresql_env.bash_escape(build_root),
@@ -73,7 +75,8 @@ postgresql_configure = postgresql_env.Command(
             env_opt = env_opt,
             config_opt = config_opt,
             postgresql_target_escaped =
-                postgresql_env.bash_escape(postgresql_target)
+                postgresql_env.bash_escape(postgresql_target),
+            python_bin = postgresql_env['python_bin']
         ))])
 
 # [3] Build

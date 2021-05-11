@@ -61,7 +61,7 @@ if third_party_env['bundle_3rd_libs']:
       'psycopg2',
       'setuptools',
       'mgrs',
-      'PIL',
+      'pillow',
       'skia',
       'pyyaml',
       'defusedxml',
@@ -92,7 +92,7 @@ else:
       'mod_wsgi',
       'psycopg2', # requires postgresql.
       'mgrs',
-      'PIL',
+      'pillow',
       'skia',
       'pyyaml',
       'defusedxml',
