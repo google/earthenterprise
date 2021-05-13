@@ -205,7 +205,7 @@ fix_file_permissions()
     if [ ! -d "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER" ]; then
       mkdir -p "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER"
     fi
-    chown -R "GEFUSIONUSER:$GEGROUP" "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER"
+    chown -R "$GEFUSIONUSER:$GEGROUP" "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER"
 
     # TODO: Disabled for now...
     #sgid enabled
