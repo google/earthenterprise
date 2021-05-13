@@ -3,7 +3,6 @@
 %module libgepublishmanagerhelper
 
 %{
-#define SWIG_PYTHON_STRICT_BYTE_CHAR
 #include "fusion/gepublish/gepublishmanagerhelper.h"
 %}
 
