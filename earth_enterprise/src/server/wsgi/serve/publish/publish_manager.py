@@ -618,7 +618,7 @@ class PublishManager(object):
         search_def_list.extend(sup_search_def_list)
 
       if search_def_list:
-        publish_tmp_dir_path = os.path.normpath(publish_helper.TmpDir())
+        publish_tmp_dir_path = os.path.normpath(publish_helper.TmpDir().decode())
         search_json_local_path = (
             "%s/%s" % (publish_tmp_dir_path, PublishManager.SEARCH_JSON_PATH))
         self. __CreateSearchJsonFile(search_def_list, search_json_local_path)
