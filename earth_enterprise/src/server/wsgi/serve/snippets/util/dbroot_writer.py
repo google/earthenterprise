@@ -111,7 +111,6 @@ def CreateEndSnippetProto(snippets_json,
   # the string correctly.
   content = dbroot.SerializeToString()
 
-
   # Note: useful for debugging.
   #  dbroot_restored = dbroot_utils.MakeEmptyDbroot()
   #  dbroot_restored.ParseFromString(content)
