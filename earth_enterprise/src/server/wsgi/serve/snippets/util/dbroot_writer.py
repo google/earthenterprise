@@ -106,11 +106,7 @@ def CreateEndSnippetProto(snippets_json,
   #  if __debug__:
   #    log.debug("CreateEndSnippetProto - PROTO DBROOT: %s", dbroot)
 
-  # We convert to string here to change from a bytes object to a python byte string.
-  # We then remove the leading "b'" and the trailing "'" to ensure that swig handles
-  # the string correctly.
   content = dbroot.SerializeToString()
-
 
   # Note: useful for debugging.
   #  dbroot_restored = dbroot_utils.MakeEmptyDbroot()
