@@ -100,7 +100,7 @@ Additional python packages are needed as well and can be installed via:
 
 ```bash
 sudo python3.8 -m pip install --upgrade pip
-sudo python3.8 -m pip install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2-binary
+sudo python3.8 -m pip install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2-binary packaging
 ```
 
 ## Installing RPMs
