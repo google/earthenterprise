@@ -15,6 +15,7 @@
 
 #include <sys/prctl.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <unistd.h>
 #include <Qt/qobjectdefs.h>
 #include <Qt/qapplication.h>
@@ -112,6 +113,13 @@ void SplashScreen::setStatus(const QString& message, int alignment,
 
 int main(int argc, char** argv) {
   int argn;
+
+  // requires chmod g+s and /sbin/setcap cap_setgid=ep to be used.
+  if(getgid() != getegid()) {
+    setgid(getegid());
+    umask(002);
+  }
+
   FusionProductType type = GetFusionProductType();
   khGetopt options;
 
