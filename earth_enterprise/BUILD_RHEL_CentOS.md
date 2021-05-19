@@ -238,7 +238,7 @@ Additional python packages are needed as well:
 
 ```bash
 sudo python3.8 -m pip install --upgrade pip
-sudo python3.8 -m pip install argparse setuptools defusedxml GitPython Pillow unittest2 lxml psycopg2-binary scons
+sudo python3.8 -m pip install argparse setuptools GitPython Pillow unittest2 lxml scons
 ```
 
 ### Building on fips-enabled machines
