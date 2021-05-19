@@ -100,7 +100,7 @@ Additional python packages are needed as well and can be installed via:
 
 ```bash
 sudo python3.8 -m pip install --upgrade pip
-sudo python3.8 -m pip install argparse setuptools GitPython Pillow unittest2 lxml
+sudo python3.8 -m pip install argparse setuptools GitPython Pillow unittest2 lxml packaging
 ```
 
 ## Installing RPMs
