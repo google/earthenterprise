@@ -23,6 +23,7 @@ import os
 import re
 from string import Template
 import urllib.parse
+import html
 
 import psycopg2
 from psycopg2.pool import ThreadedConnectionPool
@@ -349,7 +350,7 @@ class POISearch(object):
       description_template = Template("${NAME} = ${VALUE}\n")
       name, description, geom_data = self.__GetPOIAttributes(
           original_query, result, description_template)
-      geom = self._geom % (cgi.escape(name), styleurl, cgi.escape(description),
+      geom = self._geom % (html.escape(name), styleurl, html.escape(description),
                            geom_data)
 
       if fly_to_first_element and set_first_element_lookat:
