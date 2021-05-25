@@ -595,12 +595,12 @@ class PublishManager(object):
 
       # Prepare publish config.
       publish_config = libgepublishmanagerhelper.PublishConfig()
-      publish_config.fusion_host = publish_def.client_host_name
-      publish_config.db_path = publish_def.db_name
-      publish_config.stream_url = stream_url
+      publish_config.fusion_host = publish_def.client_host_name.encode()
+      publish_config.db_path = publish_def.db_name.encode()
+      publish_config.stream_url = stream_url.encode()
       publish_config.end_snippet_proto = (
-          end_snippet_proto if end_snippet_proto else "")
-      publish_config.server_prefix = self._publish_helper.server_prefix
+          end_snippet_proto if end_snippet_proto else "".encode())
+      publish_config.server_prefix = self._publish_helper.server_prefix.encode()
 
       publish_helper.GetPublishManifest(publish_config, publish_manifest)
 
@@ -618,15 +618,15 @@ class PublishManager(object):
         search_def_list.extend(sup_search_def_list)
 
       if search_def_list:
-        publish_tmp_dir_path = os.path.normpath(publish_helper.TmpDir())
+        publish_tmp_dir_path = os.path.normpath(publish_helper.TmpDir().decode())
         search_json_local_path = (
             "%s/%s" % (publish_tmp_dir_path, PublishManager.SEARCH_JSON_PATH))
         self. __CreateSearchJsonFile(search_def_list, search_json_local_path)
         search_json_dbroot_path = PublishManager.SEARCH_JSON_PATH
 
         publish_manifest.push_back(
-            libgepublishmanagerhelper.ManifestEntry(search_json_dbroot_path,
-                                                    search_json_local_path))
+            libgepublishmanagerhelper.ManifestEntry(search_json_dbroot_path.encode(),
+                                                    search_json_local_path.encode()))
 
         # Append supplemental search UI html to publish manifest.
         if ((publish_def.db_type == basic_types.DbType.TYPE_GE) and
@@ -636,8 +636,8 @@ class PublishManager(object):
               PublishManager.SUPPLEMENTAL_SEARCH_UI_HTML)
           search_html_dbroot_path = PublishManager.SEARCH_HTML
           publish_manifest.push_back(
-              libgepublishmanagerhelper.ManifestEntry(search_html_dbroot_path,
-                                                      search_html_local_path))
+              libgepublishmanagerhelper.ManifestEntry(search_html_dbroot_path.encode(),
+                                                      search_html_local_path.encode()))
 
       # {gedb/,mapdb/} path is {server_prefix}/{fusion_host}{db_path}.
       gedb_path = self._publish_helper.BuildDbPublishPath(
@@ -777,8 +777,8 @@ class PublishManager(object):
       exceptions.PublishServeException
     """
     for item in publish_manifest:
-      src_path = item.current_path
-      dest_path = "%s/%s" % (db_path_prefix, item.orig_path)
+      src_path = item.current_path.decode()
+      dest_path = "%s/%s" % (db_path_prefix, item.orig_path.decode())
       logger.debug("TransferPublishManifest - src_path: %s, dest_path: %s.",
                    src_path, dest_path)
 
