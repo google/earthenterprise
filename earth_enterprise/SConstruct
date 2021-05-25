@@ -47,9 +47,9 @@ for parameter in [ 'release', 'optimize', 'profile' ] :
 # process commandline arguments
 installdir = ARGUMENTS.get('installdir', '/tmp/fusion_os_install')
 with open('rpms/build.properties', 'w') as f:
-    f.write("## Auto-generated file from scons.")
-    f.write("## Manual changes will be overwritten.")
-    f.write(str('staged=') + installdir.strip())
+    f.write("## Auto-generated file from scons.\n")
+    f.write("## Manual changes will be overwritten.\n")
+    f.write(str('staged=') + installdir.strip() + "\n")
 
 
 installdir = Dir(installdir).abspath
@@ -184,7 +184,7 @@ stage_tutorial = env.PhonyTargets(**stage_tutorial_cmds)
 env.Depends(stage_tutorial, stage_data)
 
 package_staged_cmds = {'package_install': [
-    "cd rpms; ./gradlew osPackage --debug --stacktrace " + package_command_arguments
+    "cd rpms; ./gradlew osPackage " + package_command_arguments
 ]}
 
 package_install = env.PhonyTargets(**package_staged_cmds)
