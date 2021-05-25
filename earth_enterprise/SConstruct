@@ -184,7 +184,7 @@ stage_tutorial = env.PhonyTargets(**stage_tutorial_cmds)
 env.Depends(stage_tutorial, stage_data)
 
 package_staged_cmds = {'package_install': [
-    "cd rpms; ./gradlew osPackage " + package_command_arguments
+    "cd rpms; ./gradlew osPackage --debug " + package_command_arguments
 ]}
 
 package_install = env.PhonyTargets(**package_staged_cmds)
