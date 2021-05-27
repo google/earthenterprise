@@ -62,7 +62,7 @@ python_configure = python_env.Command(
     python_target, python_extract,
     [python_env.MultiCommand(
         'cd %s\n'
-        './configure --prefix=%s --enable-shared --with-ensurepip=install \n'
+        './configure --prefix=%s --enable-shared \n'
         'touch %s' % (
             build_root, "/usr",
             python_target))])
