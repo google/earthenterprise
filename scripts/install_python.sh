@@ -98,8 +98,9 @@ if [ $DO_INSTALL == "yes" ]; then
     mkdir $TMP_38
     tar -xzf $SOURCE_38 -C $TMP_WORKSPACE
     cd $TMP_38
-    ./configure --enable-shared --with-ensurepip=install --prefix="$INSTALL_PREFIX" && make && make altinstall
+    ./configure --enable-shared --prefix="$INSTALL_PREFIX" && make && make altinstall
     ldconfig
+    python3.8 -m ensurepip --altinstall
   fi
 fi
 
