@@ -181,7 +181,7 @@ wget https://github.com/google/googletest/archive/refs/tags/release-1.8.0.tar.gz
 tar xvf release-1.8.0.tar.gz
 cd googletest-release-1.8.0 && mkdir build && cd build
 cmake -DMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_INSTALL_PREFIX:PATH=/usr .. && make && sudo make install
-cd .. && ln -s `pwd`/googletest /usr/src/gtest
+cd .. && sudo ln -s `pwd`/googletest /usr/src/gtest
 ```
 
 ### RHEL 6 and CentOS 6
