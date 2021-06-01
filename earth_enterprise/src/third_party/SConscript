@@ -35,7 +35,6 @@ if third_party_env['bundle_3rd_libs']:
       'libjs',
       'libattr',
       'libcap',
-      'openssl',
       'openldap',
       'expat',
       'libzlib',
