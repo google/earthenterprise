@@ -40,7 +40,7 @@ if third_party_env['bundle_3rd_libs']:
       'libzlib',
       'libjpeg',
       'libmng',  # requires zlib, jpeg.
-      'python',  # requires openssl to build ssl module.
+      'python',  
       'cython',
       'numpy',
       'libxml2', # requires python to build and install a Python library module, uses libz.
