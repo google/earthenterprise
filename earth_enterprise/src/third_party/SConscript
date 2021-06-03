@@ -59,7 +59,6 @@ if third_party_env['bundle_3rd_libs']:
       'apache2',
       'mod_wsgi',
       'psycopg2',
-      'setuptools',
       'mgrs',
       'pillow',
       'skia',
