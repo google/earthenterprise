@@ -182,6 +182,7 @@ tar xvf release-1.8.0.tar.gz
 cd googletest-release-1.8.0 && mkdir build && cd build
 cmake -DMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX:PATH=/usr .. && make && sudo make install
 cd .. && sudo ln -s `pwd`/googletest /usr/src/gtest
+sudo ldconfig
 ```
 
 ### RHEL 6 and CentOS 6
