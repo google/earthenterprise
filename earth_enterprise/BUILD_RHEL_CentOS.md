@@ -174,6 +174,17 @@ GTest is included in the EPEL and RHEL Extra Repositories. Install the RPM with:
 sudo yum install -y gtest-devel
 ```
 
+If you prefer to build GTest from source, you can try the following procedure:
+
+```bash
+wget https://github.com/google/googletest/archive/refs/tags/release-1.8.0.tar.gz
+tar xvf release-1.8.0.tar.gz
+cd googletest-release-1.8.0 && mkdir build && cd build
+cmake -DMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX:PATH=/usr .. && make && sudo make install
+cd .. && sudo ln -s `pwd`/googletest /usr/src/gtest
+sudo ldconfig
+```
+
 ### RHEL 6 and CentOS 6
 
 You will need to compile, package, and install an updated version of GTest as an
