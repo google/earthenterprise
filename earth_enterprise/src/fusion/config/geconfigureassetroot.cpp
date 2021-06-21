@@ -150,13 +150,13 @@ int main(int argc, char *argv[]) {
     options.opt("noprompt", noprompt);
     options.opt("chown", chown);
     options.opt("secure", secure);
-    options.setExclusiveRequired(makeset(std::string("new"),
+    options.setExclusiveRequired(makeset({std::string("new"),
                                          std::string("repair"),
                                          std::string("editvolumes"),
                                          std::string("addvolume"),
                                          std::string("removevolume"),
                                          std::string("listvolumes"),
-                                         std::string("fixmasterhost")));
+                                         std::string("fixmasterhost")}));
 
     if (!options.processAll(argc, argv, argn) || help) {
       usage(argv[0]);
