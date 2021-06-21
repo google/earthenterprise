@@ -57,7 +57,7 @@ void usage(const char* prog, const char* msg = 0, ...) {
       "                           to indicate an error if command fails or has insufficient arguments\n"
       "\n"
       "Additional options when --assetroot specified:\n"
-      "  --role {master|slave}: This machine's role in asset root [default: master]\n"
+      "  --role {primary|secondary}: This machine's role in asset root [default: primary]\n"
       "  --numcpus <number>:    Number of CPUs to use [default: %u]\n",
       prog, prog, prog,
       CommandlineNumCPUsDefault());
@@ -65,7 +65,7 @@ void usage(const char* prog, const char* msg = 0, ...) {
   exit(1);
 }
 
-enum Role { RoleMaster, RoleSlave };
+enum Role { RolePrimary, RoleSecondary };
 
 void SaveSystemrcOrThrow(const Systemrc &rc) {
   geCapabilitiesGuard cap_guard(
@@ -87,7 +87,7 @@ void SetLocked(bool locked) {
   SaveSystemrcOrThrow(systemrc);
 }
 
-void SetAssetRootMaster(const std::string &assetroot,
+void SetAssetRootPrimary(const std::string &assetroot,
                         const std::string &host) {
   VolumeDefList volumes;
   LoadVolumesOrThrow(assetroot, volumes);
@@ -95,30 +95,30 @@ void SetAssetRootMaster(const std::string &assetroot,
   SaveVolumesOrThrow(assetroot, volumes);
 }
 
-void ValidateForSlave(const AssetRootStatus &status) {
-  if (status.IsThisMachineMaster()) {
+void ValidateForSecondary(const AssetRootStatus &status) {
+  if (status.IsThisMachinePrimary()) {
     throw khException(kh::tr(
-"This machine is currently the master for %1.\n"
-"You cannot change it's role to slave.\n"
-"If you want a different machine to be the master, run the following\n"
+"This machine is currently the primary for %1.\n"
+"You cannot change it's role to secondary.\n"
+"If you want a different machine to be the primary, run the following\n"
 "on that machine:\n"
-"  geselectassetroot --assetroot %2 --role master")
+"  geselectassetroot --assetroot %2 --role primary")
                       .arg(status.assetroot_.c_str())
                       .arg(status.assetroot_.c_str()));
   }
 
   // we don't care about any other asset root status here
-  // even if it's broken, it's not our job as a slave to try to fix it
+  // even if it's broken, it's not our job as a secondary to try to fix it
 }
 
-void ValidateForMaster(const AssetRootStatus &status) {
-  if (!status.IsThisMachineMaster() &&
+void ValidateForPrimary(const AssetRootStatus &status) {
+  if (!status.IsThisMachinePrimary() &&
       khExists(geAssetRoot::Filename(status.assetroot_,
                                      geAssetRoot::ActiveFile))) {
     throw khException(kh::tr(
-"%1 is currently running as the master for %2.\n"
-"You need to shut it down before setting this machine to be the master.")
-                      .arg(status.master_host_.c_str())
+"%1 is currently running as the primary for %2.\n"
+"You need to shut it down before setting this machine to be the primary.")
+                      .arg(status.primary_host_.c_str())
                       .arg(status.assetroot_.c_str()));
   }
 
@@ -176,24 +176,24 @@ void SelectAssetRoot(const AssetRootStatus &status,
 
   // do some error checking and confirmation with the user
   // before proceeding
-  if (role == RoleSlave) {
-    ValidateForSlave(status);
+  if (role == RoleSecondary) {
+    ValidateForSecondary(status);
 
   } else {
-    ValidateForMaster(status);
+    ValidateForPrimary(status);
 
-    if (!status.IsThisMachineMaster()) {
+    if (!status.IsThisMachinePrimary()) {
       QString msg = kh::tr(
-"%1 is currently defined as the master for %2.\n"
-"Do you want to switch the master to be %3")
-                    .arg(status.master_host_.c_str())
+"%1 is currently defined as the primary for %2.\n"
+"Do you want to switch the primary to be %3")
+                    .arg(status.primary_host_.c_str())
                     .arg(status.assetroot_.c_str())
                     .arg(status.thishost_.c_str());
       if (noprompt) {
         msg = kh::tr(
-"%1 is currently defined as the master for %2.\n"
-"Cannot configure %3 machine as the master")
-                    .arg(status.master_host_.c_str())
+"%1 is currently defined as the primary for %2.\n"
+"Cannot configure %3 machine as the primary")
+                    .arg(status.primary_host_.c_str())
                     .arg(status.assetroot_.c_str())
                     .arg(status.thishost_.c_str());
         throw khException(msg);
@@ -202,7 +202,7 @@ void SelectAssetRoot(const AssetRootStatus &status,
         throw khException(kh::tr("Aborted by user"));
       }
 
-      SetAssetRootMaster(status.assetroot_, status.thishost_);
+      SetAssetRootPrimary(status.assetroot_, status.thishost_);
     }
   }
 
@@ -227,7 +227,7 @@ int main(int argc, char *argv[]) {
     std::string assetroot;
     std::string username = Systemrc::FusionUsername();
     std::string groupname = Systemrc::UserGroupname();
-    Role role    = RoleMaster;
+    Role role    = RolePrimary;
     std::uint32_t numcpus = CommandlineNumCPUsDefault();
     int argn;
     bool noprompt = false;
@@ -239,8 +239,8 @@ int main(int argc, char *argv[]) {
     options.opt("noprompt", noprompt);
     options.choiceOpt("role", role,
                       makemap<std::string, Role>(
-                          "master", RoleMaster,
-                          "slave",  RoleSlave));
+                          "primary", RolePrimary,
+                          "secondary",  RoleSecondary));
     options.opt("numcpus", numcpus,
                 &khGetopt::RangeValidator<std::uint32_t, 1, kMaxNumJobsLimit>);
 

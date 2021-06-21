@@ -96,7 +96,7 @@ void usage(const char *prog, const char *msg = 0, ...) {
 }
 
 void ValidateAssetRootForConfigure(const AssetRootStatus &status,
-                                   bool iscreate, bool isfixmaster,
+                                   bool iscreate, bool isfixprimary,
                                    bool noprompt, bool chown);
 void MakeNewAssetRoot(const AssetRootStatus &status,
                       const std::string &srcvol,
@@ -253,7 +253,7 @@ int main(int argc, char *argv[]) {
 namespace {
 
 void ValidateAssetRootForConfigure(const AssetRootStatus &status,
-                                   bool iscreate, bool isfixmaster,
+                                   bool iscreate, bool isfixprimary,
                                    bool noprompt, bool chown) {
   QString UseNewMsg = kh::tr(
       "%1 isn't an existing assetroot.\n"
@@ -299,16 +299,16 @@ void ValidateAssetRootForConfigure(const AssetRootStatus &status,
   }
 
 
-  if (!isfixmaster && !status.IsThisMachineMaster()) {
+  if (!isfixprimary && !status.IsThisMachinePrimary()) {
     throw khException(kh::tr(
-        "%1 is currently defined as the master for %2.\n"
+        "%1 is currently defined as the primary for %2.\n"
         "You must run geconfigureassetroot from %3")
-                      .arg(status.master_host_.c_str())
+                      .arg(status.primary_host_.c_str())
                       .arg(status.assetroot_.c_str())
-                      .arg(status.master_host_.c_str()));
+                      .arg(status.primary_host_.c_str()));
   }
 
-  if (!isfixmaster && status.SoftwareNeedsUpgrade()) {
+  if (!isfixprimary && status.SoftwareNeedsUpgrade()) {
     status.ThrowSoftwareNeedsUpgrade();
   }
 
@@ -631,22 +631,18 @@ void FixManagerHost(const AssetRootStatus &status) {
   LoadVolumesOrThrow(status.assetroot_, voldefs);
   VolumeDefList oldvoldefs = voldefs;
 
-  // find the master
-  std::string master;
-  for (VolumeDefList::VolumeDefMap::const_iterator v =
-         voldefs.volumedefs.begin();
-       v != voldefs.volumedefs.end(); ++v) {
-    if (v->first == geAssetRoot::VolumeName) {
-      master = v->second.host;
+  // find the primary 
+  std::string primary;
+  for (const auto& v : voldefs.volumedefs) {
+    if (v.first == geAssetRoot::VolumeName) {
+      primary = v.second.host;
       break;
     }
   }
-  // change all with the master host to this host
-  for (VolumeDefList::VolumeDefMap::iterator v =
-         voldefs.volumedefs.begin();
-       v != voldefs.volumedefs.end(); ++v) {
-    if (v->second.host == master) {
-      v->second.host = status.thishost_;
+  // change all with the primary host to this host
+  for (auto& v : voldefs.volumedefs) {
+    if (v.second.host == primary) {
+      v.second.host = status.thishost_;
     }
   }
 

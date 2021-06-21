@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright 2018-2019 The Open GEE Contributors
+# Copyright 2018-2020 The Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,238 +14,207 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# NOTE: requires xmllint from libxml2-utils
+
 umask 002
 
-#-----------------------------------------------------------------
+#------------------------------------------------------------------------------
 # Definitions
-PUBLISHER_ROOT="/gevol/published_dbs"
-INITSCRIPTUPDATE="/usr/sbin/update-rc.d"
-PGSQL="/var/opt/google/pgsql"
-#-----------------------------------------------------------------
+GEEF="$GEE_NAME Fusion"
+
+#------------------------------------------------------------------------------
+# Get system info values:
+HOSTNAME="$(hostname -f | tr [A-Z] [a-z] | $NEWLINECLEANER)"
+HOSTNAME_F="$(hostname -f | $NEWLINECLEANER)"
+HOSTNAME_S="$(hostname -s | $NEWLINECLEANER)"
+HOSTNAME_A="$(hostname -a | $NEWLINECLEANER)"
+
+NUM_CPUS="$(nproc)"
+
+# config values
+
+# additional variables
+PUBLISH_ROOT_VOLUME=""
+
+EXISTING_HOST=""
+IS_SLAVE=false
+
 
 #-----------------------------------------------------------------
 # Main Functions
 #-----------------------------------------------------------------
 main_postinstall()
 {
-    # 0) Configure publishing db, we do it post install...
-    configure_publish_root
+    create_system_main_directories
 
-    # 1) Modify files, maybe should be templated
-    modify_files
+    compare_asset_root_publishvolume
 
-    # 2) Set Permissions Before Server Start/Stop
-    fix_postinstall_filepermissions
+    setup_fusion_daemon
 
-    # 3) Upgrade Postgres config
-    reset_pgdb    
+    fix_file_permissions
 
-    # 4) Creating Daemon thread for geserver
-    setup_geserver_daemon
+    check_fusion_primary_or_secondary
 
-    # 5) Register publish root
-    "$BASEINSTALLDIR_OPT/bin/geconfigurepublishroot" --noprompt "--path=$PUBLISHER_ROOT"
+    install_or_upgrade_asset_root
 
-    # 6) Install the GEPlaces and SearchExample Databases
-    install_search_databases
+    final_assetroot_configuration
 
-    # 7) Repeated step; Set permissions after geserver Start/Stop.
-    fix_postinstall_filepermissions
-
-    # 8) Run geecheck config script
-    # If file ‘/opt/google/gehttpd/cgi-bin/set_geecheck_config.py’ exists:
-    if [ -f "$BASEINSTALLDIR_OPT/gehttpd/cgi-bin/set_geecheck_config.py" ] ; then
-        cd "$BASEINSTALLDIR_OPT/gehttpd/cgi-bin"
-        python ./set_geecheck_config.py
-    fi
-
-    # 9) Restore portable globes symlink if it existed previously
-    restore_portable_symlink
- 
-    #10) Restore Admin Console password if it exists
-    if [ -f "/tmp/.htpasswd" ]; then
-        mv -f "/tmp/.htpasswd" "$BASEINSTALLDIR_OPT/gehttpd/conf.d/"
-    fi
-
-    #11) done!
-    service geserver start
-
+    final_fusion_service_configuration
 }
+
 
 #-----------------------------------------------------------------
 # Post-install Functions
 #-----------------------------------------------------------------
 
-configure_publish_root()
+setup_fusion_daemon()
 {
-    # Update PUBLISHER_ROOT if geserver already installed
-    local STREAM_SPACE="$GEHTTPD_CONF/stream_space"
-    if [ -e $STREAM_SPACE ]; then
-        PUBLISHER_ROOT=`cat "$STREAM_SPACE" |cut -d" " -f3 |sed 's/.\{13\}$//'`
+    # setup fusion daemon
+    echo "Setting up the Fusion daemon..."
+
+    add_service gefusion
+
+    echo "Fusion daemon setup ... Done"
+}
+
+create_system_main_directories()
+{
+    mkdir -p "$ASSET_ROOT"
+    mkdir -p "$SOURCE_VOLUME"
+}
+
+compare_asset_root_publishvolume()
+{
+    if [ -f "$BASEINSTALLDIR_OPT/gehttpd/conf.d/stream_space" ]; then
+        PUBLISH_ROOT_VOLUME="$(cut -d' ' -f3 /opt/google/gehttpd/conf.d/stream_space | cut -d'/' -f2 | $NEWLINECLEANER)"
+
+        if [ -d "$ASSET_ROOT" ] && [ -d "$PUBLISH_ROOT_VOLUME" ]; then
+            VOL_ASSETROOT=$(df "$ASSET_ROOT" | grep -v ^Filesystem | grep -Eo '^[^ ]+')
+            VOL_PUBLISHED_ROOT_VOLUME=$(df "$PUBLISH_ROOT_VOLUME" | grep -v ^Filesystem | grep -Eo '^[^ ]+')
+        fi
     fi
 }
 
-# /etc/init.d/geserver maybe should be expanded from a template instead...
-modify_files()
+check_fusion_primary_or_secondary()
 {
-    # Replace IA users in a file if they are found.
-    # this step not requied for the OSS installs, however
-    # if there are non-OSS installs in the system, it might help cleanup those.
+    if [ -f "$ASSET_ROOT/.config/volumes.xml" ]; then
+        EXISTING_HOST=$(xml_file_get_xpath "$ASSET_ROOT/.config/volumes.xml" "//VolumeDefList/volumedefs/item[1]/host/text()" | $NEWLINECLEANER)
 
-    # a) Search and replace the below variables in /etc/init.d/geserver.
-    sed -i "s/IA_GEAPACHE_USER/$GEAPACHEUSER/" $BININSTALLROOTDIR/geserver
-    sed -i "s/IA_GEPGUSER/$GEPGUSER/" $BININSTALLROOTDIR/geserver
+        case "$EXISTING_HOST" in
+            $HOSTNAME_F|$HOSTNAME_A|$HOSTNAME_S|$HOSTNAME)
+                IS_SLAVE=false
+                ;;
+            *)
+                IS_SLAVE=true
 
-    # b) Search and replace the file ‘/opt/google/gehttpd/conf/gehttpd.conf’
-    sed -i "s/IA_GEAPACHE_USER/$GEAPACHEUSER/" /opt/google/gehttpd/conf/gehttpd.conf
-    sed -i "s/IA_GEPGUSER/$GEPGUSER/" /opt/google/gehttpd/conf/gehttpd.conf
-    sed -i "s/IA_GEGROUP/$GEGROUP/" /opt/google/gehttpd/conf/gehttpd.conf
-
-    # c) Create a new file ‘/etc/opt/google/fusion_server_version’ and
-    # add the below text to it.
-    echo "$RPM_PACKAGE_VERSION" >/etc/opt/google/fusion_server_version
-
-    # d) Create a new file ‘/etc/init.d/gevars.sh’ and prepend the below lines.
-    echo -e "GEAPACHEUSER=$GEAPACHEUSER\nGEPGUSER=$GEPGUSER\nGEFUSIONUSER=$GEFUSIONUSER\nGEGROUP=$GEGROUP" >$BININSTALLROOTDIR/gevars.sh
+                echo -e "\nThe asset root [$ASSET_ROOT] is owned by another Fusion host:  $EXISTING_HOST"
+                echo -e "Installing $GEEF $GEE_VERSION in Grid Slave mode.\n"
+                ;;
+        esac
+    fi
 }
 
-# this too probably should be done inside the rpm...
-fix_postinstall_filepermissions()
+create_systemrc()
 {
-    # PostGres
-    chown -R $GEPGUSER:$GEGROUP $BASEINSTALLDIR_VAR/pgsql/
-
-    # Apache
-    mkdir -p $BASEINSTALLDIR_OPT/gehttpd/conf.d/virtual_servers/runtime
-    chmod -R 755 $BASEINSTALLDIR_OPT/gehttpd
-    chmod -R 775 $BASEINSTALLDIR_OPT/gehttpd/conf.d/virtual_servers/runtime/
-    chown -R $GEAPACHEUSER:$GEGROUP $BASEINSTALLDIR_OPT/gehttpd/conf.d/virtual_servers/
-    chown -R $GEAPACHEUSER:$GEGROUP $BASEINSTALLDIR_OPT/gehttpd/htdocs/cutter/
-    chmod -R 700 $BASEINSTALLDIR_OPT/gehttpd/htdocs/cutter/globes/
-    chown $GEAPACHEUSER:$GEGROUP $BASEINSTALLDIR_OPT/gehttpd/htdocs/.htaccess
-    chown -R $GEAPACHEUSER:$GEGROUP $BASEINSTALLDIR_OPT/gehttpd/logs
-
-    # Publish Root - note these are not recursive
-    # Ownership and permissions of publish root content is handled by geconfigurepublishroot
-    chmod 775 $PUBLISHER_ROOT/stream_space
-    chmod 644 $PUBLISHER_ROOT/.config
-    chmod 755 $PUBLISHER_ROOT
-
-    SEARCH_OWNER=`find "$PUBLISHER_ROOT/search_space" -maxdepth 0 -printf "%g:%u"`
-    STREAM_OWNER=`find "$PUBLISHER_ROOT/stream_space" -maxdepth 0 -printf "%g:%u"`
-    if [ "$SEARCH_OWNER" != "$GEGROUP:$GEAPACHEUSER" -o "$STREAM_OWNER" != "$GEGROUP:$GEAPACHEUSER" ] ; then
-        printf "WARNING: The installer detected the publish root may have incorrect permissions! \
-After installation you may need to run \n\n\
-sudo /opt/google/bin/geconfigurepublishroot --noprompt --chown --path=$PUBLISHER_ROOT\n\n"
-    fi
-    # Run and logs ownership
-    chown root:$GEGROUP $BASEINSTALLDIR_OPT/run
-    chown root:$GEGROUP $BASEINSTALLDIR_VAR/run
-    chown root:$GEGROUP $BASEINSTALLDIR_VAR/log
-    chown root:$GEGROUP $BASEINSTALLDIR_OPT/log
-
-    # setuid requirements...hmmm
-    chmod +s /opt/google/bin/gerestartapache /opt/google/bin/geresetpgdb /opt/google/bin/geserveradmin
-
-    # Tutorial and Share
-    find /opt/google/share -type d -exec chmod 755 {} \;
-    find /opt/google/share -type f -exec chmod 644 {} \;
-    if [ -f "${SEARCH_EX_SCRIPT}" ]; then
-      chmod 0755 "${SEARCH_EX_SCRIPT}"
-    fi
-    if [ -f /opt/google/share/tutorials/fusion/download_tutorial.sh ]; then
-      chmod ugo+x /opt/google/share/tutorials/fusion/download_tutorial.sh
-    fi
-    chmod ugo+x /opt/google/share/geplaces/geplaces
-    chmod ugo+x /opt/google/share/support/geecheck/geecheck.pl
-    chmod ugo+x /opt/google/share/support/geecheck/convert_to_kml.pl
-    chmod ugo+x /opt/google/share/support/geecheck/find_terrain_pixel.pl
-    chmod ugo+x /opt/google/share/support/geecheck/pg_check.pl
-    chown -R root:root /opt/google/share
-
-    # Disable cutter (default) during installation.
-    /opt/google/bin/geserveradmin --disable_cutter
-
-    # Restrict permissions to uninstaller and installer logs
-    chmod -R go-rwx "$BASEINSTALLDIR_OPT/install"
-
-    if [ ! -d "${BASEINSTALLDIR_OPT}/.users/${GEPGUSER}" ]; then
-      mkdir -p "${BASEINSTALLDIR_OPT}/.users/${GEPGUSER}"
-    fi
-    chown -R "${GEPGUSER}:${GEGROUP}" "${BASEINSTALLDIR_OPT}/.users/${GEPGUSER}"
-
-    if [ ! -d "${BASEINSTALLDIR_OPT}/.users/${GEAPACHEUSER}" ]; then
-      mkdir -p "${BASEINSTALLDIR_OPT}/.users/${GEAPACHEUSER}"
-    fi
-    chown -R "${GEAPACHEUSER}:${GEGROUP}" "${BASEINSTALLDIR_OPT}/.users/${GEAPACHEUSER}"
+    cat > "$SYSTEMRC" <<END
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<Systemrc>
+  <assetroot>$ASSET_ROOT</assetroot>
+  <maxjobs>$NUM_CPUS</maxjobs>
+  <locked>0</locked>
+  <fusionUsername>$GEFUSIONUSER</fusionUsername>
+  <userGroupname>$GEGROUP</userGroupname>
+</Systemrc>
+END
 }
 
-reset_pgdb()
+install_or_upgrade_asset_root()
 {
-    # a) Always do an upgrade of the psql db
-    DB_BACKUP=""
-    DB_BACKUP_LATEST="$(ls -td -- $PGSQL/data.backup_dump*/ | head -n 1)"
-    echo "Latest backup: $DB_BACKUP_LATEST"
-    if [ -d "$DB_BACKUP_LATEST" ]; then
-        DB_BACKUP="$DB_BACKUP_LATEST"
-        echo "Restoring data backup from: $DB_BACKUP"
+    if [ -f "$SYSTEMRC" ]; then
+        rm -f "$SYSTEMRC"
     fi
 
-    echo 2 | run_as_user "$GEPGUSER" "/opt/google/bin/geresetpgdb upgrade $DB_BACKUP"
-    echo -e "upgrade done"
+    # create new systemrc file
+    create_systemrc
 
-    # b) Check for Success of PostGresDb
-    if [ -d "$PGSQL_DATA" ]; then
-        # PostgreSQL install Success.
-        echo -e "The PostgreSQL component is successfully installed."
+    chmod 644 "$SYSTEMRC"
+    chown "$GEFUSIONUSER:$GEGROUP" "$SYSTEMRC"
+
+    if [ ! -d "$ASSET_ROOT/.config" ]; then
+        "$BASEINSTALLDIR_OPT/bin/geconfigureassetroot" --new --noprompt \
+            --assetroot "$ASSET_ROOT" --srcvol "$SOURCE_VOLUME"
     else
-        # postgress reset/install failed.
-        echo -e "Failed to create PostGresDb."
-        echo -e "The PostgreSQL component failed to install."
+        # Upgrade the asset root, if this is a Fusion primary host.
+        #   Fusion secondary hosts access the same files over NFS, and they rely on the
+        # primary to keep proper confguration and file permissions.
+        if [ "$IS_SLAVE" = "false" ]; then
+            OWNERSHIP=`find "$ASSET_ROOT" -maxdepth 0 -printf "%g:%u"`
+            if [ "$OWNERSHIP" != "$GEGROUP:$GEFUSIONUSER" ] ; then
+                UPGRADE_MESSAGE="WARNING: The installer detected the asset root may have incorrect permissions! \
+After installation you may need to run \n\n\
+sudo $BASEINSTALLDIR_OPT/bin/geconfigureassetroot --noprompt --chown --repair --assetroot $ASSET_ROOT\n\n"
+            else
+                UPGRADE_MESSAGE=""
+            fi
+
+            cat <<END
+
+The asset root must be upgraded to work with the current version of $GEEF $GEE_VERSION.
+You cannot use an upgraded asset root with older versions of $GEEF.
+Consider backing up your asset root. $GEEF will warn you when
+attempting to run with a non-upgraded asset root.
+
+END
+            if [ ! -z "$UPGRADE_MESSAGE" ]; then 
+                printf "$UPGRADE_MESSAGE"
+            fi
+
+            "$BASEINSTALLDIR_OPT/bin/geconfigureassetroot" --fixmanagerhost \
+                --noprompt --assetroot $ASSET_ROOT
+            # If `geconfigureassetroot` already updated ownership, don't do it again:
+            "$BASEINSTALLDIR_OPT/bin/geupgradeassetroot" --noprompt \
+                --assetroot "$ASSET_ROOT"
+        fi
     fi
 }
 
-setup_geserver_daemon()
-{   
-    # setup geserver daemon
-    add_service geserver
-}
-
-install_search_databases()
-{   
-  # a) Start the PSQL Server
-    echo "# a) Start the PSQL Server "
-    run_as_user "$GEPGUSER" "$PGSQL_PROGRAM -D $PGSQL_DATA -l $PGSQL_LOGS/pg.log start -w"
-
-    echo "# b) Install GEPlaces Database"
-    # b) Install GEPlaces Database
-    run_as_user "$GEPGUSER" "/opt/google/share/geplaces/geplaces create"
-    
-    # c) Install SearchExample Database
-    install_searchexample_database
-
-    # d) Turn off examplesearch (will be turned on by Extra, if installed).
-    #  If 'Extra' already installed, don't delete
-    if [ ! -f "$SQLDIR/examplesearch_delete.sql" ]; then
-        echo "# d) Turn off examplesearch"
-        run_as_user "$GEPGUSER" "$BASEINSTALLDIR_OPT/bin/psql -q -d gesearch geuser -f $SQLDIR/examplesearch_2delete.sql"
-    fi
-
-    # e) Stop the PSQL Server
-    echo "# e) Stop the PSQL Server"
-    run_as_user "$GEPGUSER" "$PGSQL_PROGRAM -D $PGSQL_DATA stop"
-}
-
-restore_portable_symlink()
+final_assetroot_configuration()
 {
-    if [ -L "$BASEINSTALLDIR_OPT/gehttpd/htdocs/cutter/globes_symlink" ]; then
-        rm -rf "$BASEINSTALLDIR_OPT/gehttpd/htdocs/cutter/globes"
-        mv "$BASEINSTALLDIR_OPT/gehttpd/htdocs/cutter/globes_symlink" "$BASEINSTALLDIR_OPT/gehttpd/htdocs/cutter/globes"
+    if [ "$IS_SLAVE" = "true" ]; then
+        "$BASEINSTALLDIR_OPT/bin/geselectassetroot" --role secondary --assetroot "$ASSET_ROOT"
+    else
+        "$BASEINSTALLDIR_OPT/bin/geselectassetroot" --assetroot "$ASSET_ROOT"
+         add_fusion_tutorial_volume
     fi
 }
 
+final_fusion_service_configuration()
+{
+    chcon -t texrel_shlib_t "$BASEINSTALLDIR_OPT"/lib/*so* ||
+      echo "Warning: chcon labeling failed. SELinux is probably not enabled"
+
+    service gefusion start
+}
+
+fix_file_permissions()
+{
+    chown "root:$GEGROUP" "$BASEINSTALLDIR_VAR/run"
+    chown "root:$GEGROUP" "$BASEINSTALLDIR_VAR/log"
+    chmod -R 555 "$BASEINSTALLDIR_OPT/bin"
+
+    if [ ! -d "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER" ]; then
+      mkdir -p "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER"
+    fi
+    chown -R "$GEFUSIONUSER:$GEGROUP" "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER"
+
+    # TODO: Disabled for now...
+    #sgid enabled
+    #chown "root:$GEGROUP" "$BASEINSTALLDIR_OPT/bin/fusion"
+    #chmod g+s "$BASEINSTALLDIR_OPT/bin/fusion"
+}
+
 #-----------------------------------------------------------------
-# Post-install Main
+# Post-Install Main
 #-----------------------------------------------------------------
 
-main_postinstall $@
+main_postinstall

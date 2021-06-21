@@ -53,7 +53,7 @@ main_postinstall()
 
     fix_file_permissions
 
-    check_fusion_master_or_slave
+    check_fusion_primary_or_secondary
 
     install_or_upgrade_asset_root
 
@@ -95,7 +95,7 @@ compare_asset_root_publishvolume()
     fi
 }
 
-check_fusion_master_or_slave()
+check_fusion_primary_or_secondary()
 {
     if [ -f "$ASSET_ROOT/.config/volumes.xml" ]; then
         EXISTING_HOST=$(xml_file_get_xpath "$ASSET_ROOT/.config/volumes.xml" "//VolumeDefList/volumedefs/item[1]/host/text()" | $NEWLINECLEANER)
@@ -144,9 +144,9 @@ install_or_upgrade_asset_root()
         "$BASEINSTALLDIR_OPT/bin/geconfigureassetroot" --new --noprompt \
             --assetroot "$ASSET_ROOT" --srcvol "$SOURCE_VOLUME"
     else
-        # Upgrade the asset root, if this is a Fusion master host.
-        #   Fusion slaves access the same files over NFS, and they rely on the
-        # master to keep proper confguration and file permissions.
+        # Upgrade the asset root, if this is a Fusion primary host.
+        #   Fusion secondary hosts access the same files over NFS, and they rely on the
+        # primary to keep proper confguration and file permissions.
         if [ "$IS_SLAVE" = "false" ]; then
             OWNERSHIP=`find "$ASSET_ROOT" -maxdepth 0 -printf "%g:%u"`
             if [ "$OWNERSHIP" != "$GEGROUP:$GEFUSIONUSER" ] ; then
@@ -181,7 +181,7 @@ END
 final_assetroot_configuration()
 {
     if [ "$IS_SLAVE" = "true" ]; then
-        "$BASEINSTALLDIR_OPT/bin/geselectassetroot" --role slave --assetroot "$ASSET_ROOT"
+        "$BASEINSTALLDIR_OPT/bin/geselectassetroot" --role secondary --assetroot "$ASSET_ROOT"
     else
         "$BASEINSTALLDIR_OPT/bin/geselectassetroot" --assetroot "$ASSET_ROOT"
          add_fusion_tutorial_volume

@@ -187,7 +187,7 @@ main_postinstall()
 	chmod 755 $BININSTALLPROFILEDIR/ge-fusion.csh
 	chmod 755 $BININSTALLPROFILEDIR/ge-fusion.sh
 
-    check_fusion_master_or_slave
+    check_fusion_primary_or_secondary
 
 	if ! install_or_upgrade_asset_root; then
 		exit 1
@@ -757,7 +757,7 @@ check_asset_root_volume_size()
     return $check_asset_root_volume_size_retval
 }
 
-check_fusion_master_or_slave()
+check_fusion_primary_or_secondary()
 {
     if [ -f "$ASSET_ROOT/.config/volumes.xml" ]; then
 	EXISTING_HOST=$(xml_file_get_xpath "$ASSET_ROOT/.config/volumes.xml" "//VolumeDefList/volumedefs/item[1]/host/text()")
@@ -808,9 +808,9 @@ install_or_upgrade_asset_root()
         "$BASEINSTALLDIR_OPT/bin/geconfigureassetroot" --new --noprompt \
             --assetroot "$ASSET_ROOT" --srcvol "$SOURCE_VOLUME"
     else
-        # Upgrade the asset root, if this is a Fusion master host.
-        #   Fusion slaves access the same files over NFS, and they rely on the
-        # master to keep proper confguration and file permissions.
+        # Upgrade the asset root, if this is a Fusion primary host.
+        #   Fusion secondary hosts access the same files over NFS, and they rely on the
+        # primary to keep proper confguration and file permissions.
         if [ "$IS_SLAVE" = "false" ]; then
             OWNERSHIP=`find "$ASSET_ROOT" -maxdepth 0 -printf "%g:%u"`
             if [ "$OWNERSHIP" != "$GROUPNAME:$GEFUSIONUSER_NAME" ] ; then
@@ -895,7 +895,7 @@ fix_postinstall_filepermissions()
 final_assetroot_configuration()
 {
     if [ $IS_SLAVE == true ]; then
-        $BASEINSTALLDIR_OPT/bin/geselectassetroot --role slave --assetroot $ASSET_ROOT
+        $BASEINSTALLDIR_OPT/bin/geselectassetroot --role secondary --assetroot $ASSET_ROOT
     else
         $BASEINSTALLDIR_OPT/bin/geselectassetroot --assetroot $ASSET_ROOT
 
@@ -951,7 +951,7 @@ show_final_success_message()
 
     if [ $START_FUSION_DAEMON == true ]; then
         if [ -z "$SYSTEM_MGR_CHECK" ] && [ $IS_SLAVE == false ] || [ -z "$SYSTEM_RPROVIDER_CHECK" ]; then
-            # warning 1: fusion systemmanager is not running properly for fusion master (not relevant for slave installs)
+            # warning 1: fusion systemmanager is not running properly for fusion primary (not relevant for secondary installs)
 			# OR warning 2: fusion system resource provider is not running
             echo -e "$GEEF daemon services are not running properly."
             echo -e "Please ensure that your asset root is selected using:"

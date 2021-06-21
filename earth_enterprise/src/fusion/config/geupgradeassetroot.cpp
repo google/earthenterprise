@@ -140,9 +140,9 @@ void ValidateAssetRootForUpgrade(const AssetRootStatus &status, bool noprompt,
                       .arg(status.assetroot_.c_str()));
   }
 
-  if (!status.IsThisMachineMaster()) {
+  if (!status.IsThisMachinePrimary()) {
     throw khException(kh::tr(
-"%1 is currently defined as the master for %2.\n"
+"%1 is currently defined as the primary for %2.\n"
 "To upgrade, you must run the following command from %3:\n"
 "  geupgradeassetroot --assetroot %4\n"
 "If the asset root's hostname, %5, is not \n"
@@ -150,11 +150,11 @@ void ValidateAssetRootForUpgrade(const AssetRootStatus &status, bool noprompt,
 "then run the following command to fix it:\n"
 "  geconfigureassetroot --assetroot %6 --fixmanagerhost\n"
 "then run geupgradeassetroot again.")
-                      .arg(status.master_host_.c_str())
+                      .arg(status.primary_host_.c_str())
                       .arg(status.assetroot_.c_str())
-                      .arg(status.master_host_.c_str())
+                      .arg(status.primary_host_.c_str())
                       .arg(status.assetroot_.c_str())
-                      .arg(status.master_host_.c_str())
+                      .arg(status.primary_host_.c_str())
                       .arg(status.assetroot_.c_str())
                       );
   }
