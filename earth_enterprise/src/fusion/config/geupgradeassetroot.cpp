@@ -148,7 +148,7 @@ void ValidateAssetRootForUpgrade(const AssetRootStatus &status, bool noprompt,
 "If the asset root's hostname, %5, is not \n"
 "set to the fully qualified hostname, \n"
 "then run the following command to fix it:\n"
-"  geconfigureassetroot --assetroot %6 --fixmasterhost\n"
+"  geconfigureassetroot --assetroot %6 --fixmanagerhost\n"
 "then run geupgradeassetroot again.")
                       .arg(status.master_host_.c_str())
                       .arg(status.assetroot_.c_str())

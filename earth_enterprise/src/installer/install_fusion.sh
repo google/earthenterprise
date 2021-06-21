@@ -836,7 +836,7 @@ END
             if ! prompt_to_quit "X (Exit) the installer and backup your asset root - C (Continue) to upgrade the asset root."; then
                 install_or_upgrade_asset_root_retval=1
 			else
-            	$BASEINSTALLDIR_OPT/bin/geconfigureassetroot --fixmasterhost --noprompt --assetroot $ASSET_ROOT
+            	$BASEINSTALLDIR_OPT/bin/geconfigureassetroot --fixmanagerhost --noprompt --assetroot $ASSET_ROOT
             	$BASEINSTALLDIR_OPT/bin/geupgradeassetroot --noprompt --assetroot $ASSET_ROOT
             fi
         fi
