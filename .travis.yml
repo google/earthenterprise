@@ -39,6 +39,3 @@ jobs:
       - CPP_STD=11
       - BUILD_TYPE=release
     script: scripts/ci/build_fusion_and_test.sh
-
-notifications:
-  slack: opengee:YjzzzTnc7pgITPsrQPATIGwc
