@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Google Inc.
+ * Copyright 2021 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,16 +35,16 @@ class AssetRootStatus {
   std::string  thishost_;
   bool         dir_exists_;
   bool         has_volumes_;
-  std::string  master_host_;
-  bool         master_active_;
+  std::string  primary_host_;
+  bool         primary_active_;
   std::string  version_;
   bool         unique_ids_ok_;
   bool         owner_ok_;
 
 
-  bool IsMaster(const std::string &thishost) const;
-  inline bool IsThisMachineMaster(void) const {
-    return IsMaster(thishost_);
+  bool IsPrimary(const std::string &thishost) const;
+  inline bool IsThisMachinePrimary(void) const {
+    return IsPrimary(thishost_);
   }
 
   // various higher level tests

@@ -576,7 +576,7 @@ class LocaleConfig {
   deprecated QString iconName = QString("");
   deprecated IconReference::Type iconType = IconReference::Internal;
   deprecated bool icon_default = true;
-  deprecated std::set< unsigned int>  labels = makeset< unsigned int> (0);
+  deprecated std::set< unsigned int>  labels = makeset< unsigned int> ({0});
   deprecated bool labels_default = true;
   deprecated bool isChecked = false;
   deprecated bool isChecked_default = true;
@@ -592,7 +592,7 @@ class LocaleConfig {
   xmlattr int config_version  = new:LocaleConfig::curr_config_version, load:0;
   Defaultable<QString>       name_          = Defaultable<QString>(true /* use_default */, "");
   Defaultable<IconReference> icon_          = Defaultable<IconReference>(true /* use_default */, IconReference(IconReference::Internal, ""));
-  deprecated Defaultable<std::set< unsigned int>  > labels_      = Defaultable<std::set< unsigned int>  >(true /* use_default */, makeset< unsigned int> (0));
+  deprecated Defaultable<std::set< unsigned int>  > labels_      = Defaultable<std::set< unsigned int>  >(true /* use_default */, makeset< unsigned int> ({0}));
   Defaultable<bool>          is_checked_    = Defaultable<bool>(true /* use_default */, false);
   Defaultable<QString>       desc_          = Defaultable<QString>(true /* use_default */, "");
   Defaultable<QString>       look_at_       = Defaultable<QString>(true /* use_default */, "");

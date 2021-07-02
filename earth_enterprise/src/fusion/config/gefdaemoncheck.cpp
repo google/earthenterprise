@@ -92,7 +92,7 @@ main(int argc, char *argv[]) {
                            username, groupname);
 
     if (checksysman) {
-      exit(status.IsThisMachineMaster() ? 0 : 1);
+      exit(status.IsThisMachinePrimary() ? 0 : 1);
     } else if (checkassetroot) {
       status.ValidateForDaemonCheck();
     }

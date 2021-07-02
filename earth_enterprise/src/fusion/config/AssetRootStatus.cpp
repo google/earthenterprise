@@ -57,8 +57,8 @@ AssetRootStatus::AssetRootStatus(const std::string &dirname,
     thishost_(thishost),
     dir_exists_(false),
     has_volumes_(false),
-    master_host_(),
-    master_active_(true),
+    primary_host_(),
+    primary_active_(true),
     version_(),
     unique_ids_ok_(false),
     owner_ok_(false)
@@ -86,8 +86,8 @@ AssetRootStatus::AssetRootStatus(const std::string &dirname,
     if (khExists(volumefname)) {
       VolumeDefList volumes;
       if (volumes.Load(volumefname)) {
-        master_host_ = volumes.VolumeHost(geAssetRoot::VolumeName);
-        has_volumes_ = !master_host_.empty();
+        primary_host_ = volumes.VolumeHost(geAssetRoot::VolumeName);
+        has_volumes_ = !primary_host_.empty();
       }
     }
     if (!has_volumes_) {
@@ -95,8 +95,8 @@ AssetRootStatus::AssetRootStatus(const std::string &dirname,
     }
   }
 
-  // is master active
-  master_active_ =
+  // is primary active
+  primary_active_ =
     khExists(geAssetRoot::Filename(assetroot_, geAssetRoot::ActiveFile));
 
   // asset root version
@@ -133,8 +133,8 @@ AssetRootStatus::AssetRootStatus(const std::string &dirname,
 }
 
 
-bool AssetRootStatus::IsMaster(const std::string &host) const {
-  return host == master_host_;
+bool AssetRootStatus::IsPrimary(const std::string &host) const {
+  return host == primary_host_;
 }
 
 bool AssetRootStatus::AssetRootNeedsUpgrade(void) const {
@@ -152,10 +152,10 @@ bool AssetRootStatus::AssetRootNeedsRepair(void) const {
 
 
 std::string AssetRootStatus::FromHostString(void) const {
-  bool is_master = (thishost_ == master_host_);
-  return is_master
+  bool is_primary = (thishost_ == primary_host_);
+  return is_primary
     ? QString("").toUtf8().constData()
-    : kh::tr(" from %1").arg(master_host_.c_str()).toUtf8().constData();
+    : kh::tr(" from %1").arg(primary_host_.c_str()).toUtf8().constData();
 }
 
 void AssetRootStatus::ThrowAssetRootNeedsRepair(void) const {

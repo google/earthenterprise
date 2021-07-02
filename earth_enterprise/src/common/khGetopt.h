@@ -386,18 +386,18 @@ class khGetopt {
   void setExclusive(const std::set<std::string> &set);
   inline void setExclusive(const std::string &n1,
                            const std::string &n2) {
-    setExclusive(makeset(n1, n2));
+    setExclusive(makeset({n1, n2}));
   }
   inline void setExclusive(const std::string &n1,
                            const std::string &n2,
                            const std::string &n3) {
-    setExclusive(makeset(n1, n2, n3));
+    setExclusive(makeset({n1, n2, n3}));
   }
   inline void setExclusive(const std::string &n1,
                            const std::string &n2,
                            const std::string &n3,
                            const std::string &n4) {
-    setExclusive(makeset(n1, n2, n3, n4));
+    setExclusive(makeset({n1, n2, n3, n4}));
   }
 
 
@@ -405,39 +405,39 @@ class khGetopt {
   void setExclusiveRequired(const std::set<std::string> &set);
   inline void setExclusiveRequired(const std::string &n1,
                                    const std::string &n2) {
-    setExclusiveRequired(makeset(n1, n2));
+    setExclusiveRequired(makeset({n1, n2}));
   }
   inline void setExclusiveRequired(const std::string &n1,
                                    const std::string &n2,
                                    const std::string &n3) {
-    setExclusiveRequired(makeset(n1, n2, n3));
+    setExclusiveRequired(makeset({n1, n2, n3}));
   }
   inline void setExclusiveRequired(const std::string &n1,
                                    const std::string &n2,
                                    const std::string &n3,
                                    const std::string &n4) {
-    setExclusiveRequired(makeset(n1, n2, n3, n4));
+    setExclusiveRequired(makeset({n1, n2, n3, n4}));
   }
 
   // setRequired
   void setRequired(const std::set<std::string> &set);
   inline void setRequired(const std::string &name) {
-    setRequired(makeset(name));
+    setRequired(makeset({name}));
   }
   inline void setRequired(const std::string &n1,
                           const std::string &n2) {
-    setRequired(makeset(n1, n2));
+    setRequired(makeset({n1, n2}));
   }
   inline void setRequired(const std::string &n1,
                           const std::string &n2,
                           const std::string &n3) {
-    setRequired(makeset(n1, n2, n3));
+    setRequired(makeset({n1, n2, n3}));
   }
   inline void setRequired(const std::string &n1,
                           const std::string &n2,
                           const std::string &n3,
                           const std::string &n4) {
-    setRequired(makeset(n1, n2, n3, n4));
+    setRequired(makeset({n1, n2, n3, n4}));
   }
 
   // verifies that required and exclusive constrains have been met

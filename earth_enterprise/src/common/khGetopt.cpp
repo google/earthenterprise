@@ -215,7 +215,7 @@ void khGetopt::setExclusiveRequired(const std::set<std::string> &set) {
 void khGetopt::setRequired(const std::set<std::string> &set) {
   for (std::set<std::string>::const_iterator name = set.begin();
        name != set.end(); ++name) {
-    constraints_.push_back(Constraint(makeset(*name),
+    constraints_.push_back(Constraint(makeset({*name}),
                                       true /* required */));
   }
 }
