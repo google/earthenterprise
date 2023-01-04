@@ -1,3 +1,6 @@
+# Important!
+
+The `google/earthenterprise` repository is being archived. Please read the [Open GEE Archive Announcement](https://github.com/google/earthenterprise/wiki/Open-GEE-Archive-Announcement).
 
 # Earth Enterprise [![Chat on Slack][slack-img]][slack] [![build][travis-img]][travis]
 
